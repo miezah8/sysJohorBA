@@ -3,15 +3,26 @@
     <div class="sidenav-header">
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
-        <a class="navbar-brand m-0"
-            href=" https://demos.creative-tim.com/soft-ui-dashboard-pro/pages/dashboards/default.html " target="_blank">
-            <img src="../../assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
-            <span class="ms-1 font-weight-bold">Soft UI Dashboard 3 PRO</span>
+        <a class="navbar-brand m-0" href="{{ route('dashboard') }}" target="_self">
+            <img src="{{ asset('images/logo_pbj1.png') }}" class="navbar-brand-img h-100" alt="main_logo">
+            <span class="ms-1 font-weight-bold">JOHOR BA</span>
         </a>
     </div>
     <hr class="horizontal dark mt-0">
     <div class="collapse navbar-collapse  w-auto h-auto" id="sidenav-collapse-main">
         <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="{{ route('school') }}" class="nav-link active" aria-controls="" role="button"
+                    aria-expanded="false">
+                    <div
+                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
+                        <i class="fa-solid fa-school" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">School</span>
+                </a>
+            </li>
+        </ul>
+        {{-- <ul class="navbar-nav">
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#dashboardsExamples" class="nav-link active"
                     aria-controls="dashboardsExamples" role="button" aria-expanded="false">
@@ -84,7 +95,8 @@
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>office</title>
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                                <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF"
+                                    fill-rule="nonzero">
                                     <g transform="translate(1716.000000, 291.000000)">
                                         <g id="office" transform="translate(153.000000, 2.000000)">
                                             <path class="color-background"
@@ -635,7 +647,6 @@
                     </ul>
                 </div>
             </li>
-
-        </ul>
+        </ul> --}}
     </div>
 </aside>
