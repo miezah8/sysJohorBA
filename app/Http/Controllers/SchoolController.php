@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\School;
+use Illuminate\Support\Facades\DB;
 
 class SchoolController extends Controller
 {
@@ -11,9 +13,19 @@ class SchoolController extends Controller
      */
     public function index(Request $request)
     {
-        return view('school.index'
-        // , ['user' => $request->user(),]
-    );
+        $tblSchool = school::all();
+
+        $schoolData = DB::table('school as a')
+            ->leftjoin('district as b', 'a.district_id', '=', 'b.id_district')
+            ->select(
+                'a.school_name',
+                'b.district_name',
+            )->get();
+
+        return view(
+            'school.index',
+            ['schoolData' => $schoolData,]
+        );
     }
 
     /**
