@@ -27,20 +27,22 @@
                 </div>
                 <ul class="navbar-nav  justify-content-end">
                     <li class="nav-item d-flex align-items-center">
-                        <a href="../../pages/authentication/signin/illustration.html"
+                        <!-- Authentication -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <a class="btn btn-outline-danger btn-sm d-none d-sm-inline">
+                                <span href="route('logout')"
+                                    onclick="event.preventDefault(); this.closest('form').submit();">
+                                    Sign Out
+                                </span>
+                            </a>
+                            {{-- <span href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();"
+                                 class="d-sm-inline d-none">Sign Out XX</span> --}}
+                        </form>
+                        {{-- <a href="../../pages/authentication/signin/illustration.html"
                             class="nav-link text-body font-weight-bold px-0" target="_blank">
                             <i class="fa fa-user me-sm-1"></i>
-                            <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <span class="d-sm-inline d-none" href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">Sign
-                                    Out XX</span>
-
-                            </form>
-
-                        </a>
+                        </a> --}}
                     </li>
                     <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                         <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
@@ -51,12 +53,12 @@
                             </div>
                         </a>
                     </li>
-                    <li class="nav-item px-3 d-flex align-items-center">
+                    {{-- <li class="nav-item px-3 d-flex align-items-center">
                         <a href="javascript:;" class="nav-link text-body p-0">
                             <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
                         </a>
-                    </li>
-                    <li class="nav-item dropdown pe-2 d-flex align-items-center">
+                    </li> --}}
+                    {{-- <li class="nav-item dropdown pe-2 d-flex align-items-center">
                         <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa fa-bell cursor-pointer"></i>
@@ -139,7 +141,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
         </div>
