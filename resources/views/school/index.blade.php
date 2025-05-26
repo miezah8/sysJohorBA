@@ -63,36 +63,36 @@
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="school_name" class="form-label">School Name</label>
-                                <input type="text" class="form-control" id="school_name" name="school_name" required>
+                                <input type="text" class="form-control" id="school_name" name="school_name" >
                             </div>
                             <div class="col">
                                 <label for="sch_code" class="form-label">School Code</label>
-                                <input type="text" class="form-control" id="sch_code" name="sch_code" required>
+                                <input type="text" class="form-control" id="sch_code" name="sch_code" >
                             </div>
                         </div>
 
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="sc_address" class="form-label">School Address</label>
-                                <textarea type="text" class="form-control" id="sc_address" name="sc_address" required></textarea>
+                                <textarea type="text" class="form-control" id="sc_address" name="sc_address" ></textarea>
                             </div>
                             <div class="col">
                                 <label for="postcode" class="form-label">Postcode</label>
-                                <input type="text" class="form-control" id="postcode" name="postcode" required>
+                                <input type="text" class="form-control" id="postcode" name="postcode" >
                             </div>
                         </div>
 
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="district_id" class="form-label">City</label>
-                                <select class="form-select select2" id="district_id" name="district_id" required>
+                                <select class="form-select select2" id="district_id" name="district_id" >
                                     <option value="">-- Select District --</option>
                                 </select>
                             </div>
 
                             <div class="col">
                                 <label for="state_id" class="form-label">State ID</label>
-                                <input type="text" class="form-control" id="state_id" name="state_id" required>
+                                <input type="text" class="form-control" id="state_id" name="state_id" >
                             </div>
                         </div>
 
@@ -100,7 +100,7 @@
                         <div class="row mb-2">
                             <div class="col">
                                 <label for="no_tel" class="form-label">Telephone No.</label>
-                                <input type="text" class="form-control" id="no_tel" name="no_tel" required>
+                                <input type="text" class="form-control" id="no_tel" name="no_tel" >
                             </div>
                             <div class="col">
                                 <label for="no_fax" class="form-label">Fax No.</label>
@@ -110,7 +110,7 @@
 
                         <div class="mb-2">
                             <label for="email_sch" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email_sch" name="email_sch" required>
+                            <input type="email" class="form-control" id="email_sch" name="email_sch" >
                         </div>
                     </div>
 
@@ -181,6 +181,9 @@
         const $modalTitle = $('#schoolModalLabel');
         const $submitButton = $form.find('button[type="submit"]');
         const baseUrl = $modal.data('url');
+        const storeUrl = "{{ route('school.store') }}";
+        const updateUrl = "{{ url('/school') }}"; // for PUT with ID appended
+
 
         $modal.on('show.bs.modal', function(event) {
             const button = $(event.relatedTarget);
@@ -230,29 +233,42 @@
         });
 
 
-        $form.on('submit', function(e) {
+        $('#schoolForm').on('submit', function(e) {
             e.preventDefault();
 
-            const id = $form.find('[name="id"]').val();
-            const formData = $form.serialize();
+            const $form = $(this);
+            const $submitButton = $form.find('button[type="submit"]');
+            const id = $form.find('[name="id_school"]').val();
             const isEdit = Boolean(id);
 
+            $submitButton.prop('disabled', true).text('Saving...');
+
+            const formDataArray = $form.serializeArray();
+            const formData = {};
+            $.each(formDataArray, function(index, field) {
+                formData[field.name] = field.value;
+            });
+
             $.ajax({
-                url: isEdit ? `${baseUrl}/${id}` : baseUrl,
-                method: isEdit ? 'PUT' : 'POST',
-                data: formData,
+                type: 'POST', // Laravel will still accept PUT via _method field
+                url: isEdit ? `${updateUrl}/${id}` : storeUrl,
+                data: isEdit ? {...formData, _method: 'PUT'} : formData,
                 success: function(response) {
                     console.log(isEdit ? 'Updated:' : 'Created:', response);
-                    $modal.modal('hide');
+                    $('#schoolModal').modal('hide');
                     $form.trigger('reset');
-                    // Optional: refresh DataTable if needed
-                    // dataTableSearch.refresh();
+                    // Optional: refresh DataTable
                 },
                 error: function(xhr) {
                     alert('An error occurred. Please try again.');
+                },
+                complete: function() {
+                    $submitButton.prop('disabled', false).text('Save');
                 }
             });
         });
+
+
 
         function loadDistricts(selectedId = null) {
             const $ddl = $('#district_id');

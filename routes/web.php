@@ -23,15 +23,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // School
     Route::get('/player', [PlayerController::class, 'index'])->name('player');
     Route::get('/club', [ClubController::class, 'index'])->name('club');
     Route::get('/coach', [CoachController::class, 'index'])->name('coach');
     Route::get('/user', [UserController::class, 'index'])->name('user');
 
+    // School
     Route::get('/school', [SchoolController::class, 'index'])->name('school');
     Route::post('/school/show', [SchoolController::class, 'show'])->name('school.show');
-    // Route::get('/schools/{id}', [SchoolController::class, 'show']);
+    Route::post('/school', [SchoolController::class, 'store'])->name('school.store');
+    Route::put('/school/{id}', [SchoolController::class, 'update'])->name('school.update');
 
     Route::get('/achievement', [AchievementController::class, 'index'])->name('achievement');
     Route::get('/setting', [SettingController::class, 'index'])->name('setting');
@@ -41,4 +42,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/districts', [SchoolController::class, 'getDistricts'])->name('districts.list');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
