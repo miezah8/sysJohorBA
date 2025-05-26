@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClubController;
+use App\Http\Controllers\CoachController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolController;
@@ -22,6 +23,7 @@ Route::middleware('auth')->group(function () {
     // School
     Route::get('/player', [PlayerController::class, 'index'])->name('player');
     Route::get('/club', [ClubController::class, 'index'])->name('club');
+    Route::get('/coach', [CoachController::class, 'index'])->name('coach');
     Route::get('/school', [SchoolController::class, 'index'])->name('school');
 });
 
