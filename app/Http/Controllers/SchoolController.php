@@ -37,7 +37,21 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'school_name' => 'required|string|max:255',
+            'sch_code' => 'required|string|max:20',
+            'sc_address' => 'required|string',
+            'postcode' => 'required|string|max:10',
+            'district_id' => 'required|exists:district,id_district',
+            'state_id' => 'required|integer',
+            'no_tel' => 'required|string|max:20',
+            'no_fax' => 'nullable|string|max:20',
+            'email_sch' => 'required|email|max:255',
+        ]);
+
+        $school = school::create($validated);
+
+        return response()->json(['message' => 'School created successfully', 'data' => $school]);
     }
 
     /**
@@ -81,6 +95,6 @@ class SchoolController extends Controller
 
     public function getDistricts()
     {
-        return response()->json(district::pluck('district_name', 'id_district'));
+        return response()->json(District::pluck('district_name', 'id_district'));
     }
 }
