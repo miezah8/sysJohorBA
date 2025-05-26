@@ -5,6 +5,7 @@ use App\Http\Controllers\CoachController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/player', [PlayerController::class, 'index'])->name('player');
     Route::get('/club', [ClubController::class, 'index'])->name('club');
     Route::get('/coach', [CoachController::class, 'index'])->name('coach');
+    Route::get('/user', [UserController::class, 'index'])->name('user');
     Route::get('/school', [SchoolController::class, 'index'])->name('school');
 });
 
