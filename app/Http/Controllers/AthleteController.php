@@ -3,30 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\School;
+use App\Models\Athlete;
 use Illuminate\Support\Facades\DB;
 
-class PlayerController extends Controller
+class AthleteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $tblSchool = school::all();
+        //  $Athlete = Athlete::all();
 
-        // $schoolData = DB::table('school as a')
-        //     ->leftjoin('district as b', 'a.district_id', '=', 'b.id_district')
-        //     ->select(
-        //         'a.school_name',
-        //         'b.district_name',
-        //     )->get();
-
-        // return view(
-        //     'school.index',
-        //     ['schoolData' => $schoolData,]
-        // );
-        return view('player.index');
+        $athlete = DB::table('athlete as a')
+            ->leftjoin('school as b', 'a.school_id', '=', 'b.id_school')
+            ->leftjoin('club as c', 'a.club_id', '=', 'c.id_club')
+            ->select(
+                    DB::raw("CONCAT(a.athlete_fname, ' ', a.athlete_lname) as full_name"),
+                    'c.club_name',
+                    'b.school_name',
+                    'a.id_athlete'
+                )->get();
+        
+        return view(
+            'athlete.index',
+            ['AthleteList' => $athlete,]
+        );
     }
 
     /**
@@ -34,7 +36,9 @@ class PlayerController extends Controller
      */
     public function create()
     {
-        //
+        return view(
+            'athlete.formAthlete'
+        );
     }
 
     /**

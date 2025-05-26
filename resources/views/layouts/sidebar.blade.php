@@ -22,13 +22,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('player') }}" class="nav-link  " aria-controls="" role="button"
+                <a href="{{ route('athlete') }}" class="nav-link  " aria-controls="" role="button"
                     aria-expanded="false">
                     <div
                         class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
                         <i class="fa-solid fa-school" aria-hidden="true"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Player</span>
+                    <span class="nav-link-text ms-1">Athlete</span>
                 </a>
             </li>
             <li class="nav-item">
