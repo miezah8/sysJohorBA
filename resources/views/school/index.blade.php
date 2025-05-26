@@ -29,6 +29,11 @@
                                 {{-- <button class="btn btn-outline-info" type="button">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button> --}}
+                                {{-- <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#schoolModal"
+                                    data-mode="edit" data-id="{{ $school->id_school }}"
+                                    data-name="{{ $school->school_name }}">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                                </button> --}}
                                 <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#schoolModal"
                                     data-mode="edit" data-id="{{ $school->id_school }}">
                                     <i class="fa-solid fa-pen-to-square me-1"></i> Edit
@@ -42,10 +47,10 @@
     </div>
 
     {{-- modal section --}}
-    <div class="modal fade" id="schoolModal" tabindex="-1" aria-labelledby="schoolModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+    <div class="modal fade" id="schoolModal" tabindex="-1" aria-labelledby="schoolModalLabel" aria-hidden="true"
+        data-url="/schools">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-
                 <div class="modal-header">
                     <h5 class="modal-title" id="schoolModalLabel"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -53,10 +58,59 @@
 
                 <form id="schoolForm">
                     <div class="modal-body">
-                        <input type="hidden" id="schoolId" name="id">
-                        <div class="mb-3">
-                            <label for="schoolName" class="form-label">School Name</label>
-                            <input type="text" class="form-control" id="schoolName" name="name" required>
+                        <input type="hidden" name="id_school">
+
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="school_name" class="form-label">School Name</label>
+                                <input type="text" class="form-control" id="school_name" name="school_name" required>
+                            </div>
+                            <div class="col">
+                                <label for="sch_code" class="form-label">School Code</label>
+                                <input type="text" class="form-control" id="sch_code" name="sch_code" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="sc_address" class="form-label">School Address</label>
+                                <textarea type="text" class="form-control" id="sc_address" name="sc_address" required></textarea>
+                            </div>
+                            <div class="col">
+                                <label for="postcode" class="form-label">Postcode</label>
+                                <input type="text" class="form-control" id="postcode" name="postcode" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="district_id" class="form-label">City</label>
+                                <select class="form-select select2" id="district_id" name="district_id" required>
+                                    <option value="">-- Select District --</option>
+                                </select>
+                            </div>
+
+                            <div class="col">
+                                <label for="state_id" class="form-label">State ID</label>
+                                <input type="text" class="form-control" id="state_id" name="state_id" required>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="no_tel" class="form-label">Telephone No.</label>
+                                <input type="text" class="form-control" id="no_tel" name="no_tel" required>
+                            </div>
+                            <div class="col">
+                                <label for="no_fax" class="form-label">Fax No.</label>
+                                <input type="text" class="form-control" id="no_fax" name="no_fax">
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="email_sch" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email_sch" name="email_sch" required>
                         </div>
                     </div>
 
@@ -69,6 +123,7 @@
             </div>
         </div>
     </div>
+
     {{-- modal section --}}
 @endsection
 
@@ -98,6 +153,12 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             const dataTableSearch = new simpleDatatables.DataTable(
                 "#datatable-search", {
                     searchable: true,
@@ -105,52 +166,111 @@
                 }
             );
 
-            const $schoolModal = $('#schoolModal');
-            const $schoolForm = $('#schoolForm');
-            const $modalTitle = $('#schoolModalLabel');
-            const $schoolIdInput = $('#schoolId');
-            const $schoolNameInput = $('#schoolName');
-
-            $schoolModal.on('show.bs.modal', function(event) {
-                const button = $(event.relatedTarget); // Button that triggered the modal
-                const mode = button.data('mode');
-
-                if (mode === 'edit') {
-                    const id = button.data('id');
-                    const name = button.data('name');
-
-                    $modalTitle.text('Edit School');
-                    $schoolIdInput.val(id);
-                    $schoolNameInput.val(name);
-                } else {
-                    $modalTitle.text('Add School');
-                    $schoolForm.trigger('reset');
-                    $schoolIdInput.val('');
-                }
+            $('.select2').select2({
+                dropdownParent: $('#schoolModal'),
+                theme: 'bootstrap-5',
+                width: '100%'
             });
 
-            $schoolForm.on('submit', function(e) {
-                e.preventDefault();
 
-                const id = $schoolIdInput.val();
-                const name = $schoolNameInput.val();
+        });
 
-                if (id) {
-                    console.log('Editing school:', {
-                        id,
-                        name
-                    });
-                    // AJAX PUT or PATCH request here
-                } else {
-                    console.log('Adding new school:', {
-                        name
-                    });
-                    // AJAX POST request here
+
+        const $modal = $('#schoolModal');
+        const $form = $('#schoolForm');
+        const $modalTitle = $('#schoolModalLabel');
+        const $submitButton = $form.find('button[type="submit"]');
+        const baseUrl = $modal.data('url');
+
+        $modal.on('show.bs.modal', function(event) {
+            const button = $(event.relatedTarget);
+            const mode = button.data('mode');
+            const id = button.data('id');
+
+            $form.trigger('reset');
+            $form.find('.is-invalid').removeClass('is-invalid');
+            $submitButton.prop('disabled', false).text('Save');
+
+            if (mode === 'edit' && id) {
+                $modalTitle.text('Edit School');
+                $form.find('[name="id"]').val(id);
+                $submitButton.prop('disabled', true).text('Loading...');
+
+                // Load districts first
+                loadDistricts(); // Preload dropdown
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('school.show') }}",
+                    data: {
+                        selectedRecord: id
+                    },
+                    success: function(data) {
+                        // Now populate form values
+                        $.each(data, function(key, value) {
+                            $form.find(`[name="${key}"]`).val(value);
+                        });
+
+                        // After setting form, set district dropdown specifically
+                        loadDistricts(data.district_id);
+                    },
+                    error: function() {
+                        alert('Failed to load school data.');
+                        $modal.modal('hide');
+                    },
+                    complete: function() {
+                        $submitButton.prop('disabled', false).text('Save');
+                    }
+                });
+
+            } else {
+                $modalTitle.text('Add School');
+                loadDistricts(); // Load for Add mode
+            }
+        });
+
+
+        $form.on('submit', function(e) {
+            e.preventDefault();
+
+            const id = $form.find('[name="id"]').val();
+            const formData = $form.serialize();
+            const isEdit = Boolean(id);
+
+            $.ajax({
+                url: isEdit ? `${baseUrl}/${id}` : baseUrl,
+                method: isEdit ? 'PUT' : 'POST',
+                data: formData,
+                success: function(response) {
+                    console.log(isEdit ? 'Updated:' : 'Created:', response);
+                    $modal.modal('hide');
+                    $form.trigger('reset');
+                    // Optional: refresh DataTable if needed
+                    // dataTableSearch.refresh();
+                },
+                error: function(xhr) {
+                    alert('An error occurred. Please try again.');
                 }
-
-                $schoolModal.modal('hide');
-                $schoolForm.trigger('reset');
             });
         });
+
+        function loadDistricts(selectedId = null) {
+            const $ddl = $('#district_id');
+            $ddl.prop('disabled', true).empty().append('<option value="">Loading districts...</option>');
+
+            $.get("{{ route('districts.list') }}", function(districts) {
+                $ddl.empty().append('<option value="">-- Select District --</option>');
+
+                $.each(districts, function(id, name) {
+                    $ddl.append(new Option(name, id));
+                });
+
+                if (selectedId) {
+                    $ddl.val(selectedId).trigger('change'); // trigger for select2 update
+                }
+
+                $ddl.prop('disabled', false);
+            });
+        }
     </script>
 @endpush

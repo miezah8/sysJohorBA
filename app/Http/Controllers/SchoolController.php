@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\School;
 use Illuminate\Support\Facades\DB;
+use App\Models\School;
+use App\Models\District;
 
 class SchoolController extends Controller
 {
@@ -18,9 +19,9 @@ class SchoolController extends Controller
         $schoolData = DB::table('school as a')
             ->leftjoin('district as b', 'a.district_id', '=', 'b.id_district')->get();
 
-            // dd($schoolData->take(10));
+        // dd($schoolData->take(10));
 
-        return view('school.index',['schoolData' => $schoolData,]);
+        return view('school.index', ['schoolData' => $schoolData,]);
     }
 
     /**
@@ -42,9 +43,16 @@ class SchoolController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request)
     {
-        //
+        $id = $request->selectedRecord;
+        $school = school::find($id);
+
+        if (!$school) {
+            return response()->json(['error' => 'School not found'], 404);
+        }
+
+        return response()->json($school);
     }
 
     /**
@@ -69,5 +77,10 @@ class SchoolController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getDistricts()
+    {
+        return response()->json(district::pluck('district_name', 'id_district'));
     }
 }
