@@ -6,6 +6,7 @@ use App\Http\Controllers\CoachController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/user', [UserController::class, 'index'])->name('user');
     Route::get('/school', [SchoolController::class, 'index'])->name('school');
     Route::get('/achievement', [AchievementController::class, 'index'])->name('achievement');
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting');
 });
 
 require __DIR__.'/auth.php';
