@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\CoachController;
 use App\Http\Controllers\PlayerController;
@@ -27,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/coach', [CoachController::class, 'index'])->name('coach');
     Route::get('/user', [UserController::class, 'index'])->name('user');
     Route::get('/school', [SchoolController::class, 'index'])->name('school');
+    Route::get('/achievement', [AchievementController::class, 'index'])->name('achievement');
 });
 
 require __DIR__.'/auth.php';
