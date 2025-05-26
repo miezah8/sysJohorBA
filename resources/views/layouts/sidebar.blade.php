@@ -12,7 +12,57 @@
     <div class="collapse navbar-collapse  w-auto h-auto" id="sidenav-collapse-main">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a href="{{ route('school') }}" class="nav-link active" aria-controls="" role="button"
+                <a href="{{ route('dashboard') }}" class="nav-link active " aria-controls="" role="button"
+                    aria-expanded="false">
+                    <div
+                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
+                        <i class="fa-solid fa-school" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('player') }}" class="nav-link  " aria-controls="" role="button"
+                    aria-expanded="false">
+                    <div
+                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
+                        <i class="fa-solid fa-school" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Player</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('club') }}" class="nav-link  " aria-controls="" role="button"
+                    aria-expanded="false">
+                    <div
+                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
+                        <i class="fa-solid fa-school" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Club</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('coach') }}" class="nav-link  " aria-controls="" role="button"
+                    aria-expanded="false">
+                    <div
+                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
+                        <i class="fa-solid fa-school" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Coach</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('user') }}" class="nav-link  " aria-controls="" role="button"
+                    aria-expanded="false">
+                    <div
+                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
+                        <i class="fa-solid fa-school" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">User</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('school') }}" class="nav-link" aria-controls="" role="button"
                     aria-expanded="false">
                     <div
                         class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
@@ -21,10 +71,30 @@
                     <span class="nav-link-text ms-1">School</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('achievement') }}" class="nav-link  " aria-controls="" role="button"
+                    aria-expanded="false">
+                    <div
+                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
+                        <i class="fa-solid fa-school" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Achievement</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('setting') }}" class="nav-link  " aria-controls="" role="button"
+                    aria-expanded="false">
+                    <div
+                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
+                        <i class="fa-solid fa-school" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Setting</span>
+                </a>
+            </li>
         </ul>
         {{-- <ul class="navbar-nav">
             <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#dashboardsExamples" class="nav-link active"
+                <a data-bs-toggle="collapse" href="#dashboardsExamples" class="nav-link  "
                     aria-controls="dashboardsExamples" role="button" aria-expanded="false">
                     <div
                         class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
@@ -34,8 +104,8 @@
                 </a>
                 <div class="collapse  show " id="dashboardsExamples">
                     <ul class="nav ms-4 ps-3">
-                        <li class="nav-item active">
-                            <a class="nav-link active" href="../../pages/dashboards/default.html">
+                        <li class="nav-item  ">
+                            <a class="nav-link  " href="../../pages/dashboards/default.html">
                                 <span class="sidenav-mini-icon"> D </span>
                                 <span class="sidenav-normal"> Default </span>
                             </a>
