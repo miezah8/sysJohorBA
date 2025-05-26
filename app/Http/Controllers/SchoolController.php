@@ -16,16 +16,11 @@ class SchoolController extends Controller
         $tblSchool = school::all();
 
         $schoolData = DB::table('school as a')
-            ->leftjoin('district as b', 'a.district_id', '=', 'b.id_district')
-            ->select(
-                'a.school_name',
-                'b.district_name',
-            )->get();
+            ->leftjoin('district as b', 'a.district_id', '=', 'b.id_district')->get();
 
-        return view(
-            'school.index',
-            ['schoolData' => $schoolData,]
-        );
+            // dd($schoolData->take(10));
+
+        return view('school.index',['schoolData' => $schoolData,]);
     }
 
     /**
