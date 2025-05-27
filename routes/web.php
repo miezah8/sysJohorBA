@@ -29,40 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/athlete', [AthleteController::class, 'index'])->name('athlete');
     Route::get('/athlete/create', [AthleteController::class, 'create'])->name('athlete.create');
 
-    Route::get('/proxy', function (Request $request) {
-    $endpoint = $request->query('endpoint');
-
-    if (!$endpoint) {
-        return response()->json(['error' => 'No endpoint specified'], 400);
-    }
-
-    // Contoh API sumber negeri Malaysia (anda kena cari API yang sebenar)
-    $apiUrl = null;
-
-    if ($endpoint === 'negeri') {
-        // Contoh URL API negeri (tukar kepada API sebenar yang anda guna)
-        $apiUrl = 'https://raw.githubusercontent.com/hexzz/json-malaysia/main/negeri.json';
-    } elseif ($endpoint === 'daerah') {
-        // Anda boleh tambah parameter negeri untuk fetch daerah
-        $kodNegeri = $request->query('kod');
-        if (!$kodNegeri) {
-            return response()->json(['error' => 'kod negeri required for daerah'], 400);
-        }
-        $apiUrl = "https://raw.githubusercontent.com/hexzz/json-malaysia/main/daerah/{$kodNegeri}.json";
-    } else {
-        return response()->json(['error' => 'Invalid endpoint'], 404);
-    }
-
-    $response = Http::get($apiUrl);
-
-    if ($response->failed()) {
-        return response()->json(['error' => 'Failed to fetch data'], $response->status());
-    }
-
-    return response($response->body(), $response->status())
-           ->header('Content-Type', 'application/json');
-});
-
     Route::get('/club', [ClubController::class, 'index'])->name('club');
     Route::get('/coach', [CoachController::class, 'index'])->name('coach');
     Route::get('/user', [UserController::class, 'index'])->name('user');
