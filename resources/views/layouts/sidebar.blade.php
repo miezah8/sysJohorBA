@@ -11,87 +11,72 @@
     <hr class="horizontal dark mt-0">
     <div class="collapse navbar-collapse  w-auto h-auto" id="sidenav-collapse-main">
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="{{ route('dashboard') }}" class="nav-link active " aria-controls="" role="button"
-                    aria-expanded="false">
-                    <div
-                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
-                        <i class="fa-solid fa-school" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('athlete') }}" class="nav-link  " aria-controls="" role="button"
-                    aria-expanded="false">
-                    <div
-                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
-                        <i class="fa-solid fa-school" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Athlete</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('club') }}" class="nav-link  " aria-controls="" role="button"
-                    aria-expanded="false">
-                    <div
-                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
-                        <i class="fa-solid fa-school" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Club</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('coach') }}" class="nav-link  " aria-controls="" role="button"
-                    aria-expanded="false">
-                    <div
-                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
-                        <i class="fa-solid fa-school" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Coach</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('user') }}" class="nav-link  " aria-controls="" role="button"
-                    aria-expanded="false">
-                    <div
-                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
-                        <i class="fa-solid fa-school" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">User</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('school') }}" class="nav-link" aria-controls="" role="button"
-                    aria-expanded="false">
-                    <div
-                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
-                        <i class="fa-solid fa-school" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">School</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('achievement') }}" class="nav-link  " aria-controls="" role="button"
-                    aria-expanded="false">
-                    <div
-                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
-                        <i class="fa-solid fa-school" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Achievement</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('setting') }}" class="nav-link  " aria-controls="" role="button"
-                    aria-expanded="false">
-                    <div
-                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center  me-2">
-                        <i class="fa-solid fa-school" aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Setting</span>
-                </a>
-            </li>
-        </ul>
+    <li class="nav-item">
+        <a href="{{ route('dashboard') }}" class="nav-link active" role="button">
+            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                <i class="bi bi-speedometer2"></i>
+            </div>
+            <span class="nav-link-text ms-1">Dashboard</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{ route('athlete') }}" class="nav-link" role="button">
+            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                <i class="bi bi-person-running"></i>
+            </div>
+            <span class="nav-link-text ms-1">Athlete</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{ route('club') }}" class="nav-link" role="button">
+            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                <i class="bi bi-people"></i>
+            </div>
+            <span class="nav-link-text ms-1">Club</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{ route('coach') }}" class="nav-link" role="button">
+            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                <i class="bi bi-person-badge"></i>
+            </div>
+            <span class="nav-link-text ms-1">Coach</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{ route('user') }}" class="nav-link" role="button">
+            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                <i class="bi bi-person"></i>
+            </div>
+            <span class="nav-link-text ms-1">User</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{ route('school') }}" class="nav-link" role="button">
+            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                <i class="bi bi-building"></i>
+            </div>
+            <span class="nav-link-text ms-1">School</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{ route('achievement') }}" class="nav-link" role="button">
+            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                <i class="bi bi-trophy"></i>
+            </div>
+            <span class="nav-link-text ms-1">Achievement</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{ route('setting') }}" class="nav-link" role="button">
+            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                <i class="bi bi-gear"></i>
+            </div>
+            <span class="nav-link-text ms-1">Setting</span>
+        </a>
+    </li>
+</ul>
+
         {{-- <ul class="navbar-nav">
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#dashboardsExamples" class="nav-link  "
@@ -720,3 +705,5 @@
         </ul> --}}
     </div>
 </aside>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">

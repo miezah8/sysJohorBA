@@ -125,8 +125,24 @@
                                             </div>
                                             <div class="col-md-12 mb-3">
                                                 <label class="form-label required">Negeri</label>
-                                                <select class="form-select" id="negeriDropdown" required>
-                                                    <option value="">-- Pilih Negeri --</option>
+                                                <select class="form-control" id="schA_state" name="sch_state" onchange="stateSch_change(this.value);">
+									                <option value="">Please choose state</option>
+                                                    <option value="1">JOHOR</option>
+                                                    <option value="2">KEDAH</option>
+                                                    <option value="3">KELANTAN</option>
+                                                    <option value="4">MELAKA</option>
+                                                    <option value="5">NEGERI SEMBILAN</option>
+                                                    <option value="6">PAHANG</option>
+                                                    <option value="8">PERAK</option>
+                                                    <option value="9">PERLIS</option>
+                                                    <option value="7">PULAU PINANG</option>
+                                                    <option value="12">SABAH</option>
+                                                    <option value="13">SARAWAK</option>
+                                                    <option value="10">SELANGOR</option>
+                                                    <option value="11">TERENGGANU</option>
+                                                    <option value="14">W.P KUALA LUMPUR</option>
+                                                    <option value="15">W.P LABUAN</option>
+                                                    <option value="16">W.P PUTRAJAYA</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-12 mb-3">
