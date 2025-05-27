@@ -3,76 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\School;
-use Illuminate\Support\Facades\DB;
+use App\Models\Achievement;
 
 class AchievementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    // Show list page
+    public function index()
     {
-        $tblSchool = school::all();
-
-        $schoolData = DB::table('school as a')
-            ->leftjoin('district as b', 'a.district_id', '=', 'b.id_district')
-            ->select(
-                'a.school_name',
-                'b.district_name',
-            )->get();
-
-        return view(
-            'school.index',
-            ['schoolData' => $schoolData,]
-        );
+        $achievementData = Achievement::all(); // get all achievement records
+        return view('achievement.index', compact('achievementData'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Update achievement by id
+    public function update(Request $request, $id)
     {
-        //
-    }
+        // Validate inputs (simple example)
+        $request->validate([
+            'achieve_bm' => 'required|string|max:255',
+            'achieve_bi' => 'required|string|max:255',
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $achievement = Achievement::findOrFail($id);
+        $achievement->achieve_bm = $request->achieve_bm;
+        $achievement->achieve_bi = $request->achieve_bi;
+        $achievement->save();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json(['message' => 'Achievement updated successfully']);
     }
 }
