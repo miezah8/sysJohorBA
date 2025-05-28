@@ -4,7 +4,7 @@
 @section('content')
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">
-            <h5 class="mb-0">List of School</h5>
+            <h5 class="mb-0">List of School ASDWE</h5>
             <button class="btn btn-behance" data-bs-toggle="modal" data-bs-target="#schoolModal" data-mode="add">
                 <i class="fa-solid fa-plus me-1"></i>Add
             </button>
