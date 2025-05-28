@@ -41,8 +41,13 @@ Route::middleware('auth')->group(function () {
     //Achievement
     // Route::get('/achievement', [AchievementController::class, 'index'])->name('achievement');
     // Route::resource('achievement', AchievementController::class)->only(['index', 'update']);
-    Route::resource('achievement', AchievementController::class)->only(['index', 'update'])
-    ->names(['index' => 'achievement']);
+    //Route::resource('achievement', AchievementController::class)->only(['index', 'update'])
+    //->names(['index' => 'achievement']);
+    // Achievement routes
+    Route::resource('achievement', AchievementController::class)->only(['index', 'store', 'update'])
+        ->names(['index' => 'achievement']);
+    Route::post('/achievement', [AchievementController::class, 'store'])->name('achievement.store');
+
     Route::get('/setting', [SettingController::class, 'index'])->name('setting');
 
 
@@ -50,21 +55,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/districts', [SchoolController::class, 'getDistricts'])->name('districts.list');
 
 
-   /* Route::get('/achievement', [AchievementController::class, 'index'])->name('achievement.index');
-    Route::post('/achievement/store', [AchievementController::class, 'store'])->name('achievement.store');
-    Route::post('/achievement/update', [AchievementController::class, 'update'])->name('achievement.update');
-    Route::post('/achievement/show', [AchievementController::class, 'show'])->name('achievement.show');
-    Route::delete('/achievement/{id}', [AchievementController::class, 'destroy'])->name('achievement.destroy');
-*/
+   
 });
-/*
-Route::prefix('achievement')->group(function() {
-    Route::get('/', [AchievementController::class, 'index'])->name('achievement.index');
-    Route::post('/', [AchievementController::class, 'store'])->name('achievement.store');
-    Route::post('/show', [AchievementController::class, 'show'])->name('achievement.show');
-    Route::put('/{id}', [AchievementController::class, 'update'])->name('achievement.update');
-    Route::delete('/{id}', [AchievementController::class, 'destroy'])->name('achievement.destroy');
-});*/
+
 
 
 require __DIR__ . '/auth.php';

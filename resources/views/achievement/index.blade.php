@@ -5,6 +5,9 @@
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">
             <h5 class="mb-0">List of Achievements</h5>
+            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addAchievementModal">
+                <i class="fa-solid fa-plus me-1"></i> Add Achievement
+            </button>
         </div>
         <div class="table-responsive">
             <table class="table table-flush" id="datatable-achievement">
@@ -27,7 +30,7 @@
                                     data-id="{{ $achieve->id_achieve }}"
                                     data-bm="{{ $achieve->achieve_bm }}"
                                     data-bi="{{ $achieve->achieve_bi }}"
-                                    data-bs-toggle="modal" data-bs-target="#achievementModal">
+                                    data-bs-toggle="modal" data-bs-target="#editAchievementModal">
                                     <i class="fa-solid fa-pen-to-square me-1"></i> Edit
                                 </button>
                             </td>
@@ -38,18 +41,16 @@
         </div>
     </div>
 
-    {{-- Edit Achievement Modal --}}
-    <div class="modal fade" id="achievementModal" tabindex="-1" aria-labelledby="achievementModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+    {{-- Add Achievement Modal --}}
+    <div class="modal fade" id="addAchievementModal" tabindex="-1" aria-labelledby="addAchievementModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form id="achievementForm">
+                <form id="addAchievementForm">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="achievementModalLabel">Edit Achievement</h5>
+                        <h5 class="modal-title" id="addAchievementModalLabel">Add Achievement</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" name="id_achieve" id="id_achieve">
-
                         <div class="mb-3">
                             <label for="achieve_bm" class="form-label">Achievement BM</label>
                             <input type="text" class="form-control" id="achieve_bm" name="achieve_bm" required>
@@ -62,34 +63,45 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary" id="saveBtn">Update</button>
+                        <button type="submit" class="btn btn-primary">Add Achievement</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    {{-- Edit Achievement Modal --}}
+    <div class="modal fade" id="editAchievementModal" tabindex="-1" aria-labelledby="editAchievementModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="editAchievementForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editAchievementModalLabel">Edit Achievement</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="edit_id_achieve" name="id_achieve">
+
+                        <div class="mb-3">
+                            <label for="edit_achieve_bm" class="form-label">Achievement BM</label>
+                            <input type="text" class="form-control" id="edit_achieve_bm" name="achieve_bm" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edit_achieve_bi" class="form-label">Achievement BI</label>
+                            <input type="text" class="form-control" id="edit_achieve_bi" name="achieve_bi" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update Achievement</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 @endsection
-
-@push('css')
-    <style>
-        table th:first-child,
-        table td:first-child {
-            width: 1%;
-            white-space: nowrap;
-            text-align: center;
-        }
-
-        table th:last-child,
-        table td:last-child {
-            width: 15%;
-            white-space: nowrap;
-        }
-
-        td {
-            font-size: 0.875em;
-        }
-    </style>
-@endpush
 
 @push('scripts')
     <script>
@@ -106,47 +118,60 @@
                 const bm = $(this).data('bm');
                 const bi = $(this).data('bi');
 
-                $('#id_achieve').val(id);
-                $('#achieve_bm').val(bm);
-                $('#achieve_bi').val(bi);
+                $('#edit_id_achieve').val(id);
+                $('#edit_achieve_bm').val(bm);
+                $('#edit_achieve_bi').val(bi);
             });
 
-            // Handle form submit for update
-            $('#achievementForm').on('submit', function(e) {
+            // Handle form submit for adding a new achievement
+            $('#addAchievementForm').on('submit', function(e) {
                 e.preventDefault();
-                $('#saveBtn').prop('disabled', true).text('Updating...');
 
-                const id = $('#id_achieve').val();
                 const data = {
                     achieve_bm: $('#achieve_bm').val(),
                     achieve_bi: $('#achieve_bi').val(),
-                    _method: 'PUT',  // Laravel expects PUT for update
-                    //_token: '{{ csrf_token() }}'
+                    _token: '{{ csrf_token() }}' // Include CSRF token here
                 };
 
-                $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    });
+                $.ajax({
+                    url: '{{ route('achievement.store') }}',
+                    type: 'POST',
+                    data: data,
+                    success: function(response) {
+                        $('#addAchievementModal').modal('hide');
+                        location.reload();  // Reload the page to show updated data
+                        alert(response.message);
+                    },
+                    error: function(xhr) {
+                        alert('Error! Please try again.');
+                        console.error(xhr.responseText);  // Log the error response
+                    }
+                });
+            });
+
+            // Handle form submit for updating achievement
+            $('#editAchievementForm').on('submit', function(e) {
+                e.preventDefault();
+
+                const id = $('#edit_id_achieve').val();
+                const data = {
+                    achieve_bm: $('#edit_achieve_bm').val(),
+                    achieve_bi: $('#edit_achieve_bi').val(),
+                    _method: 'PUT',
+                    _token: '{{ csrf_token() }}'
+                };
 
                 $.ajax({
                     url: `/achievement/${id}`,
                     type: 'POST',
                     data: data,
                     success: function(response) {
-                        // Close modal
-                        $('#achievementModal').modal('hide');
-                        alert('Achievement updated successfully!');
-                        // Reload page or update row dynamically
+                        $('#editAchievementModal').modal('hide');
                         location.reload();
+                        alert(response.message);
                     },
                     error: function(xhr) {
-                        alert('Update failed! Please try again.');
-                        console.error(xhr.responseText);
-                    },
-                    complete: function() {
-                        $('#saveBtn').prop('disabled', false).text('Update');
+                        alert('Error! Please try again.');
                     }
                 });
             });
