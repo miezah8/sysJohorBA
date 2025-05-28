@@ -103,17 +103,41 @@
 
 @endsection
 
+@push('css')
+    <style>
+        table th:first-child,
+        table td:first-child {
+            width: 1%;
+            white-space: nowrap;
+            text-align: center
+                /* Prevents wrapping */
+        }
+
+        table th:last-child,
+        table td:last-child {
+            width: 15%;
+            white-space: nowrap;
+            /* Optional, depending on content */
+        }
+
+        td {
+            font-size: 0.875em;
+        }
+    </style>
+@endpush
+
 @push('scripts')
     <script>
         $(document).ready(function() {
+
             // Initialize datatable
             const dataTable = new simpleDatatables.DataTable("#datatable-achievement", {
                 searchable: true,
                 fixedHeight: true,
             });
 
-            // When edit button clicked, populate modal inputs
-            $('.btn-edit').on('click', function() {
+            // When edit button clicked, populate modal inputs -regardless of pagination or re-rendering—will trigger your handler.
+            $('#datatable-achievement').on('click', '.btn-edit', function() {
                 const id = $(this).data('id');
                 const bm = $(this).data('bm');
                 const bi = $(this).data('bi');
