@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\School;
 use App\Models\District;
+use App\Models\State;
 
 class SchoolController extends Controller
 {
@@ -78,11 +79,35 @@ class SchoolController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage. 
+     * NHMA update 28052025
      */
     public function update(Request $request, string $id)
     {
-        //
+        // 1. Validate incoming data (same rules as store)
+        $validated = $request->validate([
+            'school_name' => 'required|string|max:255',
+            'sch_code'    => 'required|string|max:20',
+            'sc_address'  => 'required|string',
+            'postcode'    => 'required|string|max:10',
+            'district_id' => 'required|exists:district,id_district',
+            'state_id'    => 'required|integer',
+            'no_tel'      => 'required|string|max:20',
+            'no_fax'      => 'nullable|string|max:20',
+            'email_sch'   => 'required|email|max:255',
+        ]);
+
+        // 2. Fetch the model (404 if not found)
+        $school = School::findOrFail($id);
+
+        // 3. Update and save
+        $school->update($validated);
+
+        // 4. Return JSON (so your AJAX success handler can pick it up)
+        return response()->json([
+            'message' => 'School updated successfully',
+            'data'    => $school,
+        ]);
     }
 
     /**
@@ -96,5 +121,11 @@ class SchoolController extends Controller
     public function getDistricts()
     {
         return response()->json(District::pluck('district_name', 'id_district'));
+    }
+
+    public function getStates()
+    {
+        // returns { id_state: state_name, … }
+        return response()->json(State::pluck('state_name', 'id_state'));
     }
 }

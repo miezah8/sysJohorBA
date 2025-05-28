@@ -4,7 +4,7 @@
 @section('content')
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">
-            <h5 class="mb-0">List of School ASDWE</h5>
+            <h5 class="mb-0">List of School</h5>
             <button class="btn btn-behance" data-bs-toggle="modal" data-bs-target="#schoolModal" data-mode="add">
                 <i class="fa-solid fa-plus me-1"></i>Add
             </button>
@@ -91,8 +91,10 @@
                             </div>
 
                             <div class="col">
-                                <label for="state_id" class="form-label">State ID</label>
-                                <input type="text" class="form-control" id="state_id" name="state_id" >
+                                <label for="state_id" class="form-label">State</label>
+                                <select class="form-select select2" id="state_id" name="state_id">
+                                    <option value="">-- Select State --</option>
+                                </select>
                             </div>
                         </div>
 
@@ -196,11 +198,12 @@
 
             if (mode === 'edit' && id) {
                 $modalTitle.text('Edit School');
-                $form.find('[name="id"]').val(id);
+                $form.find('[name="id_school"]').val(id); //NH update from id
                 $submitButton.prop('disabled', true).text('Loading...');
 
                 // Load districts first
                 loadDistricts(); // Preload dropdown
+                loadStates();
 
                 $.ajax({
                     type: 'POST',
@@ -216,6 +219,7 @@
 
                         // After setting form, set district dropdown specifically
                         loadDistricts(data.district_id);
+                        loadStates(data.state_id);
                     },
                     error: function() {
                         alert('Failed to load school data.');
@@ -229,6 +233,8 @@
             } else {
                 $modalTitle.text('Add School');
                 loadDistricts(); // Load for Add mode
+                loadStates();
+                
             }
         });
 
@@ -257,6 +263,7 @@
                     console.log(isEdit ? 'Updated:' : 'Created:', response);
                     $('#schoolModal').modal('hide');
                     $form.trigger('reset');
+                    window.location.reload();
                     // Optional: refresh DataTable
                 },
                 error: function(xhr) {
@@ -288,5 +295,24 @@
                 $ddl.prop('disabled', false);
             });
         }
+
+        function loadStates(selectedId = null) {
+            const $ddl = $('#state_id');
+            $ddl.prop('disabled', true)
+                .empty()
+                .append('<option>Loading states…</option>');
+
+            $.get("{{ route('states.list') }}", function(states) {
+                $ddl.empty().append('<option value="">-- Select State --</option>');
+                $.each(states, function(id, name) {
+                $ddl.append(new Option(name, id));
+                });
+                if (selectedId) {
+                $ddl.val(selectedId).trigger('change');
+                }
+                $ddl.prop('disabled', false);
+            });
+            }
+
     </script>
 @endpush
