@@ -39,21 +39,24 @@ Route::middleware('auth')->group(function () {
     Route::put('/school/{id}', [SchoolController::class, 'update'])->name('school.update');
 
     //Achievement
-    // Route::get('/achievement', [AchievementController::class, 'index'])->name('achievement');
-    // Route::resource('achievement', AchievementController::class)->only(['index', 'update']);
-    //Route::resource('achievement', AchievementController::class)->only(['index', 'update'])
-    //->names(['index' => 'achievement']);
-    // Achievement routes
-    Route::resource('achievement', AchievementController::class)->only(['index', 'store', 'update'])
+     Route::resource('achievement', AchievementController::class)->only(['index', 'store', 'update'])
         ->names(['index' => 'achievement']);
     Route::post('/achievement', [AchievementController::class, 'store'])->name('achievement.store');
 
     Route::get('/setting', [SettingController::class, 'index'])->name('setting');
 
+    //Club
+    Route::get('/clubs', [ClubController::class, 'index'])->name('clubs.index');
+    Route::post('/clubs/show', [ClubController::class, 'show'])->name('clubs.show');
+    Route::post('/clubs', [ClubController::class, 'store'])->name('clubs.store');
+    Route::put('/clubs/{club}', [ClubController::class, 'update'])->name('clubs.update');
+    Route::get('/clubs/{club}/edit', [ClubController::class, 'edit'])->name('clubs.edit');
 
     //ddl
     Route::get('/districts', [SchoolController::class, 'getDistricts'])->name('districts.list');
 
+    // states for the state dropdown
+    Route::get('/states', [SchoolController::class, 'getStates'])->name('states.list');
 
    
 });
