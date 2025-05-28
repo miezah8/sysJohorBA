@@ -46,11 +46,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/setting', [SettingController::class, 'index'])->name('setting');
 
     //Club
-    Route::get('/clubs', [ClubController::class, 'index'])->name('clubs.index');
+    /*Route::get('/clubs', [ClubController::class, 'index'])->name('clubs.index');
     Route::post('/clubs/show', [ClubController::class, 'show'])->name('clubs.show');
     Route::post('/clubs', [ClubController::class, 'store'])->name('clubs.store');
     Route::put('/clubs/{club}', [ClubController::class, 'update'])->name('clubs.update');
     Route::get('/clubs/{club}/edit', [ClubController::class, 'edit'])->name('clubs.edit');
+    */
+    // 1) First, register the players-list route:
+    Route::get('/clubs/{club}/players', [ClubController::class, 'players'])->name('clubs.players');
+    //Route::post('/clubs/show', [ClubController::class,'show'])->name('clubs.show');
+    // 2) Then your resource routes (index, create, store, show, edit, update, destroy):
+    Route::resource('clubs', ClubController::class);
+    
 
     //ddl
     Route::get('/districts', [SchoolController::class, 'getDistricts'])->name('districts.list');
