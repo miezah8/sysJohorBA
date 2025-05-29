@@ -186,6 +186,201 @@
                             </form>
                         </div>
 
+                        <div class="tab-pane fade" id="guardian" role="tabpanel">
+                            <form id="formGuardian">
+                                <div class="row mt-3">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label required">Nama Penjaga</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label required">No Telefon Penjaga</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label required">Pekerjaan</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label required">Perhubungan</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col text-start">
+                                        <button type="button" class="btn btn-secondary">Prev</button>
+                                    </div>
+                                    <div class="col text-end">
+                                        <button type="button" class="btn btn-primary">Next</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="school" role="tabpanel">
+                            <form id="formSchool">
+                                <div class="row mt-3">
+                                    <!-- Dropdown Nama Sekolah -->
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label required">Nama Sekolah</label>
+                                        <select id="schoolDropdown" class="form-select" required>
+                                            <option value="">-- Pilih Sekolah --</option>
+                                            <!-- Contoh pilihan, nanti boleh populate dari JS -->
+                                            <option value="SK Taman Bukit">SK Taman Bukit</option>
+                                            <option value="SMK Seri Indah">SMK Seri Indah</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Kod Sekolah</label>
+                                        <input type="text" class="form-control" disabled>
+                                    </div>
+
+                                    <!-- Kiri: Alamat -->
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Alamat Sekolah</label>
+                                        <textarea class="form-control" rows="8" disabled></textarea>
+                                    </div>
+
+                                    <!-- Kanan: Kod, Poskod, Negeri, Daerah -->
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Poskod</label>
+                                            <input type="text" class="form-control" disabled>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Negeri</label>
+                                            <input type="text" class="form-control" disabled>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Daerah</label>
+                                            <input type="text" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Butang Prev & Next -->
+                                <div class="row mt-4">
+                                    <div class="col text-start">
+                                        <button type="button" class="btn btn-secondary">Prev</button>
+                                    </div>
+                                    <div class="col text-end">
+                                        <button type="button" class="btn btn-primary">Next</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane fade" id="experience" role="tabpanel">
+                            <form id="formExperience">
+                                <div class="table-responsive mt-3">
+                                    <div class="row">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Pertandingan</th>
+                                                    <th>Peringkat</th>
+                                                    <th>Kategori</th>
+                                                    <th>Pencapaian</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="experienceTableBody">
+                                                <tr>
+                                                    <td>
+                                                        <input type="text" class="form-control" placeholder="Contoh: Kejohanan Bola Sepak">
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-select">
+                                                            <option>Sila pilih pering</option>
+                                                            <option>Daerah</option>
+                                                            <option>Negeri</option>
+                                                            <option>Kebangsaan</option>
+                                                            <option>Antarabangsa</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-select">
+                                                            <option>Sila pilih kategori</option>
+                                                            <option>Bawah 12</option>
+                                                            <option>Bawah 15</option>
+                                                            <option>Terbuka</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-select">
+                                                            <option>Sila pilih pencapaian</option>
+                                                            <option>Johan</option>
+                                                            <option>Naib Johan</option>
+                                                            <option>Tempat Ketiga</option>
+                                                            <option>Penyertaan</option>
+                                                        </select>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-danger removeRow">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- Butang Tambah -->
+                                    <div class="mb-3 text-end">
+                                        <button type="button" id="addRow" class="btn btn-outline-primary">
+                                            <i class="fa-solid fa-plus me-1"></i> Add 
+                                        </button>
+                                    </div>
+                                </div>
+
+                                
+
+                                <!-- Butang Previous & Next -->
+                                <div class="row">
+                                    <div class="col text-start">
+                                        <button type="button" class="btn" style="background-color: #f4b942; color: white;">Previous</button>
+                                    </div>
+                                    <div class="col text-end">
+                                        <button type="button" class="btn" style="background-color: #00cfe8; color: white;">Next</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane fade" id="coach" role="tabpanel">
+                            <form id="formCoach" class="mt-3">
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <label for="coachSelect" class="form-label required">Jurulatih</label>
+                                        <select id="coachSelect" class="form-select" required>
+                                            <option value="">-- Sila pilih Jurulatih --</option>
+                                            <option value="Coach A">Coach A</option>
+                                            <option value="Coach B">Coach B</option>
+                                            <option value="Coach C">Coach C</option>
+                                            <!-- Tambah pilihan lain mengikut keperluan -->
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="clubSelect" class="form-label required">Kelab</label>
+                                        <select id="clubSelect" class="form-select" required>
+                                            <option value="">-- Sila pilih Kelab --</option>
+                                            <option value="Kelab A">Kelab A</option>
+                                            <option value="Kelab B">Kelab B</option>
+                                            <option value="Kelab C">Kelab C</option>
+                                            <!-- Tambah pilihan lain mengikut keperluan -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Butang Previous -->
+                                <div class="text-start">
+                                    <button type="button" class="btn" style="background-color: #f4b942; color: white;">Previous</button>
+                                </div>
+                            </form>
+                        </div>
+
                         <!-- Other tab forms will go here... -->
 
                     </div>
