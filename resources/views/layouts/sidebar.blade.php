@@ -68,6 +68,14 @@
         </a>
     </li>
     <li class="nav-item">
+        <a href="{{ route('sanction') }}" class="nav-link" role="button">
+            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                <i class="bi bi-gear"></i>
+            </div>
+            <span class="nav-link-text ms-1">Sanction</span>
+        </a>
+    </li>
+        <li class="nav-item">
         <a href="{{ route('setting') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
                 <i class="bi bi-gear"></i>

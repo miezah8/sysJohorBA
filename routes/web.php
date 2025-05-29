@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SanctionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/school/{id}', [SchoolController::class, 'update'])->name('school.update');
 
     //Achievement
-     Route::resource('achievement', AchievementController::class)->only(['index', 'store', 'update'])
+    Route::resource('achievement', AchievementController::class)->only(['index', 'store', 'update'])
         ->names(['index' => 'achievement']);
     Route::post('/achievement', [AchievementController::class, 'store'])->name('achievement.store');
 
@@ -57,7 +58,7 @@ Route::middleware('auth')->group(function () {
     //Route::post('/clubs/show', [ClubController::class,'show'])->name('clubs.show');
     // 2) Then your resource routes (index, create, store, show, edit, update, destroy):
     Route::resource('clubs', ClubController::class);
-    
+
 
     //ddl
     Route::get('/districts', [SchoolController::class, 'getDistricts'])->name('districts.list');
@@ -65,7 +66,16 @@ Route::middleware('auth')->group(function () {
     // states for the state dropdown
     Route::get('/states', [SchoolController::class, 'getStates'])->name('states.list');
 
-   
+    //Sanction
+    //Route::resource('sanction', SanctionController::class);//->names('sanction');
+    //Route::get('/sanction', [SanctionController::class, 'index'])->name('sanction.index');
+    Route::resource('sanction', SanctionController::class)
+     ->names(['index' => 'sanction',
+         // you can leave the other names default:
+         // 'create' => 'sanction.create',
+         // 'store'  => 'sanction.store',
+         // …etc.
+     ]);
 });
 
 
