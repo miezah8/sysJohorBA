@@ -22,7 +22,7 @@
     <li class="nav-item">
         <a href="{{ route('athlete') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
-                <i class="bi bi-person-running"></i>
+                <i class="bi bi-person-walking"></i>
             </div>
             <span class="nav-link-text ms-1">Athlete</span>
         </a>
@@ -70,7 +70,7 @@
     <li class="nav-item">
         <a href="{{ route('sanction') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
-                <i class="bi bi-gear"></i>
+                <i class="bi bi-file-ruled"></i>
             </div>
             <span class="nav-link-text ms-1">Sanction</span>
         </a>
