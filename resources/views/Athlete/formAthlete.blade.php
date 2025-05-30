@@ -2,57 +2,67 @@
 @section('title', 'Athlete Module')
 
 @section('content')
+    <!-- Begin: Card Pendaftaran Athlete -->
     <div class="card">
-        <!-- Card header -->
+        <!-- Begin : Card header -->
         <div class="card-header d-flex justify-content-between">
-            <h5 class="mb-0">Pendaftaran Athlete</h5>
+            <h4 class="mb-0">Pendaftaran Athlete</h4>
         </div>
+        <!-- End: Card header -->
         <div class="table-responsive">
+            <!-- Begin: Card body -->
             <div class="card-body">
-                <!-- Switch Button -->
-            <div class="form-check form-switch mb-4">
-                <input class="form-check-input" type="checkbox" role="switch" id="switchMode">
-                <label class="form-check-label" for="switchMode">Pemain lebih dari 1</label>
-            </div>
-
-                <!-- Form: Pemain Lebih Dari 1 -->
+                <!-- Begin : Switch Button -->
+                <div class="form-check form-switch mb-4">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchMode">
+                    <label class="form-check-label" for="switchMode">Pemain lebih dari 1</label>
+                </div>
+                <!-- End : Switch Button -->
+                <!-- Begin: Body Pemain Lebih Dari 1 -->
                 <div id="formMultiple" style="display: none;">
+                    <!-- Begin : Form Multiplayer -->
                     <form id="multiPlayerForm">
                         <div class="multi-row">
+                            <!-- Row untuk player input -->
                             <div class="row align-items-end mb-2">
                                 <div class="col-md-3">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="firstName[]">
+                                    <label class="form-label required">Name</label>
+                                    <input type="text" class="form-control" name="firstName[]" id="NameMultiple">
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label">Family Name</label>
-                                    <input type="text" class="form-control" name="lastName[]">
+                                    <label class="form-label required">Family Name</label>
+                                    <input type="text" class="form-control" name="lastName[]" id="FamNameMultiple">
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" class="form-control" name="email[]">
+                                    <label class="form-label required">Email</label>
+                                    <input type="email" class="form-control" name="email[]" id="emailMultiple">
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" name="phone[]">
+                                    <label class="form-label required">Phone Number</label>
+                                    <input type="tel" class="form-control" name="phone[]" id="phoneMultiple">
                                 </div>
                                 <div class="col-md-2 d-flex align-items-end">
-                                    <button type="button" class="btn btn-danger removeRow">Remove</button>
+                                    <button type="button" class="btn btn-danger w-100 removeRow">Remove</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="text-end mb-3">
-                            <button type="button" id="addRow" class="btn btn-outline-primary">
-                                <i class="fa-solid fa-plus me-1"></i> Add Player
-                            </button>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <!-- Row baru untuk butang Add Player -->
+                            <div class="row mb-3">
+                                <div class="col-md-2 offset-md-10 d-flex justify-content-end">
+                                    <button type="button" id="addRow" class="btn btn-outline-primary w-100">
+                                        <i class="fa-solid fa-plus me-1"></i> Add Player
+                                    </button>
+                                </div>
+                            </div>
                     </form>
+
+                    <!-- End : Form Multiplayer -->
                 </div>
+                <!-- End: Body Pemain Lebih Dari 1 -->
 
-                <!-- Form: 1 Pemain (Tabbed) -->
-
+                <!-- Begin: 1 Pemain (Tabbed) -->
                 <div id="formSingle">
+                    <!-- Begin: Tab Form -->
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button">Maklumat Peribadi</button>
@@ -70,31 +80,35 @@
                             <button class="nav-link" id="coach-tab" data-bs-toggle="tab" data-bs-target="#coach" type="button">Maklumat Jurulatih & Kelab</button>
                         </li>
                     </ul>
+                    <!-- End: Tab Form -->
+
+                    <!-- Begin: Form Maklumat Peribadi -->
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="personal" role="tabpanel">
-                            <!-- Maklumat Peribadi Form -->
+                            <!-- Begin: Maklumat Peribadi Form -->
                             <form id="formPersonal">
+                                <!-- Begin: Row -->
                                 <div class="row mt-3">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">First Name</label>
-                                        <input type="text" class="form-control" required>
+                                        <input type="text" class="form-control">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Last Name</label>
-                                        <input type="text" class="form-control" required>
+                                        <input type="text" class="form-control">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">No. KP/Passport</label>
-                                        <input type="text" class="form-control" required>
+                                        <input type="text" class="form-control">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Phone Number</label>
-                                        <input type="tel" class="form-control" required>
+                                        <input type="tel" class="form-control">
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label class="form-label d-block required">Jantina</label>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="jantina" id="lelaki" value="Lelaki" required>
+                                            <input class="form-check-input" type="radio" name="jantina" id="lelaki" value="Lelaki">
                                             <label class="form-check-label" for="lelaki">Lelaki</label>
                                         </div>
                                         <div class="form-check form-check-inline">
@@ -104,24 +118,24 @@
                                     </div>
                                     <div class="col-md-5 mb-3">
                                         <label class="form-label required">Emel</label>
-                                        <input type="email" class="form-control" required>
+                                        <input type="email" class="form-control">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label required">Warganegara</label>
-                                        <select id="countryList" class="form-select" required>
+                                        <select id="countryList" class="form-select">
                                             <option value="">-- Pilih Negara --</option>
                                         </select>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Alamat</label>
-                                        <textarea class="form-control" rows="8" required></textarea>
+                                        <textarea class="form-control" rows="8"></textarea>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="row">
                                             <div class="col-md-12 mb-3">
                                                 <label class="form-label required">Poskod</label>
-                                                <input type="text" class="form-control" required>
+                                                <input type="text" class="form-control">
                                             </div>
                                             <div class="col-md-12 mb-3">
                                                 <label class="form-label required">Negeri</label>
@@ -147,7 +161,7 @@
                                             </div>
                                             <div class="col-md-12 mb-3">
                                                 <label class="form-label required">Daerah</label>
-                                                <select class="form-select" id="daerahDropdown" required>
+                                                <select class="form-select" id="daerahDropdown">
                                                     <option value="">-- Pilih Daerah --</option>
                                                 </select>
                                             </div>
@@ -157,11 +171,11 @@
                                     <div class="row mb-3">
                                         <div class="col-md-4">
                                             <label class="form-label required">Gambar</label>
-                                            <input type="file" class="form-control" accept="image/*" required>
+                                            <input type="file" class="form-control" accept="image/*">
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label required">Saiz T-Shirt</label>
-                                            <select class="form-select" required>
+                                            <select class="form-select">
                                                 <option value="">-- Pilih Saiz --</option>
                                                 <option value="XS">XS</option>
                                                 <option value="S">S</option>
@@ -174,11 +188,9 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label required">Nama di T-Shirt</label>
-                                            <input type="text" class="form-control" required>
+                                            <input type="text" class="form-control">
                                         </div>
-                                        
                                     </div>
-
                                     <div class="text-end">
                                         <button type="button" class="btn btn-primary">Next</button>
                                     </div>
@@ -191,21 +203,21 @@
                                 <div class="row mt-3">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Nama Penjaga</label>
-                                        <input type="text" class="form-control" required>
+                                        <input type="text" class="form-control">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">No Telefon Penjaga</label>
-                                        <input type="text" class="form-control" required>
+                                        <input type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Pekerjaan</label>
-                                        <input type="text" class="form-control" required>
+                                        <input type="text" class="form-control">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Perhubungan</label>
-                                        <input type="text" class="form-control" required>
+                                        <input type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row mt-4">
@@ -216,7 +228,6 @@
                                         <button type="button" class="btn btn-primary">Next</button>
                                     </div>
                                 </div>
-
                             </form>
                         </div>
                         
@@ -226,7 +237,7 @@
                                     <!-- Dropdown Nama Sekolah -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Nama Sekolah</label>
-                                        <select id="schoolDropdown" class="form-select" required>
+                                        <select id="schoolDropdown" class="form-select">
                                             <option value="">-- Pilih Sekolah --</option>
                                             <!-- Contoh pilihan, nanti boleh populate dari JS -->
                                             <option value="SK Taman Bukit">SK Taman Bukit</option>
@@ -234,28 +245,28 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Kod Sekolah</label>
+                                        <label class="form-label required">Kod Sekolah</label>
                                         <input type="text" class="form-control" disabled>
                                     </div>
 
                                     <!-- Kiri: Alamat -->
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Alamat Sekolah</label>
+                                        <label class="form-label required">Alamat Sekolah</label>
                                         <textarea class="form-control" rows="8" disabled></textarea>
                                     </div>
 
                                     <!-- Kanan: Kod, Poskod, Negeri, Daerah -->
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Poskod</label>
+                                            <label class="form-label required">Poskod</label>
                                             <input type="text" class="form-control" disabled>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Negeri</label>
+                                            <label class="form-label required">Negeri</label>
                                             <input type="text" class="form-control" disabled>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Daerah</label>
+                                            <label class="form-label required">Daerah</label>
                                             <input type="text" class="form-control" disabled>
                                         </div>
                                     </div>
@@ -280,11 +291,11 @@
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th>Pertandingan</th>
-                                                    <th>Peringkat</th>
-                                                    <th>Kategori</th>
-                                                    <th>Pencapaian</th>
-                                                    <th></th>
+                                                    <th class="required">Pertandingan</th>
+                                                    <th class="required">Peringkat</th>
+                                                    <th class="required">Kategori</th>
+                                                    <th class="required">Pencapaian</th>
+                                                    <th class=""></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="experienceTableBody">
@@ -334,9 +345,6 @@
                                         </button>
                                     </div>
                                 </div>
-
-                                
-
                                 <!-- Butang Previous & Next -->
                                 <div class="row">
                                     <div class="col text-start">
@@ -354,7 +362,7 @@
                                 <div class="row mb-4">
                                     <div class="col-md-6">
                                         <label for="coachSelect" class="form-label required">Jurulatih</label>
-                                        <select id="coachSelect" class="form-select" required>
+                                        <select id="coachSelect" class="form-select">
                                             <option value="">-- Sila pilih Jurulatih --</option>
                                             <option value="Coach A">Coach A</option>
                                             <option value="Coach B">Coach B</option>
@@ -364,7 +372,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="clubSelect" class="form-label required">Kelab</label>
-                                        <select id="clubSelect" class="form-select" required>
+                                        <select id="clubSelect" class="form-select">
                                             <option value="">-- Sila pilih Kelab --</option>
                                             <option value="Kelab A">Kelab A</option>
                                             <option value="Kelab B">Kelab B</option>
@@ -373,7 +381,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <!-- Butang Previous -->
                                 <div class="text-start">
                                     <button type="button" class="btn" style="background-color: #f4b942; color: white;">Previous</button>
@@ -381,12 +388,16 @@
                             </form>
                         </div>
 
-                        <!-- Other tab forms will go here... -->
-
                     </div>
                 </div>
 
             </div>
+        </div>
+        <div class="card-footer text-center">
+            <button type="button" class="btn btn-secondary btn-sm">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+            <button type="button" id="SubmitAll" class="btn btn-primary btn-sm">Submit</button>
+
         </div>
     </div>
 @endsection
@@ -410,10 +421,21 @@
         td {
             font-size: 0.875em;
         }
+
+        .required::after {
+            content: " *";
+            color: red;
+        }
+
     </style>
 @endpush
 
 @push('scripts')
+    <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const dataTableSearch = new simpleDatatables.DataTable(
             "#datatable-search", {
@@ -440,82 +462,121 @@
     </script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.querySelector('#multiPlayerForm');
-        const container = form.querySelector('.multi-row');
-        const addButton = document.querySelector('#addRow');
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('#multiPlayerForm');
+            const container = form.querySelector('.multi-row');
+            const addButton = document.querySelector('#addRow');
 
-        addButton.addEventListener('click', function () {
-            const row = container.querySelector('.row');
-            const newRow = row.cloneNode(true);
+            addButton.addEventListener('click', function () {
+                const row = container.querySelector('.row');
+                const newRow = row.cloneNode(true);
 
-            newRow.querySelectorAll('input').forEach(input => input.value = '');
-            container.appendChild(newRow);
-        });
+                newRow.querySelectorAll('input').forEach(input => input.value = '');
+                container.appendChild(newRow);
+            });
 
-        form.addEventListener('click', function (e) {
-            if (e.target.classList.contains('removeRow')) {
-                const rows = container.querySelectorAll('.row');
-                if (rows.length > 1) {
-                    e.target.closest('.row').remove();
-                } else {
-                    alert('Sekurang-kurangnya satu baris mesti ada.');
+            form.addEventListener('click', function (e) {
+                if (e.target.classList.contains('removeRow')) {
+                    const rows = container.querySelectorAll('.row');
+                    if (rows.length > 1) {
+                        e.target.closest('.row').remove();
+                    } else {
+                        alert('Sekurang-kurangnya satu baris mesti ada.');
+                    }
                 }
-            }
+            });
         });
-    });
-</script>
+    </script>
 
-<script>
-fetch('https://restcountries.com/v3.1/all')
-  .then(res => res.json())
-  .then(data => {
-    const countrySelect = document.getElementById('countryList');
-    const countries = data.map(c => c.name.common).sort();
-    countries.forEach(name => {
-      const opt = document.createElement('option');
-      opt.value = name;
-      opt.textContent = name;
-      countrySelect.appendChild(opt);
-    });
-  });
-</script>
+    <script>
+        fetch('https://restcountries.com/v3.1/all')
+        .then(res => res.json())
+        .then(data => {
+            const countrySelect = document.getElementById('countryList');
+            const countries = data.map(c => c.name.common).sort();
+            countries.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            countrySelect.appendChild(opt);
+            });
+        });
+    </script>
 
-
-<script>
-  // Penuhkan dropdown Negeri
-  fetch('proxy.php?endpoint=negeri')
-    .then(response => response.json())
-    .then(data => {
-      const negeriSelect = document.getElementById('negeriDropdown');
-      negeriSelect.innerHTML = '<option value="">-- Pilih Negeri --</option>';
-      data.forEach(negeri => {
-        const option = document.createElement('option');
-        option.value = negeri.name;
-        option.textContent = negeri.name;
-        negeriSelect.appendChild(option);
-      });
-    });
-
-  // Bila negeri berubah, penuhkan Daerah
-  document.getElementById('negeriDropdown').addEventListener('change', function () {
-    const negeri = this.value;
-    const daerahSelect = document.getElementById('daerahDropdown');
-    daerahSelect.innerHTML = '<option value="">-- Pilih Daerah --</option>';
-
-    if (negeri) {
-      fetch(`proxy.php?endpoint=daerah&negeri=${encodeURIComponent(negeri)}`)
+    <script>
+    // Penuhkan dropdown Negeri
+    fetch('proxy.php?endpoint=negeri')
         .then(response => response.json())
         .then(data => {
-          data.forEach(daerah => {
+        const negeriSelect = document.getElementById('negeriDropdown');
+        negeriSelect.innerHTML = '<option value="">-- Pilih Negeri --</option>';
+        data.forEach(negeri => {
             const option = document.createElement('option');
-            option.value = daerah;
-            option.textContent = daerah;
-            daerahSelect.appendChild(option);
-          });
+            option.value = negeri.name;
+            option.textContent = negeri.name;
+            negeriSelect.appendChild(option);
         });
-    }
-  });
-</script>
+        });
+
+    // Bila negeri berubah, penuhkan Daerah
+    document.getElementById('negeriDropdown').addEventListener('change', function () {
+        const negeri = this.value;
+        const daerahSelect = document.getElementById('daerahDropdown');
+        daerahSelect.innerHTML = '<option value="">-- Pilih Daerah --</option>';
+
+        if (negeri) {
+        fetch(`proxy.php?endpoint=daerah&negeri=${encodeURIComponent(negeri)}`)
+            .then(response => response.json())
+            .then(data => {
+            data.forEach(daerah => {
+                const option = document.createElement('option');
+                option.value = daerah;
+                option.textContent = daerah;
+                daerahSelect.appendChild(option);
+            });
+            });
+        }
+    });
+    </script>
+
+    <script>
+        $('#SubmitAll').on('click', function () {
+            let isValid = true;
+            let data = [];
+
+            $('input[name="firstName[]"]').each(function (index) {
+                let firstName = $(this).val().trim();
+                let lastName = $('input[name="lastName[]"]').eq(index).val().trim();
+                let email = $('input[name="email[]"]').eq(index).val().trim();
+                let phone = $('input[name="phone[]"]').eq(index).val().trim();
+
+                if (!firstName || !lastName || !email || !phone) {
+                    isValid = false;
+                    return false; // keluar dari .each
+                }
+
+                data.push({
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    phone: phone
+                });
+            });
+
+            if (!isValid) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Maklumat tidak lengkap',
+                    text: 'Sila pastikan semua medan diisi sebelum meneruskan.'
+                });
+                return;
+            }
+
+            console.log(data);
+
+        });
+
+    </script>
+
 
 @endpush
