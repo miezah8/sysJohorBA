@@ -38,10 +38,21 @@
                     {{ __('Forgot your password?') }}
                 </a>
             @endif
-
+                
             <x-primary-button class="ms-3">
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
     </form>
+
+    
+        {{-- Pautan Register di bawah borang --}}
+        @if (Route::has('register'))
+            <div class="mt-6 text-center">
+                <a href="{{ route('register') }}"
+                class="underline text-sm text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    {{ __("Don't have an account? Register") }}
+                </a>
+            </div>
+        @endif
 </x-guest-layout>
