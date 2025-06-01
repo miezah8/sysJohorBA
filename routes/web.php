@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
 
     //coach
     Route::get('/coach', [CoachController::class, 'index'])->name('coach');
+    Route::get('/coach/{coach}/players', [CoachController::class, 'players'])->name('coach.players');
 
     Route::get('/user', [UserController::class, 'index'])->name('user');
 

@@ -24,7 +24,9 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $coach->coach_fname }}</td>
-                            <td><a class="{{ $coach->athletes_coach_count > 0 ? 'text-danger fw-bold' : '' }}" href="#">{{ $coach->athletes_coach_count }}</a></td>
+                            <td><a class="{{ $coach->athletes_coach_count > 0 ? 'text-danger fw-bold' : '' }}"
+                                    href="{{ route('coach.players', $coach->id_coach) }}">{{ $coach->athletes_coach_count }}</a>
+                            </td>
                             <td>
                                 {{-- <button class="btn btn-outline-info" type="button">
                                     <i class="fa-solid fa-pen-to-square"></i>

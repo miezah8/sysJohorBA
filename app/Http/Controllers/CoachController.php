@@ -21,6 +21,12 @@ class CoachController extends Controller
         return view('coach.index', ['coachData' => $coachData]);
     }
 
+    public function players(Coach $coach)
+    {
+        $players = $coach->athletesCoach()->paginate(25);
+        return view('coach.players', compact('coach', 'players'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
