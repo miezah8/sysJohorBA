@@ -9,6 +9,7 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Admin\UserController;// as AdminUserController;
 use App\Http\Controllers\SanctionController;
+use App\Models\Athlete;
 //use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -73,6 +74,7 @@ Route::middleware('auth')->group(function () {
 
     //ddl
     Route::get('/districts', [SchoolController::class, 'getDistricts'])->name('districts.list');
+    Route::get('/nationality', [AthleteController::class, 'getNationality'])->name('nationality.list');
 
     // states for the state dropdown
     Route::get('/states', [SchoolController::class, 'getStates'])->name('states.list');

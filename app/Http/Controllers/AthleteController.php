@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Athlete;
+use App\Models\Nationality;
 use Illuminate\Support\Facades\DB;
 
 class AthleteController extends Controller
@@ -79,5 +80,11 @@ class AthleteController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getNationality()
+    {
+        // returns { id_state: state_name, … }
+        return response()->json(Nationality::pluck('nationality_name', 'id_nationality'));
     }
 }

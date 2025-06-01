@@ -19,7 +19,7 @@
                 </div>
                 <!-- End : Switch Button -->
                 <!-- Begin: Body Pemain Lebih Dari 1 -->
-                <div id="formMultiple" style="display: none;">
+                <div id="formMultiple" class="d-none">
                     <!-- Begin : Form Multiplayer -->
                     <form id="multiPlayerForm">
                         <div class="multi-row">
@@ -49,7 +49,7 @@
                         <!-- Row baru untuk butang Add Player -->
                             <div class="row mb-3">
                                 <div class="col-md-2 offset-md-10 d-flex justify-content-end">
-                                    <button type="button" id="addRow" class="btn btn-outline-primary w-100">
+                                    <button type="button" id="addRow" class="btn btn-outline-primary">
                                         <i class="fa-solid fa-plus me-1"></i> Add Player
                                     </button>
                                 </div>
@@ -61,7 +61,7 @@
                 <!-- End: Body Pemain Lebih Dari 1 -->
 
                 <!-- Begin: 1 Pemain (Tabbed) -->
-                <div id="formSingle">
+                <div id="formSingle" class="">
                     <!-- Begin: Tab Form -->
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -91,56 +91,56 @@
                                 <div class="row mt-3">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">First Name</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" name="firstname">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Last Name</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" name="lastname">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">No. KP/Passport</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" name="idNumber">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Phone Number</label>
-                                        <input type="tel" class="form-control">
+                                        <input type="tel" name="phone" id="phone" class="form-control">
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <label class="form-label d-block required">Jantina</label>
+                                        <label class="form-label d-block required">Gender</label>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="jantina" id="lelaki" value="Lelaki">
-                                            <label class="form-check-label" for="lelaki">Lelaki</label>
+                                            <input class="form-check-input" type="radio" name="gender" id="lelaki" value="Lelaki">
+                                            <label class="form-check-label" for="lelaki">Male</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="jantina" id="perempuan" value="Perempuan">
-                                            <label class="form-check-label" for="perempuan">Perempuan</label>
+                                            <input class="form-check-input" type="radio" name="gender" id="perempuan" value="Perempuan">
+                                            <label class="form-check-label" for="perempuan">Female</label>
                                         </div>
                                     </div>
                                     <div class="col-md-5 mb-3">
-                                        <label class="form-label required">Emel</label>
-                                        <input type="email" class="form-control">
+                                        <label class="form-label required">Email</label>
+                                        <input type="email" class="form-control" name="email">
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label class="form-label required">Warganegara</label>
-                                        <select id="countryList" class="form-select">
-                                            <option value="">-- Pilih Negara --</option>
+                                        <label class="form-label required">Citizens</label>
+                                        <select id="countryList" class="form-select" name="citizens">
+                                            <option value="">-- Select Country --</option>
                                         </select>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">Alamat</label>
-                                        <textarea class="form-control" rows="8"></textarea>
+                                        <label class="form-label required">Address</label>
+                                        <textarea class="form-control" name="address" rows="8"></textarea>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="row">
                                             <div class="col-md-12 mb-3">
-                                                <label class="form-label required">Poskod</label>
-                                                <input type="text" class="form-control">
+                                                <label class="form-label required">Postcode</label>
+                                                <input type="text" class="form-control" name="postcode" id="postcode">
                                             </div>
                                             <div class="col-md-12 mb-3">
-                                                <label class="form-label required">Negeri</label>
+                                                <label class="form-label required">State</label>
                                                 <select class="form-control" id="schA_state" name="sch_state" onchange="stateSch_change(this.value);">
-									                <option value="">Please choose state</option>
+									                <option value="">-- Select State --</option>
                                                     <option value="1">JOHOR</option>
                                                     <option value="2">KEDAH</option>
                                                     <option value="3">KELANTAN</option>
@@ -160,9 +160,9 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-12 mb-3">
-                                                <label class="form-label required">Daerah</label>
-                                                <select class="form-select" id="daerahDropdown">
-                                                    <option value="">-- Pilih Daerah --</option>
+                                                <label class="form-label required">Districts</label>
+                                                <select class="form-select" id="daerahDropdown" name="districts">
+                                                    <option value="">-- Select Districts --</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -170,13 +170,13 @@
 
                                     <div class="row mb-3">
                                         <div class="col-md-4">
-                                            <label class="form-label required">Gambar</label>
-                                            <input type="file" class="form-control" accept="image/*">
+                                            <label class="form-label required">Picture</label>
+                                            <input type="file" class="form-control" name="picture" accept="image/*">
                                         </div>
                                         <div class="col-md-4">
-                                            <label class="form-label required">Saiz T-Shirt</label>
-                                            <select class="form-select">
-                                                <option value="">-- Pilih Saiz --</option>
+                                            <label class="form-label required">T-Shirt Size</label>
+                                            <select class="form-select" name="size">
+                                                <option value="">-- Select Size --</option>
                                                 <option value="XS">XS</option>
                                                 <option value="S">S</option>
                                                 <option value="M">M</option>
@@ -187,12 +187,12 @@
                                             </select>
                                         </div>
                                         <div class="col-md-4">
-                                            <label class="form-label required">Nama di T-Shirt</label>
-                                            <input type="text" class="form-control">
+                                            <label class="form-label required">Name on T-Shirt</label>
+                                            <input type="text" class="form-control" >
                                         </div>
                                     </div>
                                     <div class="text-end">
-                                        <button type="button" class="btn btn-primary">Next</button>
+                                        <button type="button" class="btn btn-primary" id="btnNext">Next</button>
                                     </div>
                                 </div>
                             </form>
@@ -394,15 +394,16 @@
             </div>
         </div>
         <div class="card-footer text-center">
-            <button type="button" class="btn btn-secondary btn-sm">Cancel</button>
-            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-            <button type="button" id="SubmitAll" class="btn btn-primary btn-sm">Submit</button>
-
+            <button type="button" id="CancelALlForm" class="btn btn-secondary btn-sm">Cancel</button>
+            <button type="button" id="SubmitAllForm" class="btn btn-primary btn-sm">Submit</button>
         </div>
     </div>
 @endsection
 
 @push('css')
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/css/intlTelInput.min.css" />
+
     <style>
         table th:first-child,
         table td:first-child {
@@ -427,156 +428,256 @@
             color: red;
         }
 
+        .is-invalid {
+            border-color: red !important;
+        }
     </style>
 @endpush
 
 @push('scripts')
     <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        const dataTableSearch = new simpleDatatables.DataTable(
-            "#datatable-search", {
-                searchable: true,
-                fixedHeight: true,
-            }
-        );
-    </script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        const switchMode = document.getElementById('switchMode');
-        const formMultiple = document.getElementById('formMultiple');
-        const formSingle = document.getElementById('formSingle');
-
-        switchMode.addEventListener('change', function () {
-            if (this.checked) {
-                formMultiple.style.display = 'block';
-                formSingle.style.display = 'none';
-            } else {
-                formMultiple.style.display = 'none';
-                formSingle.style.display = 'block';
-            }
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.querySelector('#multiPlayerForm');
-            const container = form.querySelector('.multi-row');
-            const addButton = document.querySelector('#addRow');
-
-            addButton.addEventListener('click', function () {
-                const row = container.querySelector('.row');
-                const newRow = row.cloneNode(true);
-
-                newRow.querySelectorAll('input').forEach(input => input.value = '');
-                container.appendChild(newRow);
+        $(document).ready(function () {
+            //Switch function
+            $('#switchMode').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#formMultiple').removeClass('d-none').addClass('d-block');
+                    $('#formSingle').removeClass('d-block').addClass('d-none');
+                } else {
+                    $('#formMultiple').removeClass('d-block').addClass('d-none');
+                    $('#formSingle').removeClass('d-none').addClass('d-block');
+                }
             });
 
-            form.addEventListener('click', function (e) {
-                if (e.target.classList.contains('removeRow')) {
-                    const rows = container.querySelectorAll('.row');
-                    if (rows.length > 1) {
-                        e.target.closest('.row').remove();
+            //function add multiple form
+            const $form = $('#multiPlayerForm');
+            const $container = $form.find('.multi-row');
+            const $addButton = $('#addRow');
+
+            $addButton.on('click', function () {
+                const $row = $container.find('.row').first();
+                const $newRow = $row.clone();
+
+                $newRow.find('input').val('');
+                $container.append($newRow);
+            });
+
+            $form.on('click', '.removeRow', function () {
+                const $rows = $container.find('.row');
+                if ($rows.length > 1) {
+                    $(this).closest('.row').remove();
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'At least one row is required.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+
+            //function button next
+            $('#btnNext').on('click', function () {
+                const form = $('#formPersonal');
+                const fields = [
+                    { selector: 'input[name="firstname"]', name: 'First Name' },
+                    { selector: 'input[name="lastname"]', name: 'Last Name' },
+                    { selector: 'input[name="idNumber"]', name: 'No. KP/Passport' },
+                    { selector: 'input[name="phone"]', name: 'Phone Number' },
+                    { selector: 'input[name="gender"]', name: 'Gender', isRadio: true },
+                    { selector: 'input[name="email"]', name: 'Email' },
+                    { selector: '#countryList', name: 'Citizens' },
+                    { selector: 'textarea[name="address"]', name: 'Address' },
+                    { selector: 'input[name="postcode"]', name: 'Postcode' },
+                    { selector: '#schA_state', name: 'State' },
+                    { selector: '#daerahDropdown', name: 'Districts' },
+                    { selector: 'input[name="picture"]', name: 'Picture' },
+                    { selector: 'select[name="size"]', name: 'T-Shirt Size' },
+                    { selector: 'input[name="shirtName"]', name: 'Name on T-Shirt' } // ni awak tak letak name dalam HTML, kena tambah
+                ];
+
+                // Reset semua error state
+                form.find('input, select, textarea').removeClass('is-invalid');
+                form.find('.mb-3').removeClass('border border-danger p-2');
+
+                for (let field of fields) {
+                    const el = form.find(field.selector);
+                    let value;
+
+                    if (field.isRadio) {
+                        value = el.filter(':checked').val();
                     } else {
-                        alert('Sekurang-kurangnya satu baris mesti ada.');
+                        value = el.val() ? el.val().trim() : '';
+                    }
+
+                    if (!value) {
+                        el.addClass('is-invalid');
+                        el.closest('.mb-3').addClass('border border-danger p-2');
+
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Missing Information',
+                            text: `Please enter ${field.name}`,
+                            confirmButtonText: 'OK'
+                        });
+                        return;
                     }
                 }
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'All Set!',
+                    text: 'Proceeding to the next step.',
+                    confirmButtonText: 'Continue'
+                }).then(() => {
+                    // proceedNextStep();
+                });
             });
-        });
-    </script>
 
-    <script>
-        fetch('https://restcountries.com/v3.1/all')
-        .then(res => res.json())
-        .then(data => {
-            const countrySelect = document.getElementById('countryList');
-            const countries = data.map(c => c.name.common).sort();
-            countries.forEach(name => {
-            const opt = document.createElement('option');
-            opt.value = name;
-            opt.textContent = name;
-            countrySelect.appendChild(opt);
+
+
+
+
+
+
+            // Auto clear error when typing/selecting
+            $('#formPersonal input, #formPersonal select, #formPersonal textarea').on('input change', function () {
+                if ($(this).val().trim() !== '') {
+                    $(this).removeClass('is-invalid');
+                    $(this).closest('.mb-3').removeClass('border border-danger p-2');
+                }
             });
-        });
-    </script>
 
-    <script>
-    // Penuhkan dropdown Negeri
-    fetch('proxy.php?endpoint=negeri')
-        .then(response => response.json())
-        .then(data => {
-        const negeriSelect = document.getElementById('negeriDropdown');
-        negeriSelect.innerHTML = '<option value="">-- Pilih Negeri --</option>';
-        data.forEach(negeri => {
-            const option = document.createElement('option');
-            option.value = negeri.name;
-            option.textContent = negeri.name;
-            negeriSelect.appendChild(option);
-        });
-        });
-
-    // Bila negeri berubah, penuhkan Daerah
-    document.getElementById('negeriDropdown').addEventListener('change', function () {
-        const negeri = this.value;
-        const daerahSelect = document.getElementById('daerahDropdown');
-        daerahSelect.innerHTML = '<option value="">-- Pilih Daerah --</option>';
-
-        if (negeri) {
-        fetch(`proxy.php?endpoint=daerah&negeri=${encodeURIComponent(negeri)}`)
-            .then(response => response.json())
-            .then(data => {
-            data.forEach(daerah => {
-                const option = document.createElement('option');
-                option.value = daerah;
-                option.textContent = daerah;
-                daerahSelect.appendChild(option);
+            //cancel button
+            $('#CancelALlForm').click(function() {
+                const container = $('#formSingle');
+                container.find('input[type="text"], input[type="number"], input[type="email"], textarea, select').val('');
+                container.find('input[type="checkbox"], input[type="radio"]').prop('checked', false);
             });
-            });
-        }
-    });
-    </script>
 
-    <script>
-        $('#SubmitAll').on('click', function () {
-            let isValid = true;
-            let data = [];
+            //submit button
+            $('#SubmitAll').on('click', function () {
+                let isValid = true;
+                let showMessage = null;
 
-            $('input[name="firstName[]"]').each(function (index) {
-                let firstName = $(this).val().trim();
-                let lastName = $('input[name="lastName[]"]').eq(index).val().trim();
-                let email = $('input[name="email[]"]').eq(index).val().trim();
-                let phone = $('input[name="phone[]"]').eq(index).val().trim();
+                // Untuk debug selepas loop, kita simpan contoh
+                let validName = '';
+                let validEmail = '';
 
-                if (!firstName || !lastName || !email || !phone) {
-                    isValid = false;
-                    return false; // keluar dari .each
+                $('input[name="firstName[]"]').each(function (index) {
+                    let name = $(this).val().trim();
+                    let familyName = $('input[name="lastName[]"]').eq(index).val().trim();
+                    let email = $('input[name="email[]"]').eq(index).val().trim();
+                    let phone = $('input[name="phone[]"]').eq(index).val().trim();
+
+                    if (!name) {
+                        isValid = false;
+                        showMessage = `Please enter the name`;
+                        return false;
+                    }
+                    if (!familyName) {
+                        isValid = false;
+                        showMessage = `Please enter the family name`;
+                        return false;
+                    }
+                    if (!email) {
+                        isValid = false;
+                        showMessage = `Please enter the email`;
+                        return false;
+                    }
+                    if (!phone) {
+                        isValid = false;
+                        showMessage = `Please enter the phone number`;
+                        return false;
+                    }
+
+                    // Simpan satu contoh data untuk debug
+                    validName = name;
+                    validFamilyName = familyName;
+                    validEmail = email;
+                    validPhone = phone;
+                });
+
+                if (!isValid && showMessage) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning ',
+                        text: showMessage
+                    });
+                    return;
+                } else {
+                    console.log(validName, validFamilyName, validEmail, validPhone); // Kini name dan email ada nilai
                 }
 
-                data.push({
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    phone: phone
-                });
+                // proceedNextStep();
             });
 
-            if (!isValid) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Maklumat tidak lengkap',
-                    text: 'Sila pastikan semua medan diisi sebelum meneruskan.'
+            function loadDistricts(selectedId = null) {
+                const $ddl = $('#daerahDropdown');
+                $ddl.prop('disabled', true).empty().append('<option value="">Loading districts...</option>');
+
+                $.get("{{ route('districts.list') }}", function(districts) {
+                    $ddl.empty().append('<option value="">-- Select District --</option>');
+
+                    $.each(districts, function(id, name) {
+                        $ddl.append(new Option(name, id));
+                    });
+
+                    if (selectedId) {
+                        $ddl.val(selectedId).trigger('change'); // trigger for select2 update
+                    }
+
+                    $ddl.prop('disabled', false);
                 });
-                return;
             }
 
-            console.log(data);
+            function loadStates(selectedId = null) {
+                const $ddl = $('#schA_state');
+                $ddl.prop('disabled', true)
+                    .empty()
+                    .append('<option>Loading states…</option>');
+
+                $.get("{{ route('states.list') }}", function(states) {
+                    $ddl.empty().append('<option value="">-- Select State --</option>');
+                    $.each(states, function(id, name) {
+                    $ddl.append(new Option(name, id));
+                    });
+                    if (selectedId) {
+                    $ddl.val(selectedId).trigger('change');
+                    }
+                    $ddl.prop('disabled', false);
+                });
+            }
+
+            function loadNationality(selectedId = null) {
+                const $ddl = $('#countryList');
+                $ddl.prop('disabled', true)                 // disable dropdown sementara loading
+                    .empty()                                // kosongkan option sedia ada
+                    .append('<option>Loading citizens</option>');  // masukkan option loading
+
+                $.get("{{ route('nationality.list') }}", function(nationality) {  // fetch data via GET
+                    $ddl.empty().append('<option value="">-- Select Citizens --</option>'); // reset option
+                    
+                    // untuk setiap data nationality (id, name), buat option baru
+                    $.each(nationality, function(id, name) {
+                        $ddl.append(new Option(name, id));
+                    });
+
+                    // kalau ada selectedId, set nilai dropdown dan trigger change event
+                    if (selectedId) {
+                        $ddl.val(selectedId).trigger('change');
+                    }
+
+                    // enable dropdown semula bila dah siap
+                    $ddl.prop('disabled', false);
+                });
+            }
 
         });
-
     </script>
-
-
 @endpush

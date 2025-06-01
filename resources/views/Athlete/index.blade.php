@@ -6,10 +6,9 @@
         <!-- Card header -->
         <div class="card-header d-flex justify-content-between">
             <h5 class="mb-0">List of Athlete</h5>
-            <a href="{{ route('athlete.create') }}" class="btn btn-behance">
-                <i class="fa-solid fa-plus me-1"></i> Add
+            <a href="{{ route('athlete.create') }}" class="btn btn-outline-success">
+                <i class="fa-solid fa-plus me-1"></i> Add Athlete
             </a>
-
         </div>
         <div class="table-responsive">
             <table class="table table-flush" id="datatable-search">
@@ -30,7 +29,7 @@
                             <td>{{ $data->club_name }}</td>
                             <td>{{ $data->school_name }}</td>
                             <td>
-                                <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#schoolModal"
+                                <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#"
                                     data-mode="edit" data-id="{{ $data->id_athlete }}">
                                     <i class="fa-solid fa-pen-to-square me-1"></i> Edit
                                 </button>
