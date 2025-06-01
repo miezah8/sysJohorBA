@@ -1,10 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\Coach;
 use Illuminate\Http\Request;
-use App\Models\School;
-use Illuminate\Support\Facades\DB;
 
 class CoachController extends Controller
 {
@@ -13,19 +11,14 @@ class CoachController extends Controller
      */
     public function index(Request $request)
     {
-        $tblSchool = school::all();
+        $coachData = Coach::withCount('athletesCoach')->get();
 
-        $schoolData = DB::table('school as a')
-            ->leftjoin('district as b', 'a.district_id', '=', 'b.id_district')
-            ->select(
-                'a.school_name',
-                'b.district_name',
-            )->get();
+        // $coach = coach::find('1');
+        // $athletes = $coach->athletes; // returns a collection of athletes associated with the coach
+        // $athlete = Athlete::find(1);
+        // $coach = $athlete->coach; // returns the coach associated with the athlete
 
-        return view(
-            'school.index',
-            ['schoolData' => $schoolData,]
-        );
+        return view('coach.index', ['coachData' => $coachData]);
     }
 
     /**
