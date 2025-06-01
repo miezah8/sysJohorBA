@@ -24,8 +24,8 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $club->club_name }}</td>
-                            <td class="{{ $club->athletes_count>0 ? 'text-danger fw-bold':'' }}">
-                                <a href="{{ route('clubs.players', $club->id_club) }}">
+                            <td>
+                                <a class="{{ $club->athletes_count> 0 ? 'text-danger fw-bold':'' }}" href="{{ route('clubs.players', $club->id_club) }}">
                                     {{ $club->athletes_count }}
                                 </a>
                             </td>
