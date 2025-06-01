@@ -10,6 +10,14 @@ use App\Models\State;
 
 class SchoolController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view school')->only(['index','show']);
+        $this->middleware('permission:add school')->only(['create','store']);
+        $this->middleware('permission:edit school')->only(['edit','update']);
+        $this->middleware('permission:delete school')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -113,9 +121,13 @@ class SchoolController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(School $school)
     {
-        //
+        $school->delete();
+
+        return redirect()
+            ->route('school.index')
+            ->with('success','School berhasil dihapus.');
     }
 
     public function getDistricts()

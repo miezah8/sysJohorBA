@@ -14,6 +14,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
+    protected $guard_name = 'web';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -35,7 +37,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
+        protected $hidden = [
         'password',
         'remember_token',
     ];
@@ -45,7 +47,7 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
-    protected $casts = [
+        protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'first_login' => 'boolean',

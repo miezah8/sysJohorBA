@@ -18,9 +18,12 @@ class UserController extends Controller
         // Jika anda mahu hanya yang pending:
         // $users = User::where('status_user', '0')->orderBy('created_at', 'desc')->paginate(10);
         // Jika anda mahu semua (pending + active):
-        $users = User::orderBy('created_at', 'desc')->paginate(10);
+        //$users = User::orderBy('created_at', 'desc')->paginate(10);
 
-        return view('admin.users.index', compact('users'));
+        //return view('admin.users.index', compact('users'));
+        $users = User::with('roles')->orderBy('created_at','desc')->paginate(10);
+        $roles = Role::all();
+        return view('admin.users.index', compact('users','roles'));
     }
 
     /**
@@ -83,5 +86,43 @@ class UserController extends Controller
         return redirect()
             ->route('admin.users.index')
             ->with('success','Pengguna berjaya dikemaskini (status, role, permissions).');
+
     }
+    public function assignRole(Request $request)
+    {
+        $user = User::findOrFail($request->user_id);
+        $user->syncRoles($request->roles ?? []);
+
+        return redirect()->back()->with('success', 'User roles updated successfully.');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'ic_number' => 'required|string|max:20|unique:users,ic_number',
+            'email' => 'required|email|unique:users,email',
+            'contact_no' => 'nullable|string|max:20',
+            'password' => 'required|string|confirmed|min:8',
+            'role' => 'required|exists:roles,name',
+            'status_user' => 'required|in:0,1',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'ic_number' => $request->ic_number,
+            'email' => $request->email,
+            'contact_no' => $request->contact_no,
+            'password' => bcrypt($request->password),
+            'status_user' => $request->status_user,
+            'first_login' => 1,
+        ]);
+
+        $user->assignRole($request->role);
+
+        return redirect()->route('admin.users.index')
+                        ->with('success', 'New user created successfully.');
+    }
+
+
 }

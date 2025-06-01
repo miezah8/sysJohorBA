@@ -3,17 +3,18 @@
 
 @section('content')
     <div class="card p-2">
-        <div class="card-header d-flex justify-content-between">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">List of Registered Users</h5>
-
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal" data-mode="add">
-                    <i class="fa-solid fa-plus me-1"></i> Add New User
-                </button> 
-          
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-flush" id="datatable-search">
+        @if(session('success'))
+            <div class="alert alert-success mt-2">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <div class="table-responsive mt-2">
+            <table class="table table-hover table-flush" id="datatable-search">
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
@@ -43,9 +44,15 @@
                             </td>
                             <td>{{ $user->getRoleNames()->implode(', ') }}</td>
                             <td>
-                                <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-outline-info">
-                                    <i class="fa-solid fa-pen-to-square me-1"></i> Edit
-                                </a>
+                                <!-- Only “Assign Role” button now -->
+                                <button class="btn btn-sm btn-outline-primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#assignRoleModal"
+                                        data-user-id="{{ $user->id }}"
+                                        data-user-name="{{ $user->name }}"
+                                        data-user-roles='@json($user->getRoleNames())'>
+                                    <i class="fa-solid fa-user-gear me-1"></i> Assign Role
+                                </button>
                             </td>
                         </tr>
                     @empty
@@ -63,6 +70,46 @@
     </div>
 
 
+    <!-- Assign Roles Modal (same as before) -->
+    <div class="modal fade" id="assignRoleModal" tabindex="-1" aria-labelledby="assignRoleLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="{{ route('admin.users.assignRole') }}">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="user_id" id="modalUserId">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="assignRoleLabel">
+                            Assign Roles to <span id="modalUserName"></span>
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <label class="form-label">Select Roles</label>
+                        @foreach ($roles as $role)
+                            <div class="form-check">
+                                <input class="form-check-input role-checkbox"
+                                       type="checkbox"
+                                       name="roles[]"
+                                       value="{{ $role->name }}"
+                                       id="role_{{ $role->id }}">
+                                <label class="form-check-label" for="role_{{ $role->id }}">
+                                    {{ ucfirst($role->name) }}
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Update Roles</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
 
 @push('css')
@@ -76,7 +123,7 @@
 
         table th:last-child,
         table td:last-child {
-            width: 15%;
+            width: 18%;
             white-space: nowrap;
         }
 
@@ -89,31 +136,28 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Inisialisasi Simple-DataTables (sama seperti di school/index.blade.php)
             const dataTableSearch = new simpleDatatables.DataTable("#datatable-search", {
                 searchable: true,
                 fixedHeight: true,
             });
 
-            // Jika anda ada AJAX untuk modal tambah/edit, masukkan kod di sini.
-            // Contoh:
-            // const $modal = $('#userModal');
-            // const $form = $('#userForm');
-            // const $modalTitle = $('#userModalLabel');
-            // const $submitButton = $form.find('button[type="submit"]');
-            // const baseUrl = $modal.data('url');
-            //
-            // $modal.on('show.bs.modal', function(event) {
-            //     const button = $(event.relatedTarget);
-            //     const mode = button.data('mode');
-            //     const id = button.data('id');
-            //     // Reset form, set title sesuai mode, loading data jika edit, dsb.
-            // });
-            //
-            // $form.on('submit', function(e) {
-            //     e.preventDefault();
-            //     // Kirim AJAX POST/PUT untuk simpan data
-            // });
+            const assignModal = document.getElementById('assignRoleModal');
+            assignModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const userId = button.getAttribute('data-user-id');
+                const userName = button.getAttribute('data-user-name');
+                const userRoles = JSON.parse(button.getAttribute('data-user-roles'));
+
+                document.getElementById('modalUserId').value = userId;
+                document.getElementById('modalUserName').textContent = userName;
+
+                document.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = false);
+
+                userRoles.forEach(role => {
+                    const checkbox = document.querySelector('.role-checkbox[value="' + role + '"]');
+                    if (checkbox) checkbox.checked = true;
+                });
+            });
         });
     </script>
 @endpush

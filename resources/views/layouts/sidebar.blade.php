@@ -19,16 +19,20 @@
             <span class="nav-link-text ms-1">Dashboard</span>
         </a>
     </li>
+    {{-- Modul Atlet - hanya untuk admin atau coach --}}
+    @hasanyrole('admin|coach|athlete')
     <li class="nav-item">
-        <a href="{{ route('athlete') }}" class="nav-link" role="button">
+        <a href="{{ route('Athlete.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
                 <i class="bi bi-person-walking"></i>
             </div>
             <span class="nav-link-text ms-1">Athlete</span>
         </a>
     </li>
+    @endhasanyrole
+    @hasanyrole('admin|coach|club')
     <li class="nav-item">
-        <a href="{{ route('club') }}" class="nav-link" role="button">
+        <a href="{{ route('clubs.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
                 <i class="bi bi-people"></i>
             </div>
@@ -36,39 +40,49 @@
         </a>
     </li>
     <li class="nav-item">
-        <a href="{{ route('coach') }}" class="nav-link" role="button">
+        <a href="{{ route('coach.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
                 <i class="bi bi-person-badge"></i>
             </div>
             <span class="nav-link-text ms-1">Coach</span>
         </a>
     </li>
+    @endhasanyrole
+    {{-- Modul users - hanya untuk admin --}}
+    @role('admin')
     <li class="nav-item">
-        <a href="{{ route('user') }}" class="nav-link" role="button">
+        <a href="{{ route('admin.users.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
                 <i class="bi bi-person"></i>
             </div>
             <span class="nav-link-text ms-1">User</span>
         </a>
     </li>
+    @endrole
+    {{-- Modul school - hanya untuk admin --}}
+    @role('admin')
     <li class="nav-item">
-        <a href="{{ route('school') }}" class="nav-link" role="button">
+        <a href="{{ route('school.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
                 <i class="bi bi-building"></i>
             </div>
             <span class="nav-link-text ms-1">School</span>
         </a>
     </li>
+    @endrole
+    {{-- Modul achievement - hanya untuk admin --}}
+    @role('admin')
     <li class="nav-item">
-        <a href="{{ route('achievement') }}" class="nav-link" role="button">
+        <a href="{{ route('achievement.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
                 <i class="bi bi-trophy"></i>
             </div>
             <span class="nav-link-text ms-1">Achievement</span>
         </a>
     </li>
+    @endrole
     <li class="nav-item">
-        <a href="{{ route('sanction') }}" class="nav-link" role="button">
+        <a href="{{ route('sanction.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
                 <i class="bi bi-file-ruled"></i>
             </div>
@@ -76,7 +90,7 @@
         </a>
     </li>
         <li class="nav-item">
-        <a href="{{ route('setting') }}" class="nav-link" role="button">
+        <a href="{{ route('setting.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
                 <i class="bi bi-gear"></i>
             </div>

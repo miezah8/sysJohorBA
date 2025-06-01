@@ -27,7 +27,8 @@ class Club extends Model
 
     public function athletes()
     {
-        return $this->hasMany(\App\Models\Athlete::class, 'club_id', 'id_club');
+        //return $this->hasMany(\App\Models\Athlete::class, 'club_id', 'id_club');
+        return $this->hasMany(Athlete::class, 'club_id', 'id_club'); 
     }
 
     // Accessor for athletes count

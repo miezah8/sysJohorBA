@@ -7,6 +7,13 @@ use App\Models\Achievement;
 
 class AchievementController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view achievement')->only(['index']);
+        $this->middleware('permission:add achievement')->only(['store']);
+        $this->middleware('permission:edit achievement')->only(['update']);
+    }
+    
     // Show the list of achievements
     public function index()
     {
