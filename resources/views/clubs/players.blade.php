@@ -9,7 +9,7 @@
     </div>
     <div class="card-body">
       @if($players->count())
-        <table class="table">
+        <table class="table" id="datatable-search">
           <thead>
             <tr><th>#</th><th>First Name</th><th>Last Name</th><!-- … --></tr>
           </thead>
@@ -42,4 +42,31 @@
             color: #f44336 !important;
         }
     </style>
+@endpush
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            const dataTableSearch = new simpleDatatables.DataTable(
+                "#datatable-search", {
+                    searchable: true,
+                    fixedHeight: true,
+                }
+            );
+
+            $('.select2').select2({
+                dropdownParent: $('#schoolModal'),
+                theme: 'bootstrap-5',
+                width: '100%'
+            });
+
+
+        });
+    </script>
 @endpush
