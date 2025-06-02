@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Athlete;
+use App\Models\Club;
+use App\Models\Coach;
 use App\Models\Nationality;
+use App\Models\School;
 use Illuminate\Support\Facades\DB;
 
 class AthleteController extends Controller
@@ -37,10 +40,10 @@ class AthleteController extends Controller
      */
     public function create()
     {
-        return view(
-            'athlete.formAthlete'
-        );
+        return view('athlete.formAthlete');
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -86,5 +89,23 @@ class AthleteController extends Controller
     {
         // returns { id_state: state_name, … }
         return response()->json(Nationality::pluck('nationality_name', 'id_nationality'));
+    }
+
+    public function getSchool()
+    {
+        // returns { id_state: state_name, … }
+        return response()->json(School::pluck('school_name', 'id_school'));
+    }
+
+    public function getClub()
+    {
+        // returns { id_state: state_name, … }
+        return response()->json(Club::pluck('club_name', 'id_club'));
+    }
+
+    public function getCoach()
+    {
+        // returns { id_state: state_name, … }
+        return response()->json(Coach::pluck('coach_fname', 'id_coach'));
     }
 }
