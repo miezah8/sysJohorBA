@@ -23,4 +23,16 @@ class School extends Model
         'created_at',
         'modified_on',
     ];
+
+    public function state()
+    {
+        return $this->belongsTo(State::class, 'state_id', 'id_state');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'district_id', 'id_district');
+    }
+ 
+
 }

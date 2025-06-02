@@ -79,7 +79,7 @@ Route::middleware('auth')->group(function () {
     // ------------------------------
     Route::middleware('permission:view athlete')->group(function() {
         Route::get('/athlete', [AthleteController::class, 'index'])->name('athlete.index');
-        // Route::get('/athlete/{athlete}', [AthleteController::class, 'show'])->name('athlete.show');
+        Route::get('/athlete/sch/{id}', [AthleteController::class, 'show'])->name('athlete.show');
     });
     Route::middleware('permission:add athlete')->group(function() {
         Route::get('/athlete/form', [AthleteController::class, 'create'])->name('athlete.form');

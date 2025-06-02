@@ -56,10 +56,24 @@ class AthleteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $school = School::find($id);
+
+        if (! $school) {
+            return response()->json(['error' => 'School not found'], 404);
+        }
+
+        $stateName = DB::table('state')->where('id_state', $school->state_id)->value('state_name');
+        $districtName = DB::table('district')->where('id_district', $school->district_id)->value('district_name');
+
+        $schoolData = $school->toArray();
+        $schoolData['state_name'] = $stateName;
+        $schoolData['district_name'] = $districtName;
+
+        return response()->json($schoolData);
     }
+
 
     /**
      * Show the form for editing the specified resource.

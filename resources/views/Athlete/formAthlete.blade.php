@@ -175,6 +175,7 @@
                                             <input type="text" class="form-control" name="NameTshirt">
                                         </div>
                                     </div>
+
                                     <div class="text-end">
                                         <button type="button" class="btn btn-primary" id="btnNext">Next</button>
                                     </div>
@@ -202,6 +203,7 @@
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Relation</label>
                                         <select name="GuardianRelation" class="form-control">
+                                            <option value="">-- Select Relation --</option>
                                             <option value="Ibu/Bapa">Ibu/Bapa</option>
                                             <option value="Ibu/Bapa">Datuk/Nenek</option>
                                             <option value="Ibu/Bapa">Adik-beradik</option>
@@ -211,7 +213,7 @@
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col text-start">
-                                        <button type="button" class="btn btn-secondary">Prev</button>
+                                        <button type="button" id="btnBackPersonal" class="btn btn-secondary">Prev</button>
                                     </div>
                                     <div class="col text-end">
                                         <button type="button" id="btnNextKeluarga" class="btn btn-primary">Next</button>
@@ -232,28 +234,28 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Kod Sekolah</label>
-                                        <input type="text" class="form-control" disabled>
+                                        <input type="text" class="form-control" id="CodeScholl" readonly>
                                     </div>
 
                                     <!-- Kiri: Alamat -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Alamat Sekolah</label>
-                                        <textarea class="form-control" rows="8" disabled></textarea>
+                                        <textarea class="form-control" rows="8" id="AddressSchool" readonly></textarea>
                                     </div>
 
                                     <!-- Kanan: Kod, Poskod, Negeri, Daerah -->
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label required">Poskod</label>
-                                            <input type="text" class="form-control" disabled>
+                                            <input type="text" class="form-control" id="PosKod" readonly>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label required">Negeri</label>
-                                            <input type="text" class="form-control" disabled>
+                                            <input type="text" class="form-control" id="state" readonly>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label required">Daerah</label>
-                                            <input type="text" class="form-control" disabled>
+                                            <input type="text" class="form-control" id="districts" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -261,10 +263,10 @@
                                 <!-- Butang Prev & Next -->
                                 <div class="row mt-4">
                                     <div class="col text-start">
-                                        <button type="button" class="btn btn-secondary">Prev</button>
+                                        <button type="button" id="btnBackGuardian" class="btn btn-secondary">Prev</button>
                                     </div>
                                     <div class="col text-end">
-                                        <button type="button" class="btn btn-primary">Next</button>
+                                        <button type="button" id="btnNextSchool" class="btn btn-primary">Next</button>
                                     </div>
                                 </div>
                             </form>
@@ -277,46 +279,62 @@
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th class="required">Pertandingan</th>
-                                                    <th class="required">Peringkat</th>
-                                                    <th class="required">Kategori</th>
-                                                    <th class="required">Pencapaian</th>
+                                                    <th class="required">Competition</th>
+                                                    <th class="required">Stage</th>
+                                                    <th class="required">Category</th>
+                                                    <th class="required">Achieve</th>
+                                                    <th class="required">Year</th>
                                                     <th class=""></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="experienceTableBody">
                                                 <tr>
                                                     <td>
-                                                        <input type="text" class="form-control" placeholder="Contoh: Kejohanan Bola Sepak">
+                                                        <input type="text" class="form-control" name="tournament">
                                                     </td>
                                                     <td>
-                                                        <select class="form-select select2">
-                                                            <option>Sila pilih pering</option>
-                                                            <option>Daerah</option>
-                                                            <option>Negeri</option>
-                                                            <option>Kebangsaan</option>
-                                                            <option>Antarabangsa</option>
+                                                        <select class="form-control" id="ranking" name="ranking[]">
+                                                            <option value="">-- Select Stage --</option>
+                                                            <option value="1">Sekolah</option>
+                                                            <option value="2">Daerah/Zon</option>
+                                                            <option value="3">Negeri</option>
+                                                            <option value="4">Kebangsaan</option>
+                                                            <option value="5">Antarabangsa</option>
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class="form-select select2">
-                                                            <option>Sila pilih kategori</option>
-                                                            <option>Bawah 12</option>
-                                                            <option>Bawah 15</option>
-                                                            <option>Terbuka</option>
+                                                        <select class="form-control" id="category" name="category[]">
+                                                            <option value="">-- Select Category --</option>
+                                                            <option value="MS">Perseorangan Lelaki</option>
+                                                            <option value="WS">Perseorangan Wanita</option>
+                                                            <option value="MD">Beregu Lelaki</option>
+                                                            <option value="WD">Beregu Wanita</option>
+                                                            <option value="MXD">Beregu Campuran</option>
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class="form-select select2">
-                                                            <option>Sila pilih pencapaian</option>
-                                                            <option>Johan</option>
-                                                            <option>Naib Johan</option>
-                                                            <option>Tempat Ketiga</option>
-                                                            <option>Penyertaan</option>
+                                                        <select class="form-control" id="achieve" name="achieve[]">
+															<option value="">-- Select Achieve --</option>
+                                                            <option value="1">EMAS</option>
+															<option value="2">PERAK</option>
+															<option value="3">GANGSA</option>
+															<option value="4">SEPARUH AKHIR</option>
+															<option value="5">SUKU AKHIR</option>
+															<option value="6">PUSINGAN 16</option>
+															<option value="7">PUSINGAN 32 </option>
+															<option value="8">PUSINGAN 64 </option>
+															<option value="9">PENYERTAAN</option>
+															<option value="11">Platinum1</option>
+                                                            <option value="12">Goldlahh</option>
+                                                            <option value="13">Golgol</option>
+															<option value="10">TIDAK BERKENAAN</option>
                                                         </select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control" name="year">
                                                     </td>
                                                     <td class="text-center">
-                                                        <button type="button" class="btn btn-danger removeRow">
+                                                        <button type="button" class="btn btn-danger btnRemoveExperience">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </td>
@@ -326,18 +344,18 @@
                                     </div>
                                     <!-- Butang Tambah -->
                                     <div class="mb-3 text-end">
-                                        <button type="button" id="addRow" class="btn btn-outline-primary">
+                                        <button type="button" class="btn btn-outline-primary btnAddExperience">
                                             <i class="fa-solid fa-plus me-1"></i> Add 
                                         </button>
                                     </div>
                                 </div>
-                                <!-- Butang Previous & Next -->
-                                <div class="row">
+                                <!-- Butang Prev & Next -->
+                                <div class="row mt-4">
                                     <div class="col text-start">
-                                        <button type="button" class="btn" style="background-color: #f4b942; color: white;">Previous</button>
+                                        <button type="button" id="btnBackSch" class="btn btn-secondary">Prev</button>
                                     </div>
                                     <div class="col text-end">
-                                        <button type="button" class="btn" style="background-color: #00cfe8; color: white;">Next</button>
+                                        <button type="button" id="btnNextExperience" class="btn btn-primary">Next</button>
                                     </div>
                                 </div>
                             </form>
@@ -347,29 +365,23 @@
                             <form id="formCoach" class="mt-3">
                                 <div class="row mb-4">
                                     <div class="col-md-6">
-                                        <label for="coachSelect" class="form-label required">Jurulatih</label>
-                                        <select id="coachSelect" class="form-select select2">
-                                            <option value="">-- Sila pilih Jurulatih --</option>
-                                            <option value="Coach A">Coach A</option>
-                                            <option value="Coach B">Coach B</option>
-                                            <option value="Coach C">Coach C</option>
+                                        <label for="coachSelect" class="form-label required">Coach</label>
+                                        <select id="coachSelect" class="form-select select2" >
+                                            <option value="">-- Select Coach --</option>
                                             <!-- Tambah pilihan lain mengikut keperluan -->
                                         </select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="clubSelect" class="form-label required">Kelab</label>
+                                        <label for="clubSelect" class="form-label required">Club</label>
                                         <select id="clubSelect" class="form-select select2">
-                                            <option value="">-- Sila pilih Kelab --</option>
-                                            <option value="Kelab A">Kelab A</option>
-                                            <option value="Kelab B">Kelab B</option>
-                                            <option value="Kelab C">Kelab C</option>
+                                            <option value="">-- Select Club --</option>
                                             <!-- Tambah pilihan lain mengikut keperluan -->
                                         </select>
                                     </div>
                                 </div>
                                 <!-- Butang Previous -->
                                 <div class="text-start">
-                                    <button type="button" class="btn" style="background-color: #f4b942; color: white;">Previous</button>
+                                    <button type="button" id="btnBackExp" class="btn btn-secondary">Prev</button>
                                 </div>
                             </form>
                         </div>
@@ -381,7 +393,7 @@
         </div>
         <div class="card-footer text-center">
             <button type="button" id="CancelALlForm" class="btn btn-secondary btn-sm">Cancel</button>
-            <button type="button" id="SubmitAllForm" class="btn btn-primary btn-sm">Submit</button>
+            <button type="button" id="btnSubmit" class="btn btn-primary btn-sm">Submit</button>
         </div>
     </div>
 @endsection
@@ -492,7 +504,7 @@
             $.get("{{ route('school.list') }}", function(school) {
                 $ddl.empty().append('<option value="">-- Select School --</option>');
                 $.each(school, function(id, name) {
-                $ddl.append(new Option(name, id));
+                    $ddl.append(new Option(name, id));
                 });
                 if (selectedId) {
                 $ddl.val(selectedId).trigger('change');
@@ -539,9 +551,9 @@
 
         $(document).ready(function () {
             //load ddl
-            loadDistricts();
-            loadStates();
-            loadNationality();
+            loadSchool();
+            loadClub();
+            loadCoach();
 
             loadNationality();//list nationality
             loadStates(); //list state
@@ -587,7 +599,7 @@
                 }
             });
 
-            //function button next
+            //function button next (in tab personal)
             $('#btnNext').on('click', function () {
                 const form = $('#formPersonal');
                 const fields = [
@@ -643,16 +655,19 @@
                 });
             });
 
+            //function button next (in tab family)
             $('#btnNextKeluarga').on('click', function () {
-                const form = $('#formPersonal');
+                const form = $('#formGuardian');
                 const fields = [
                     { selector: 'input[name="GuardianName"]', name: 'Guardian Name' },
                     { selector: 'input[name="GuardianPhone"]', name: 'Guardian Phone' },
                     { selector: 'input[name="GuardianOccup"]', name: 'Occupation' },
-                    { selector: 'input[name="GuardianRelation"]', name: 'Relation' }
+                    { selector: 'select[name="GuardianRelation"]', name: 'Relation' }
                 ];
+
                 // Reset semua error state
                 form.find('input, select, textarea').removeClass('is-invalid');
+
                 for (let field of fields) {
                     const el = form.find(field.selector);
                     let value;
@@ -661,6 +676,7 @@
                     } else {
                         value = el.val() ? el.val().trim() : '';
                     }
+
                     if (!value) {
                         el.addClass('is-invalid');
                         Swal.fire({
@@ -669,9 +685,11 @@
                             text: `Please enter ${field.name}`,
                             confirmButtonText: 'OK'
                         });
-                        return;
+                        return; // keluar dari loop dan fungsi jika ada error
                     }
                 }
+
+                // Jika semua input lengkap
                 Swal.fire({
                     icon: 'success',
                     title: 'All Set!',
@@ -680,8 +698,443 @@
                 }).then(() => {
                     $('#school-tab').click(); // Buka tab seterusnya
                 });
-            )};
+            });
 
+            //function button back ( in tab family)
+            $('#btnBackPersonal').on('click', function(){
+                $('#personal-tab').click();
+            });
+
+            //dropdown sch change all data
+            $('#schoolDropdown').on('change', function () {
+                // const selectedId = $(this).val();
+                let selectedId = $(this).val();
+                let baseSchoolUrl = "{{ url('athlete/sch') }}";
+
+                if (selectedId) {
+                    $.ajax({
+                        url: baseSchoolUrl + '/' + selectedId,
+                        method: 'GET',
+                        success: function (data) {
+                            console.log(data.postcode);
+                            $('#CodeScholl').val(data.sch_code);
+                            $('#AddressSchool').val(data.sc_address);
+                            $('#PosKod').val(data.postcode);
+                            $('#state').val(data.state_name);
+                            $('#districts').val(data.district_name);
+                        },
+                        error: function () {
+                            Swal.fire('Error', 'Failed to retrieve school data.', 'error');
+                        }
+                    });
+                } else {
+                    $('#CodeScholl, #AddressSchool, #postcode, #state, #districts').val('');
+                }
+            });
+
+            // function button next (in tab school)
+            $('#btnNextSchool').on('click', function () {
+                const form = $('#formSchool');
+                const fields = [
+                    { selector: '#schoolDropdown', name: 'School Name' },
+                    { selector: '#CodeScholl', name: 'School Code' },
+                    { selector: '#AddressSchool', name: 'School Address' },
+                    { selector: '#PosKod', name: 'School Postcode' },
+                    { selector: '#districts', name: 'School District' },
+                    { selector: '#state', name: 'School State' }
+                ];
+
+
+                // Reset semua error state
+                form.find('input, select, textarea').removeClass('is-invalid');
+
+                for (let field of fields) {
+                    const el = form.find(field.selector);
+                    let value;
+                    if (field.isRadio) {
+                        value = el.filter(':checked').val();
+                    } else {
+                        value = el.val() ? el.val().trim() : '';
+                    }
+
+                    if (!value) {
+                        el.addClass('is-invalid');
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Missing Information',
+                            text: `Please enter ${field.name}`,
+                            confirmButtonText: 'OK'
+                        });
+                        return; // keluar dari loop dan fungsi jika ada error
+                    }
+                }
+                // Jika semua input lengkap
+                Swal.fire({
+                    icon: 'success',
+                    title: 'All Set!',
+                    text: 'Proceeding to the next step.',
+                    confirmButtonText: 'Continue'
+                }).then(() => {
+                    $('#experience-tab').click(); // Buka tab seterusnya
+                });
+            });
+
+            //function button back (in tab school)
+            $('#btnBackGuardian').on('click', function(){
+                $('#guardian-tab').click();
+            });
+
+            //function button add row tab experience
+            $('#experienceTableBody').on('click', '.btnRemoveExperience', function () {
+                let $rows = $('#experienceTableBody').find('tr');
+                if ($rows.length > 1) {
+                    $(this).closest('tr').remove();
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'At least one row is required.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+
+            //function button remove row tab experience
+            $('.btnAddExperience').on('click', function () {
+                let row = $('#experienceTableBody tr:first').clone();
+                row.find('input, select').val('');
+                $('#experienceTableBody').append(row);
+            });
+
+            // // function button next (in tab experience)
+            $('#btnNextExperience').on('click', function () {
+                const $form = $('#formExperience');
+                const $rows = $('#experienceTableBody tr');
+                let isValid = true;
+                let showMessage = null;
+
+                // Reset semua is-invalid
+                $form.find('input, select').removeClass('is-invalid');
+
+                $rows.each(function () {
+                    const $row = $(this);
+
+                    const tournament = $row.find('input[name="tournament"]');
+                    const ranking = $row.find('select[name="ranking[]"]');
+                    const category = $row.find('select[name="category[]"]');
+                    const achieve = $row.find('select[name="achieve[]"]');
+                    const year = $row.find('input[name="year"]');
+
+                    if (!tournament.val().trim()) {
+                        tournament.addClass('is-invalid');
+                        showMessage = 'Please enter tournament name.';
+                        isValid = false;
+                        return false;
+                    }
+                    if (!ranking.val()) {
+                        ranking.addClass('is-invalid');
+                        showMessage = 'Please enter stage.';
+                        isValid = false;
+                        return false;
+                    }
+                    if (!category.val()) {
+                        category.addClass('is-invalid');
+                        showMessage = 'Please enter category.';
+                        isValid = false;
+                        return false;
+                    }
+                    if (!achieve.val()) {
+                        achieve.addClass('is-invalid');
+                        showMessage = 'Please enter achieve.';
+                        isValid = false;
+                        return false;
+                    }
+                    if (!year.val().trim()) {
+                        year.addClass('is-invalid');
+                        showMessage = 'Please enter year.';
+                        isValid = false;
+                        return false;
+                    }
+                });
+
+                if (!isValid && showMessage) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Missing Information',
+                        text: showMessage,
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'All Set!',
+                    text: 'Proceeding to the next step.',
+                    confirmButtonText: 'Continue'
+                }).then(() => {
+                    $('#coach-tab').click(); // Buka tab seterusnya
+                });
+            });
+
+            //function button back (in tab experience)
+            $('#btnBackSch').on('click', function(){
+                $('#school-tab').click();
+            });
+
+            //function button back (in tab coach & club)
+            $('#btnBackExp').on('click', function(){
+                $('#experience-tab').click();
+            });
+
+            $('#btnSubmit').on('click', function () {
+                // Tentukan sama ada user guna form multiplayer atau form tab individu
+                const isMultiple = !$('#formMultiple').hasClass('d-none');
+
+                if (isMultiple) {
+                    // ======================
+                    // VALIDASI FORM MULTIPLAYER
+                    // ======================
+                    const rows = $('#multiPlayerForm .multi-row .row');
+                    let isValid = true;
+
+                    for (let i = 0; i < rows.length; i++) {
+                        const row = $(rows[i]);
+                        const firstName = row.find('input[name="firstName[]"]').val()?.trim();
+                        const lastName = row.find('input[name="lastName[]"]').val()?.trim();
+                        const email = row.find('input[name="email[]"]').val()?.trim();
+                        const phone = row.find('input[name="phone[]"]').val()?.trim();
+                        const playerNum = i + 1;
+
+                        // Reset dahulu semua invalid
+                        row.find('input').removeClass('is-invalid');
+
+                        if (!firstName) {
+                            row.find('input[name="firstName[]"]').addClass('is-invalid');
+                            Swal.fire({
+                                icon: 'warning',
+                                title: `Warning`,
+                                text: `Please enter First Name.`,
+                                confirmButtonText: 'OK'
+                            });
+                            isValid = false;
+                            break;
+                        }
+
+                        if (!lastName) {
+                            row.find('input[name="lastName[]"]').addClass('is-invalid');
+                            Swal.fire({
+                                icon: 'warning',
+                                title: `Warning`,
+                                text: `Please enter Family Name.`,
+                                confirmButtonText: 'OK'
+                            });
+                            isValid = false;
+                            break;
+                        }
+
+                        if (!email) {
+                            row.find('input[name="email[]"]').addClass('is-invalid');
+                            Swal.fire({
+                                icon: 'warning',
+                                title: `Warning`,
+                                text: `Please enter Email.`,
+                                confirmButtonText: 'OK'
+                            });
+                            isValid = false;
+                            break;
+                        }
+
+                        if (!phone) {
+                            row.find('input[name="phone[]"]').addClass('is-invalid');
+                            Swal.fire({
+                                icon: 'warning',
+                                title: `Warning`,
+                                text: `Please enter Phone Number.`,
+                                confirmButtonText: 'OK'
+                            });
+                            isValid = false;
+                            break;
+                        }
+                    }
+
+                    if (!isValid) {
+                        return; // stop here if any player field is incomplete
+                    }
+
+                    // ======================
+                    // AMBIL DATA MULTIPLAYER
+                    // ======================
+                    const players = [];
+                    rows.each(function () {
+                        players.push({
+                            firstName: $(this).find('input[name="firstName[]"]').val().trim(),
+                            lastName: $(this).find('input[name="lastName[]"]').val().trim(),
+                            email: $(this).find('input[name="email[]"]').val().trim(),
+                            phone: $(this).find('input[name="phone[]"]').val().trim()
+                        });
+                    });
+
+                    console.log("Multi Player Data:", players);
+                }
+                else {
+                    // ======================
+                    // VALIDASI FORM INDIVIDU (semua tab)
+                    // ======================
+                    const validations = [
+                        {
+                            form: $('#formPersonal'),
+                            fields: [
+                                { selector: 'input[name="firstname"]', name: 'First Name' },
+                                { selector: 'input[name="lastname"]', name: 'Last Name' },
+                                { selector: 'input[name="idNumber"]', name: 'No. KP/Passport' },
+                                { selector: 'input[name="phone"]', name: 'Phone Number' },
+                                { selector: 'input[name="gender"]', name: 'Gender', isRadio: true },
+                                { selector: 'input[name="email"]', name: 'Email' },
+                                { selector: '#countryList', name: 'Citizens' },
+                                { selector: 'textarea[name="address"]', name: 'Address' },
+                                { selector: 'input[name="postcode"]', name: 'Postcode' },
+                                { selector: '#schA_state', name: 'State' },
+                                { selector: '#daerahDropdown', name: 'Districts' },
+                                { selector: 'input[name="picture"]', name: 'Picture' },
+                                { selector: 'select[name="size"]', name: 'T-Shirt Size' },
+                                { selector: 'input[name="NameTshirt"]', name: 'Name on T-Shirt' }
+                            ]
+                        },
+                        {
+                            form: $('#formGuardian'),
+                            fields: [
+                                { selector: 'input[name="GuardianName"]', name: 'Guardian Name' },
+                                { selector: 'input[name="GuardianPhone"]', name: 'Guardian Phone' },
+                                { selector: 'input[name="GuardianOccup"]', name: 'Occupation' },
+                                { selector: 'select[name="GuardianRelation"]', name: 'Relation' }
+                            ]
+                        },
+                        {
+                            form: $('#formSchool'),
+                            fields: [
+                                { selector: '#schoolDropdown', name: 'School Name' },
+                                { selector: '#CodeScholl', name: 'School Code' },
+                                { selector: '#AddressSchool', name: 'School Address' },
+                                { selector: '#PosKod', name: 'School Postcode' },
+                                { selector: '#districts', name: 'School District' },
+                                { selector: '#state', name: 'School State' }
+                            ]
+                        },
+                        {
+                            form: $('#formExperience'),
+                            isTable: true,
+                            tableSelector: '#experienceTableBody'
+                        },
+                        {
+                            form: $('#formCoach'),
+                            fields: [
+                                { selector: '#coachSelect', name: 'Coach' },
+                                { selector: '#clubSelect', name: 'Club' }
+                            ]
+                        }
+                    ];
+
+                    let allValid = true;
+
+                    for (let block of validations) {
+                        block.form.find('input, select, textarea').removeClass('is-invalid');
+
+                        if (block.isTable) {
+                            $(block.tableSelector + ' tr').each(function () {
+                                const tournament = $(this).find('input[name="tournament"]');
+                                const ranking = $(this).find('select[name="ranking[]"]');
+                                const category = $(this).find('select[name="category[]"]');
+                                const achieve = $(this).find('select[name="achieve[]"]');
+                                const year = $(this).find('input[name="year"]');
+
+                                if (!tournament.val().trim() || !ranking.val() || !category.val() || !achieve.val() || !year.val().trim()) {
+                                    tournament.addClass('is-invalid');
+                                    ranking.addClass('is-invalid');
+                                    category.addClass('is-invalid');
+                                    achieve.addClass('is-invalid');
+                                    year.addClass('is-invalid');
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Missing Information',
+                                        text: 'Please complete experience fields.',
+                                        confirmButtonText: 'OK'
+                                    });
+                                    allValid = false;
+                                    return false;
+                                }
+                            });
+                        } else {
+                            for (let field of block.fields) {
+                                const el = block.form.find(field.selector);
+                                let value = field.isRadio ? el.filter(':checked').val() : (el.val()?.trim() || '');
+                                if (!value) {
+                                    el.addClass('is-invalid');
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Missing Information',
+                                        text: `Please enter ${field.name}`,
+                                        confirmButtonText: 'OK'
+                                    });
+                                    allValid = false;
+                                    return;
+                                }
+                            }
+                        }
+
+                        if (!allValid) break;
+                    }
+
+                    if (!allValid) return;
+
+                    // Jika semua lengkap
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'All Done!',
+                        text: 'Form is complete and ready for submission.',
+                        confirmButtonText: 'Submit'
+                    }).then(() => {
+                        // ===========================
+                        // KUMPUL SEMUA DATA
+                        // ===========================
+
+                        const allData = {};
+
+                        // Contoh: Data dari tab lain (kalau ada)
+                        allData.someTabData = {
+                            exampleField1: $('#exampleField1').val()?.trim(),
+                            exampleField2: $('#exampleField2').val()?.trim(),
+                        };
+
+                        // Data dari MULTIPLAYER
+                        const players = [];
+                        $('#multiPlayerForm .multi-row .row').each(function () {
+                            players.push({
+                                firstName: $(this).find('input[name="firstName[]"]').val().trim(),
+                                lastName: $(this).find('input[name="lastName[]"]').val().trim(),
+                                email: $(this).find('input[name="email[]"]').val().trim(),
+                                phone: $(this).find('input[name="phone[]"]').val().trim()
+                            });
+                        });
+                        allData.players = players;
+
+                        // Data dari SINGLE PLAYER (jika kamu ada dan sedang toggle tab)
+                        allData.singlePlayer = {
+                            firstName: $('#firstNameSingle').val()?.trim(),
+                            lastName: $('#lastNameSingle').val()?.trim(),
+                            email: $('#emailSingle').val()?.trim(),
+                            phone: $('#phoneSingle').val()?.trim()
+                        };
+
+                        // Akhirnya log semua data
+                        console.log("Data lengkap dari semua tab boleh dihantar:", allData);
+
+                        // Boleh terus POST ke server kalau nak
+                        // $.post('/api/save', allData, function(response) { ... });
+
+                    });
+
+                }
+            });
 
 
 
