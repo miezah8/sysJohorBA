@@ -5,6 +5,11 @@
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">List of Registered Users</h5>
+
+            {{-- Invite User button --}}
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inviteUserModal">
+                <i class="fa-solid fa-envelope me-1"></i> Invite User
+            </button>
         </div>
 
         @if(session('success'))
@@ -44,14 +49,14 @@
                             </td>
                             <td>{{ $user->getRoleNames()->implode(', ') }}</td>
                             <td>
-                                <!-- Only “Assign Role” button now -->
+                                {{-- Only “Assign Roles” --}}
                                 <button class="btn btn-sm btn-outline-primary"
                                         data-bs-toggle="modal"
                                         data-bs-target="#assignRoleModal"
                                         data-user-id="{{ $user->id }}"
                                         data-user-name="{{ $user->name }}"
                                         data-user-roles='@json($user->getRoleNames())'>
-                                    <i class="fa-solid fa-user-gear me-1"></i> Assign Role
+                                    <i class="fa-solid fa-user-gear me-1"></i> Assign Roles
                                 </button>
                             </td>
                         </tr>
@@ -70,7 +75,67 @@
     </div>
 
 
-    <!-- Assign Roles Modal (same as before) -->
+    <!--====================================-->
+    <!-- Modal: Invite User -->
+    <!--====================================-->
+    <div class="modal fade" id="inviteUserModal" tabindex="-1" aria-labelledby="inviteUserLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="{{ route('admin.users.invite') }}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="inviteUserLabel">Invite New User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Enter the email address of the person you want to invite. They will receive an email with registration instructions.</p>
+
+                        <div class="mb-3">
+                            <label for="invite_email" class="form-label">Email</label>
+                            <input type="email"
+                                   class="form-control @error('invite_email') is-invalid @enderror"
+                                   id="invite_email"
+                                   name="invite_email"
+                                   value="{{ old('invite_email') }}"
+                                   required>
+                            @error('invite_email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="invite_role" class="form-label">Default Role</label>
+                            <select class="form-select @error('invite_role') is-invalid @enderror"
+                                    id="invite_role"
+                                    name="invite_role"
+                                    required>
+                                <option value="">-- Select Role --</option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->name }}" {{ old('invite_role') == $role->name ? 'selected' : '' }}>
+                                        {{ ucfirst($role->name) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('invite_role')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Send Invitation</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!--====================================-->
+    <!-- Modal: Assign Roles -->
+    <!--====================================-->
     <div class="modal fade" id="assignRoleModal" tabindex="-1" aria-labelledby="assignRoleLabel" aria-hidden="true">
         <div class="modal-dialog">
             <form method="POST" action="{{ route('admin.users.assignRole') }}">
@@ -87,7 +152,6 @@
                     </div>
 
                     <div class="modal-body">
-                        <label class="form-label">Select Roles</label>
                         @foreach ($roles as $role)
                             <div class="form-check">
                                 <input class="form-check-input role-checkbox"
@@ -123,7 +187,7 @@
 
         table th:last-child,
         table td:last-child {
-            width: 18%;
+            width: 15%;
             white-space: nowrap;
         }
 
@@ -136,23 +200,27 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const dataTableSearch = new simpleDatatables.DataTable("#datatable-search", {
+            // Initialize Simple-DataTables
+            new simpleDatatables.DataTable("#datatable-search", {
                 searchable: true,
                 fixedHeight: true,
             });
 
+            // Prefill “Assign Roles” modal with current user data
             const assignModal = document.getElementById('assignRoleModal');
             assignModal.addEventListener('show.bs.modal', function (event) {
-                const button = event.relatedTarget;
-                const userId = button.getAttribute('data-user-id');
-                const userName = button.getAttribute('data-user-name');
+                const button    = event.relatedTarget;
+                const userId    = button.getAttribute('data-user-id');
+                const userName  = button.getAttribute('data-user-name');
                 const userRoles = JSON.parse(button.getAttribute('data-user-roles'));
 
                 document.getElementById('modalUserId').value = userId;
                 document.getElementById('modalUserName').textContent = userName;
 
+                // Uncheck all first
                 document.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = false);
 
+                // Then check only those roles the user already has
                 userRoles.forEach(role => {
                     const checkbox = document.querySelector('.role-checkbox[value="' + role + '"]');
                     if (checkbox) checkbox.checked = true;

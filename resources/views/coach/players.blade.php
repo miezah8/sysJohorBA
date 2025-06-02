@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between">
             <h5>Players under Coach “{{ $coach->coach_fname }}”</h5>
-            <a class="btn btn-sm btn-secondary" href="{{ route('coach') }}">← Back to Coach</a>
+            <a class="btn btn-sm btn-secondary" href="{{ route('coach.index') }}">← Back to Coach</a>
         </div>
         <div class="card-body">
             @if ($players->count())

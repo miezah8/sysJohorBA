@@ -7,11 +7,13 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserInvitationMail; // (create a Mailable to send the invitation link)
 
 class UserController extends Controller
 {
     /**
-     * Papar senarai pengguna (misalnya yang pending dan aktif)
+     * Papar senarai pengguna (pending dan aktif)
      */
     public function index()
     {
@@ -29,7 +31,7 @@ class UserController extends Controller
     /**
      * Papar form edit untuk set Role & Permissions (akses modul)
      */
-    public function edit(User $user)
+/*    public function edit(User $user)
     {
         // Semua role yang wujud dalam sistem (contoh: admin, athlete, coach, club)
         $roles = Role::all();
@@ -44,11 +46,11 @@ class UserController extends Controller
 
         return view('admin.users.edit', compact('user','roles','modules','actions'));
     }
-
+*/
     /**
      * Simpan perubahan Status, Role, dan Permissions untuk pengguna
      */
-    public function update(Request $request, User $user)
+/*   public function update(Request $request, User $user)
     {
         // 1) Validasi input asas
         $request->validate([
@@ -88,6 +90,7 @@ class UserController extends Controller
             ->with('success','Pengguna berjaya dikemaskini (status, role, permissions).');
 
     }
+*/    
     public function assignRole(Request $request)
     {
         $user = User::findOrFail($request->user_id);
@@ -96,6 +99,30 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'User roles updated successfully.');
     }
 
+    public function invite(Request $request)
+    {
+        $request->validate([
+            'invite_email' => 'required|email|unique:users,email',
+            'invite_role'  => 'required|exists:roles,name',
+        ]);
+
+        $email = $request->invite_email;
+        $role  = $request->invite_role;
+
+        // (Optionally) create a “pending” user row, or generate a signed token to track invitation.
+        // For simplicity, we just email a registration link with prefilled role.
+
+        $token = \Str::random(40);
+        $inviteUrl = url("/register?email={$email}&role={$role}&token={$token}");
+
+        // Send invitation email:
+        Mail::to($email)->send(new UserInvitationMail($inviteUrl));
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Invitation sent to ' . $email);
+    }    
+/*
     public function store(Request $request)
     {
         $request->validate([
@@ -123,6 +150,8 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')
                         ->with('success', 'New user created successfully.');
     }
+*/
+    
 
 
 }

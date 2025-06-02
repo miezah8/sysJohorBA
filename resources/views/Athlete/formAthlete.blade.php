@@ -538,6 +538,11 @@
         }
 
         $(document).ready(function () {
+            //load ddl
+            loadDistricts();
+            loadStates();
+            loadNationality();
+
             loadNationality();//list nationality
             loadStates(); //list state
             loadDistricts(); //list district

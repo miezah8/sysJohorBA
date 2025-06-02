@@ -9,6 +9,8 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\SanctionController;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserInvitationMail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,6 +40,7 @@ Route::middleware(['auth','role:admin'])
          Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('edit');
          Route::post('/users', [AdminUserController::class, 'store'])->name('store');
          Route::put('/users/assign-role', [AdminUserController::class, 'assignRole'])->name('assignRole');
+         Route::post('users/invite', [AdminUserController::class, 'invite'])->name('invite');
 
          // Update data user (syncRoles + syncPermissions)
          Route::put('users/{user}',      [AdminUserController::class, 'update'])->name('update');
@@ -98,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:view coach')->group(function() {
         Route::get('/coach',            [CoachController::class, 'index'])->name('coach.index');
         Route::get('/coach/{coach}',    [CoachController::class, 'show'])->name('coach.show');
+        Route::get('/coach/{coach}/players', [CoachController::class, 'players'])->name('coach.players');
     });
     Route::middleware('permission:add coach')->group(function() {
         Route::get('/coach/create',     [CoachController::class, 'create'])->name('coach.create');
@@ -116,22 +120,22 @@ Route::middleware('auth')->group(function () {
     // Permissions: view club, add club, edit club, delete club
     // ------------------------------
     Route::middleware('permission:view club')->group(function() {
-        Route::get('/club',             [ClubController::class, 'index'])->name('clubs.index');
-        Route::get('/club/{club}',      [ClubController::class, 'show'])->name('clubs.show');
-        Route::get('/club/{club}/players', [ClubController::class, 'players'])->name('clubs.players');
+        Route::get('/clubs',             [ClubController::class, 'index'])->name('clubs.index');
+        Route::get('/clubs/{club}',      [ClubController::class, 'show'])->name('clubs.show');
+        Route::get('/clubs/{club}/players', [ClubController::class, 'players'])->name('clubs.players');
         // Route::resource('clubs', ClubController::class);
 
     });
     Route::middleware('permission:add club')->group(function() {
-        Route::get('/club/create',      [ClubController::class, 'create'])->name('clubs.create');
-        Route::post('/club',            [ClubController::class, 'store'])->name('clubs.store');
+        Route::get('/clubs/create',      [ClubController::class, 'create'])->name('clubs.create');
+        Route::post('/clubs',            [ClubController::class, 'store'])->name('clubs.store');
     });
     Route::middleware('permission:edit club')->group(function() {
-        Route::get('/club/{club}/edit', [ClubController::class, 'edit'])->name('clubs.edit');
-        Route::put('/club/{club}',      [ClubController::class, 'update'])->name('clubs.update');
+        Route::get('/clubs/{club}/edit', [ClubController::class, 'edit'])->name('clubs.edit');
+        Route::put('/clubs/{club}',      [ClubController::class, 'update'])->name('clubs.update');
     });
     Route::middleware('permission:delete club')->group(function() {
-        Route::delete('/club/{club}',   [ClubController::class, 'destroy'])->name('clubs.destroy');
+        Route::delete('/clubs/{club}',   [ClubController::class, 'destroy'])->name('clubs.destroy');
     });
 
     // ------------------------------
@@ -249,6 +253,13 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:edit setting')->group(function() {
         Route::put('/setting',              [SettingController::class, 'update'])->name('setting.update');
     });
+});
+
+Route::get('/test-mail', function () {
+    // Give yourself a dummy URL or token
+    $inviteUrl = url('/register?test=1');
+    Mail::to('anyone@anywhere.test')->send(new UserInvitationMail($inviteUrl));
+    return 'Mail sent (check storage/logs/laravel.log).';
 });
 
 // Akhir group 'auth'
