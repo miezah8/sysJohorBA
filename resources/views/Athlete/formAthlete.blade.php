@@ -443,6 +443,11 @@
 
     <script>
         $(document).ready(function () {
+            //load ddl
+            loadDistricts();
+            loadStates();
+            loadNationality();
+
             //Switch function
             $('#switchMode').change(function() {
                 if ($(this).is(':checked')) {
