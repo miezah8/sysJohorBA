@@ -98,6 +98,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:view coach')->group(function() {
         Route::get('/coach',            [CoachController::class, 'index'])->name('coach.index');
         Route::get('/coach/{coach}',    [CoachController::class, 'show'])->name('coach.show');
+        Route::get('/coach/{coach}/players', [CoachController::class, 'players'])->name('coach.players');
     });
     Route::middleware('permission:add coach')->group(function() {
         Route::get('/coach/create',     [CoachController::class, 'create'])->name('coach.create');
