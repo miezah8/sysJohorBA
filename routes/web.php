@@ -9,6 +9,8 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\SanctionController;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserInvitationMail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,6 +40,7 @@ Route::middleware(['auth','role:admin'])
          Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('edit');
          Route::post('/users', [AdminUserController::class, 'store'])->name('store');
          Route::put('/users/assign-role', [AdminUserController::class, 'assignRole'])->name('assignRole');
+         Route::post('users/invite', [AdminUserController::class, 'invite'])->name('invite');
 
          // Update data user (syncRoles + syncPermissions)
          Route::put('users/{user}',      [AdminUserController::class, 'update'])->name('update');
@@ -247,6 +250,13 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:edit setting')->group(function() {
         Route::put('/setting',              [SettingController::class, 'update'])->name('setting.update');
     });
+});
+
+Route::get('/test-mail', function () {
+    // Give yourself a dummy URL or token
+    $inviteUrl = url('/register?test=1');
+    Mail::to('anyone@anywhere.test')->send(new UserInvitationMail($inviteUrl));
+    return 'Mail sent (check storage/logs/laravel.log).';
 });
 
 // Akhir group 'auth'
