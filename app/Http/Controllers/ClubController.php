@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 
 class ClubController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('permission:view club')->only(['index','show','players']);
-        $this->middleware('permission:add club')->only(['create','store']);
-        $this->middleware('permission:edit club')->only(['edit','update']);
-        $this->middleware('permission:delete club')->only('destroy');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('permission:view club')->only(['index','show','players']);
+    //     $this->middleware('permission:add club')->only(['create','store']);
+    //     $this->middleware('permission:edit club')->only(['edit','update']);
+    //     $this->middleware('permission:delete club')->only('destroy');
+    // }
     /**
      * Display a listing of clubs.
      */

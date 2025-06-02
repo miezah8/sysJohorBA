@@ -116,22 +116,22 @@ Route::middleware('auth')->group(function () {
     // Permissions: view club, add club, edit club, delete club
     // ------------------------------
     Route::middleware('permission:view club')->group(function() {
-        Route::get('/club',             [ClubController::class, 'index'])->name('clubs.index');
-        Route::get('/club/{club}',      [ClubController::class, 'show'])->name('clubs.show');
-        Route::get('/club/{club}/players', [ClubController::class, 'players'])->name('clubs.players');
+        Route::get('/clubs',             [ClubController::class, 'index'])->name('clubs.index');
+        Route::get('/clubs/{club}',      [ClubController::class, 'show'])->name('clubs.show');
+        Route::get('/clubs/{club}/players', [ClubController::class, 'players'])->name('clubs.players');
         // Route::resource('clubs', ClubController::class);
 
     });
     Route::middleware('permission:add club')->group(function() {
-        Route::get('/club/create',      [ClubController::class, 'create'])->name('clubs.create');
-        Route::post('/club',            [ClubController::class, 'store'])->name('clubs.store');
+        Route::get('/clubs/create',      [ClubController::class, 'create'])->name('clubs.create');
+        Route::post('/clubs',            [ClubController::class, 'store'])->name('clubs.store');
     });
     Route::middleware('permission:edit club')->group(function() {
-        Route::get('/club/{club}/edit', [ClubController::class, 'edit'])->name('clubs.edit');
-        Route::put('/club/{club}',      [ClubController::class, 'update'])->name('clubs.update');
+        Route::get('/clubs/{club}/edit', [ClubController::class, 'edit'])->name('clubs.edit');
+        Route::put('/clubs/{club}',      [ClubController::class, 'update'])->name('clubs.update');
     });
     Route::middleware('permission:delete club')->group(function() {
-        Route::delete('/club/{club}',   [ClubController::class, 'destroy'])->name('clubs.destroy');
+        Route::delete('/clubs/{club}',   [ClubController::class, 'destroy'])->name('clubs.destroy');
     });
 
     // ------------------------------
