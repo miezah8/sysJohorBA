@@ -1,12 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\District;
+use App\Models\School;
+use App\Models\State;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\School;
-use App\Models\District;
-use App\Models\State;
 
 class SchoolController extends Controller
 {
@@ -30,16 +29,16 @@ class SchoolController extends Controller
 
         // dd($schoolData->take(10));
 
-        return view('school.index', ['schoolData' => $schoolData,]);
+        return view('school.index', ['schoolData' => $schoolData]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    // /**
+    //  * Show the form for creating a new resource.
+    //  */
+    // public function create()
+    // {
+    //     //
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -48,14 +47,14 @@ class SchoolController extends Controller
     {
         $validated = $request->validate([
             'school_name' => 'required|string|max:255',
-            'sch_code' => 'required|string|max:20',
-            'sc_address' => 'required|string',
-            'postcode' => 'required|string|max:10',
+            'sch_code'    => 'required|string|max:20',
+            'sc_address'  => 'required|string',
+            'postcode'    => 'required|string|max:10',
             'district_id' => 'required|exists:district,id_district',
-            'state_id' => 'required|integer',
-            'no_tel' => 'required|string|max:20',
-            'no_fax' => 'nullable|string|max:20',
-            'email_sch' => 'required|email|max:255',
+            'state_id'    => 'required|integer',
+            'no_tel'      => 'required|string|max:20',
+            'no_fax'      => 'nullable|string|max:20',
+            'email_sch'   => 'required|email|max:255',
         ]);
 
         $school = school::create($validated);
@@ -66,28 +65,27 @@ class SchoolController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show($id)
     {
-        $id = $request->selectedRecord;
-        $school = school::find($id);
+        $school = School::find($id);
 
-        if (!$school) {
+        if (! $school) {
             return response()->json(['error' => 'School not found'], 404);
         }
 
         return response()->json($school);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+    // /**
+    //  * Show the form for editing the specified resource.
+    //  */
+    // public function edit(string $id)
+    // {
+    //     //
+    // }
 
     /**
-     * Update the specified resource in storage. 
+     * Update the specified resource in storage.
      * NHMA update 28052025
      */
     public function update(Request $request, string $id)
@@ -125,16 +123,15 @@ class SchoolController extends Controller
     {
         $school->delete();
 
-        return redirect()
-            ->route('school.index')
-            ->with('success','School berhasil dihapus.');
+        return response()->json(['message' => 'School deleted successfully.']);
     }
+
+
 
     public function getDistricts()
     {
         return response()->json(District::pluck('district_name', 'id_district'));
     }
-    
 
     public function getStates()
     {

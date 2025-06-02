@@ -26,17 +26,12 @@
                             <td>{{ $school->school_name }}</td>
                             <td>{{ $school->district_name }}</td>
                             <td>
-                                {{-- <button class="btn btn-outline-info" type="button">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button> --}}
-                                {{-- <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#schoolModal"
-                                    data-mode="edit" data-id="{{ $school->id_school }}"
-                                    data-name="{{ $school->school_name }}">
-                                    <i class="fa-solid fa-pen-to-square me-1"></i> Edit
-                                </button> --}}
                                 <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#schoolModal"
                                     data-mode="edit" data-id="{{ $school->id_school }}">
                                     <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                                </button>
+                                <button class="btn btn-outline-danger btn-delete" data-id="{{ $school->id_school }}">
+                                    <i class="fa-solid fa-trash me-1"></i> Delete
                                 </button>
                             </td>
                         </tr>
@@ -47,51 +42,50 @@
     </div>
 
     {{-- modal section --}}
-    <div class="modal fade" id="schoolModal" tabindex="-1" aria-labelledby="schoolModalLabel" aria-hidden="true"
-        data-url="/schools">
+    <div class="modal fade" id="schoolModal" aria-labelledby="schoolModalLabel" aria-hidden="true" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="schoolModalLabel"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close"></button>
                 </div>
 
                 <form id="schoolForm">
                     <div class="modal-body">
-                        <input type="hidden" name="id_school">
+                        <input name="id_school" type="hidden">
 
                         <div class="row mb-2">
                             <div class="col">
-                                <label for="school_name" class="form-label">School Name</label>
-                                <input type="text" class="form-control" id="school_name" name="school_name" >
+                                <label class="form-label" for="school_name">School Name</label>
+                                <input class="form-control" id="school_name" name="school_name" type="text">
                             </div>
                             <div class="col">
-                                <label for="sch_code" class="form-label">School Code</label>
-                                <input type="text" class="form-control" id="sch_code" name="sch_code" >
+                                <label class="form-label" for="sch_code">School Code</label>
+                                <input class="form-control" id="sch_code" name="sch_code" type="text">
                             </div>
                         </div>
 
                         <div class="row mb-2">
                             <div class="col">
-                                <label for="sc_address" class="form-label">School Address</label>
-                                <textarea type="text" class="form-control" id="sc_address" name="sc_address" ></textarea>
+                                <label class="form-label" for="sc_address">School Address</label>
+                                <textarea class="form-control" id="sc_address" name="sc_address" type="text"></textarea>
                             </div>
                             <div class="col">
-                                <label for="postcode" class="form-label">Postcode</label>
-                                <input type="text" class="form-control" id="postcode" name="postcode" >
+                                <label class="form-label" for="postcode">Postcode</label>
+                                <input class="form-control" id="postcode" name="postcode" type="text">
                             </div>
                         </div>
 
                         <div class="row mb-2">
                             <div class="col">
-                                <label for="district_id" class="form-label">City</label>
-                                <select class="form-select select2" id="district_id" name="district_id" >
+                                <label class="form-label" for="district_id">City</label>
+                                <select class="form-select select2" id="district_id" name="district_id">
                                     <option value="">-- Select District --</option>
                                 </select>
                             </div>
 
                             <div class="col">
-                                <label for="state_id" class="form-label">State</label>
+                                <label class="form-label" for="state_id">State</label>
                                 <select class="form-select select2" id="state_id" name="state_id">
                                     <option value="">-- Select State --</option>
                                 </select>
@@ -101,31 +95,30 @@
 
                         <div class="row mb-2">
                             <div class="col">
-                                <label for="no_tel" class="form-label">Telephone No.</label>
-                                <input type="text" class="form-control" id="no_tel" name="no_tel" >
+                                <label class="form-label" for="no_tel">Telephone No.</label>
+                                <input class="form-control" id="no_tel" name="no_tel" type="text">
                             </div>
                             <div class="col">
-                                <label for="no_fax" class="form-label">Fax No.</label>
-                                <input type="text" class="form-control" id="no_fax" name="no_fax">
+                                <label class="form-label" for="no_fax">Fax No.</label>
+                                <input class="form-control" id="no_fax" name="no_fax" type="text">
                             </div>
                         </div>
 
                         <div class="mb-2">
-                            <label for="email_sch" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email_sch" name="email_sch" >
+                            <label class="form-label" for="email_sch">Email</label>
+                            <input class="form-control" id="email_sch" name="email_sch" type="email">
                         </div>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+                        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+                        <button class="btn btn-primary" id="saveBtn" type="submit">Save</button>
                     </div>
                 </form>
 
             </div>
         </div>
     </div>
-
     {{-- modal section --}}
 @endsection
 
@@ -154,19 +147,17 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        $(function() {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
 
-            const dataTableSearch = new simpleDatatables.DataTable(
-                "#datatable-search", {
-                    searchable: true,
-                    fixedHeight: true,
-                }
-            );
+            const dataTableSearch = new simpleDatatables.DataTable("#datatable-search", {
+                searchable: true,
+                fixedHeight: true,
+            });
 
             $('.select2').select2({
                 dropdownParent: $('#schoolModal'),
@@ -174,145 +165,199 @@
                 width: '100%'
             });
 
-
-        });
-
-
-        const $modal = $('#schoolModal');
-        const $form = $('#schoolForm');
-        const $modalTitle = $('#schoolModalLabel');
-        const $submitButton = $form.find('button[type="submit"]');
-        const baseUrl = $modal.data('url');
-        const storeUrl = "{{ route('school.store') }}";
-        const updateUrl = "{{ url('/school') }}"; // for PUT with ID appended
+            var $modal = $('#schoolModal');
+            var $form = $('#schoolForm');
+            var $modalTitle = $('#schoolModalLabel');
+            var $submitBtn = $form.find('button[type="submit"]');
+            var saveUrl = "{{ route('school.store') }}"; // for both create & update
 
 
-        $modal.on('show.bs.modal', function(event) {
-            const button = $(event.relatedTarget);
-            const mode = button.data('mode');
-            const id = button.data('id');
+            // Handle modal open
+            $modal.on('show.bs.modal', function(e) {
+                var button = $(e.relatedTarget);
+                var mode = button.data('mode');
+                var id = button.data('id');
 
-            $form.trigger('reset');
-            $form.find('.is-invalid').removeClass('is-invalid');
-            $submitButton.prop('disabled', false).text('Save');
+                $form[0].reset();
+                $form.find('.is-invalid').removeClass('is-invalid');
+                $form.find('.invalid-feedback').remove();
+                $submitBtn.prop('disabled', false).text('Save');
 
-            if (mode === 'edit' && id) {
-                $modalTitle.text('Edit School');
-                $form.find('[name="id_school"]').val(id); //NH update from id
-                $submitButton.prop('disabled', true).text('Loading...');
+                if (mode === 'edit' && id) {
+                    $modalTitle.text('Edit School');
+                    $form.find('[name="id_school"]').val(id);
+                    $submitBtn.prop('disabled', true).text('Loading...');
 
-                // Load districts first
-                loadDistricts(); // Preload dropdown
-                loadStates();
+                    loadDistricts();
+                    loadStates();
+
+                    $.ajax({
+                        url: '/school/' + id,
+                        method: 'GET',
+                        success: function(data) {
+                            $.each(data, function(key, val) {
+                                $form.find('[name="' + key + '"]').val(val);
+                            });
+
+                            loadDistricts(data.district_id);
+                            loadStates(data.state_id);
+                        },
+                        error: function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to load school data.'
+                            });
+                            $modal.modal('hide');
+                        },
+                        complete: function() {
+                            $submitBtn.prop('disabled', false).text('Save');
+                        }
+                    });
+                } else {
+                    $modalTitle.text('Add School');
+                    loadDistricts();
+                    loadStates();
+                }
+            });
+
+            // Handle form submission
+            $form.on('submit', function(e) {
+                e.preventDefault();
+
+                var id = $form.find('[name="id_school"]').val();
+                var isEdit = !!id;
+                var method = isEdit ? 'PUT' : 'POST';
+                var url = isEdit ? '/school/' + id : saveUrl;
+
+                $form.find('.is-invalid').removeClass('is-invalid');
+                $form.find('.invalid-feedback').remove();
+                $submitBtn.prop('disabled', true).text('Saving...');
+
+                var formData = $form.serializeArray();
+                var postData = {};
+
+                $.each(formData, function(i, field) {
+                    postData[field.name] = field.value;
+                });
+
+                if (isEdit) postData._method = 'PUT';
 
                 $.ajax({
-                    type: 'POST',
-                    url: "{{ route('school.show') }}",
-                    data: {
-                        selectedRecord: id
-                    },
-                    success: function(data) {
-                        // Now populate form values
-                        $.each(data, function(key, value) {
-                            $form.find(`[name="${key}"]`).val(value);
-                        });
+                    url: url,
+                    method: 'POST',
+                    data: postData,
+                    success: function(response) {
+                        $('#schoolModal').modal('hide');
+                        $form[0].reset();
 
-                        // After setting form, set district dropdown specifically
-                        loadDistricts(data.district_id);
-                        loadStates(data.state_id);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.message || 'School saved successfully.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload();
+                        });
                     },
-                    error: function() {
-                        alert('Failed to load school data.');
-                        $modal.modal('hide');
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            $.each(errors, function(field, messages) {
+                                var $input = $form.find('[name="' + field + '"]');
+                                $input.addClass('is-invalid');
+                                $input.after('<div class="invalid-feedback">' +
+                                    messages[0] + '</div>');
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: xhr.responseJSON?.message ||
+                                    'An unexpected error occurred.',
+                            });
+                        }
                     },
                     complete: function() {
-                        $submitButton.prop('disabled', false).text('Save');
+                        $submitBtn.prop('disabled', false).text('Save');
                     }
                 });
-
-            } else {
-                $modalTitle.text('Add School');
-                loadDistricts(); // Load for Add mode
-                loadStates();
-                
-            }
-        });
-
-
-        $('#schoolForm').on('submit', function(e) {
-            e.preventDefault();
-
-            const $form = $(this);
-            const $submitButton = $form.find('button[type="submit"]');
-            const id = $form.find('[name="id_school"]').val();
-            const isEdit = Boolean(id);
-
-            $submitButton.prop('disabled', true).text('Saving...');
-
-            const formDataArray = $form.serializeArray();
-            const formData = {};
-            $.each(formDataArray, function(index, field) {
-                formData[field.name] = field.value;
             });
 
-            $.ajax({
-                type: 'POST', // Laravel will still accept PUT via _method field
-                url: isEdit ? `${updateUrl}/${id}` : storeUrl,
-                data: isEdit ? {...formData, _method: 'PUT'} : formData,
-                success: function(response) {
-                    console.log(isEdit ? 'Updated:' : 'Created:', response);
-                    $('#schoolModal').modal('hide');
-                    $form.trigger('reset');
-                    window.location.reload();
-                    // Optional: refresh DataTable
-                },
-                error: function(xhr) {
-                    alert('An error occurred. Please try again.');
-                },
-                complete: function() {
-                    $submitButton.prop('disabled', false).text('Save');
-                }
-            });
-        });
+            function loadDistricts(selectedId) {
+                var $ddl = $('#district_id');
+                $ddl.prop('disabled', true).html('<option>Loading districts…</option>');
 
-
-
-        function loadDistricts(selectedId = null) {
-            const $ddl = $('#district_id');
-            $ddl.prop('disabled', true).empty().append('<option value="">Loading districts...</option>');
-
-            $.get("{{ route('districts.list') }}", function(districts) {
-                $ddl.empty().append('<option value="">-- Select District --</option>');
-
-                $.each(districts, function(id, name) {
-                    $ddl.append(new Option(name, id));
+                $.get("{{ route('districts.list') }}", function(data) {
+                    $ddl.empty().append('<option value="">-- Select District --</option>');
+                    $.each(data, function(id, name) {
+                        $ddl.append('<option value="' + id + '">' + name + '</option>');
+                    });
+                    if (selectedId) $ddl.val(selectedId).trigger('change');
+                    $ddl.prop('disabled', false);
                 });
-
-                if (selectedId) {
-                    $ddl.val(selectedId).trigger('change'); // trigger for select2 update
-                }
-
-                $ddl.prop('disabled', false);
-            });
-        }
-
-        function loadStates(selectedId = null) {
-            const $ddl = $('#state_id');
-            $ddl.prop('disabled', true)
-                .empty()
-                .append('<option>Loading states…</option>');
-
-            $.get("{{ route('states.list') }}", function(states) {
-                $ddl.empty().append('<option value="">-- Select State --</option>');
-                $.each(states, function(id, name) {
-                $ddl.append(new Option(name, id));
-                });
-                if (selectedId) {
-                $ddl.val(selectedId).trigger('change');
-                }
-                $ddl.prop('disabled', false);
-            });
             }
 
+            function loadStates(selectedId) {
+                var $ddl = $('#state_id');
+                $ddl.prop('disabled', true).html('<option>Loading states…</option>');
+
+                $.get("{{ route('states.list') }}", function(data) {
+                    $ddl.empty().append('<option value="">-- Select State --</option>');
+                    $.each(data, function(id, name) {
+                        $ddl.append('<option value="' + id + '">' + name + '</option>');
+                    });
+                    if (selectedId) $ddl.val(selectedId).trigger('change');
+                    $ddl.prop('disabled', false);
+                });
+            }
+        });
+    </script>
+
+    <script>
+        $(document).on('click', '.btn-delete', function() {
+            const deleteId = $(this).data('id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This action cannot be undone.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/school/${deleteId}`,
+                        type: 'POST',
+                        data: {
+                            _method: 'DELETE',
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: 'The school has been deleted.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        },
+                        error: function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to delete. Please try again.'
+                            });
+                        }
+                    });
+                }
+            });
+        });
     </script>
 @endpush

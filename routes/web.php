@@ -157,24 +157,23 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:delete coach')->group(function() {
         Route::delete('/coach/{coach}',   [CoachController::class, 'destroy'])->name('coach.destroy');
     });
-*/
+    */
     // ------------------------------
     // Modul: School
     // Permissions: view school, add school, edit school, delete school
     // ------------------------------
     Route::middleware('permission:view school')->group(function() {
         Route::get('/school',                 [SchoolController::class, 'index'])->name('school.index');
-        Route::get('/school/show',        [SchoolController::class, 'show'])->name('school.show');
+        Route::get('/school/{id}', [SchoolController::class, 'show'])->name('school.show');
     });
     Route::middleware('permission:add school')->group(function() {
-        Route::get('/school/create',          [SchoolController::class, 'create'])->name('school.create');
+        // Route::get('/school/create',          [SchoolController::class, 'create'])->name('school.create');   //xpakai sbb function create via ajax
         Route::post('/school',                [SchoolController::class, 'store'])->name('school.store');
     });
     Route::middleware('permission:edit school')->group(function() {
         //Route::get('/school/{school}/edit',   [SchoolController::class, 'edit'])->name('school.edit');
         //Route::put('/school/{school}',        [SchoolController::class, 'update'])->name('school.update');
         // Route::post('/school/show', [SchoolController::class, 'show'])->name('school.show');
-        Route::post('/school', [SchoolController::class, 'store'])->name('school.store');        
         Route::put('/school/{id}', [SchoolController::class, 'update'])->name('school.update');
     });
     Route::middleware('permission:delete school')->group(function() {
