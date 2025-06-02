@@ -122,7 +122,7 @@
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label required">Citizens</label>
-                                        <select id="countryList" class="form-select" name="citizens">
+                                        <select id="countryList" class="form-select select2" name="citizens">
                                             <option value="">-- Select Country --</option>
                                         </select>
                                     </div>
@@ -139,29 +139,13 @@
                                             </div>
                                             <div class="col-md-12 mb-3">
                                                 <label class="form-label required">State</label>
-                                                <select class="form-control" id="schA_state" name="sch_state" onchange="stateSch_change(this.value);">
+                                                <select class="form-control select2" id="schA_state" name="sch_state" onchange="stateSch_change(this.value);">
 									                <option value="">-- Select State --</option>
-                                                    <option value="1">JOHOR</option>
-                                                    <option value="2">KEDAH</option>
-                                                    <option value="3">KELANTAN</option>
-                                                    <option value="4">MELAKA</option>
-                                                    <option value="5">NEGERI SEMBILAN</option>
-                                                    <option value="6">PAHANG</option>
-                                                    <option value="8">PERAK</option>
-                                                    <option value="9">PERLIS</option>
-                                                    <option value="7">PULAU PINANG</option>
-                                                    <option value="12">SABAH</option>
-                                                    <option value="13">SARAWAK</option>
-                                                    <option value="10">SELANGOR</option>
-                                                    <option value="11">TERENGGANU</option>
-                                                    <option value="14">W.P KUALA LUMPUR</option>
-                                                    <option value="15">W.P LABUAN</option>
-                                                    <option value="16">W.P PUTRAJAYA</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-12 mb-3">
                                                 <label class="form-label required">Districts</label>
-                                                <select class="form-select" id="daerahDropdown" name="districts">
+                                                <select class="form-select select2" id="daerahDropdown" name="districts">
                                                     <option value="">-- Select Districts --</option>
                                                 </select>
                                             </div>
@@ -175,7 +159,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label required">T-Shirt Size</label>
-                                            <select class="form-select" name="size">
+                                            <select class="form-select select2" name="size">
                                                 <option value="">-- Select Size --</option>
                                                 <option value="XS">XS</option>
                                                 <option value="S">S</option>
@@ -188,7 +172,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label required">Name on T-Shirt</label>
-                                            <input type="text" class="form-control" >
+                                            <input type="text" class="form-control" name="NameTshirt">
                                         </div>
                                     </div>
                                     <div class="text-end">
@@ -202,22 +186,27 @@
                             <form id="formGuardian">
                                 <div class="row mt-3">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">Nama Penjaga</label>
-                                        <input type="text" class="form-control">
+                                        <label class="form-label required">Guardian's Name</label>
+                                        <input type="text" class="form-control" name="GuardianName">
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">No Telefon Penjaga</label>
-                                        <input type="text" class="form-control">
+                                        <label class="form-label required">Guardian's Phone Number</label>
+                                        <input type="text" class="form-control" name="GuardianPhone">
                                     </div>
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">Pekerjaan</label>
-                                        <input type="text" class="form-control">
+                                        <label class="form-label required">Occupation</label>
+                                        <input type="text" class="form-control" name="GuardianOccup">
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">Perhubungan</label>
-                                        <input type="text" class="form-control">
+                                        <label class="form-label required">Relation</label>
+                                        <select name="GuardianRelation" class="form-control">
+                                            <option value="Ibu/Bapa">Ibu/Bapa</option>
+                                            <option value="Ibu/Bapa">Datuk/Nenek</option>
+                                            <option value="Ibu/Bapa">Adik-beradik</option>
+                                            <option value="Penjaga">Penjaga</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row mt-4">
@@ -225,7 +214,7 @@
                                         <button type="button" class="btn btn-secondary">Prev</button>
                                     </div>
                                     <div class="col text-end">
-                                        <button type="button" class="btn btn-primary">Next</button>
+                                        <button type="button" id="btnNextKeluarga" class="btn btn-primary">Next</button>
                                     </div>
                                 </div>
                             </form>
@@ -237,11 +226,8 @@
                                     <!-- Dropdown Nama Sekolah -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Nama Sekolah</label>
-                                        <select id="schoolDropdown" class="form-select">
+                                        <select id="schoolDropdown" class="form-select select2">
                                             <option value="">-- Pilih Sekolah --</option>
-                                            <!-- Contoh pilihan, nanti boleh populate dari JS -->
-                                            <option value="SK Taman Bukit">SK Taman Bukit</option>
-                                            <option value="SMK Seri Indah">SMK Seri Indah</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
@@ -304,7 +290,7 @@
                                                         <input type="text" class="form-control" placeholder="Contoh: Kejohanan Bola Sepak">
                                                     </td>
                                                     <td>
-                                                        <select class="form-select">
+                                                        <select class="form-select select2">
                                                             <option>Sila pilih pering</option>
                                                             <option>Daerah</option>
                                                             <option>Negeri</option>
@@ -313,7 +299,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class="form-select">
+                                                        <select class="form-select select2">
                                                             <option>Sila pilih kategori</option>
                                                             <option>Bawah 12</option>
                                                             <option>Bawah 15</option>
@@ -321,7 +307,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class="form-select">
+                                                        <select class="form-select select2">
                                                             <option>Sila pilih pencapaian</option>
                                                             <option>Johan</option>
                                                             <option>Naib Johan</option>
@@ -362,7 +348,7 @@
                                 <div class="row mb-4">
                                     <div class="col-md-6">
                                         <label for="coachSelect" class="form-label required">Jurulatih</label>
-                                        <select id="coachSelect" class="form-select">
+                                        <select id="coachSelect" class="form-select select2">
                                             <option value="">-- Sila pilih Jurulatih --</option>
                                             <option value="Coach A">Coach A</option>
                                             <option value="Coach B">Coach B</option>
@@ -372,7 +358,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="clubSelect" class="form-label required">Kelab</label>
-                                        <select id="clubSelect" class="form-select">
+                                        <select id="clubSelect" class="form-select select2">
                                             <option value="">-- Sila pilih Kelab --</option>
                                             <option value="Kelab A">Kelab A</option>
                                             <option value="Kelab B">Kelab B</option>
@@ -442,7 +428,120 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        function loadNationality(selectedId = null) {
+            const $ddl = $('#countryList');
+            $ddl.prop('disabled', true)
+                .empty()
+                .append('<option>Loading citizens</option>');
+
+            $.get("{{ route('nationality.list') }}", function(nationality) {
+                $ddl.empty().append('<option value="">-- Select Citizens --</option>');
+                $.each(nationality, function(id, name) {
+                $ddl.append(new Option(name, id));
+                });
+                if (selectedId) {
+                $ddl.val(selectedId).trigger('change');
+                }
+                $ddl.prop('disabled', false);
+            });
+        }
+
+        function loadDistricts(selectedId = null) {
+            const $ddl = $('#daerahDropdown');
+            $ddl.prop('disabled', true).empty().append('<option value="">Loading districts...</option>');
+
+            $.get("{{ route('districts.list') }}", function(districts) {
+                $ddl.empty().append('<option value="">-- Select District --</option>');
+
+                $.each(districts, function(id, name) {
+                    $ddl.append(new Option(name, id));
+                });
+
+                if (selectedId) {
+                    $ddl.val(selectedId).trigger('change'); // trigger for select2 update
+                }
+
+                $ddl.prop('disabled', false);
+            });
+        }
+
+        function loadStates(selectedId = null) {
+            const $ddl = $('#schA_state');
+            $ddl.prop('disabled', true)
+                .empty()
+                .append('<option>Loading states…</option>');
+
+            $.get("{{ route('states.list') }}", function(states) {
+                $ddl.empty().append('<option value="">-- Select State --</option>');
+                $.each(states, function(id, name) {
+                $ddl.append(new Option(name, id));
+                });
+                if (selectedId) {
+                $ddl.val(selectedId).trigger('change');
+                }
+                $ddl.prop('disabled', false);
+            });
+        }
+
+        function loadSchool(selectedId = null) {
+            const $ddl = $('#schoolDropdown');
+            $ddl.prop('disabled', true)
+                .empty()
+                .append('<option>Loading school</option>');
+
+            $.get("{{ route('school.list') }}", function(school) {
+                $ddl.empty().append('<option value="">-- Select School --</option>');
+                $.each(school, function(id, name) {
+                $ddl.append(new Option(name, id));
+                });
+                if (selectedId) {
+                $ddl.val(selectedId).trigger('change');
+                }
+                $ddl.prop('disabled', false);
+            });
+        }
+
+        function loadClub(selectedId = null) {
+            const $ddl = $('#clubSelect');
+            $ddl.prop('disabled', true)
+                .empty()
+                .append('<option>Loading club</option>');
+
+            $.get("{{ route('club.list') }}", function(club) {
+                $ddl.empty().append('<option value="">-- Select Club --</option>');
+                $.each(club, function(id, name) {
+                $ddl.append(new Option(name, id));
+                });
+                if (selectedId) {
+                $ddl.val(selectedId).trigger('change');
+                }
+                $ddl.prop('disabled', false);
+            });
+        }
+
+        function loadCoach(selectedId = null) {
+            const $ddl = $('#coachSelect');
+            $ddl.prop('disabled', true)
+                .empty()
+                .append('<option>Loading coach</option>');
+
+            $.get("{{ route('coach.list') }}", function(coach) {
+                $ddl.empty().append('<option value="">-- Select Coach --</option>');
+                $.each(coach, function(id, name) {
+                $ddl.append(new Option(name, id));
+                });
+                if (selectedId) {
+                $ddl.val(selectedId).trigger('change');
+                }
+                $ddl.prop('disabled', false);
+            });
+        }
+
         $(document).ready(function () {
+            loadNationality();//list nationality
+            loadStates(); //list state
+            loadDistricts(); //list district
+
             //Switch function
             $('#switchMode').change(function() {
                 if ($(this).is(':checked')) {
@@ -459,6 +558,7 @@
             const $container = $form.find('.multi-row');
             const $addButton = $('#addRow');
 
+            //multiple add button
             $addButton.on('click', function () {
                 const $row = $container.find('.row').first();
                 const $newRow = $row.clone();
@@ -467,6 +567,7 @@
                 $container.append($newRow);
             });
 
+            //multiple remove buntton
             $form.on('click', '.removeRow', function () {
                 const $rows = $container.find('.row');
                 if ($rows.length > 1) {
@@ -498,12 +599,11 @@
                     { selector: '#daerahDropdown', name: 'Districts' },
                     { selector: 'input[name="picture"]', name: 'Picture' },
                     { selector: 'select[name="size"]', name: 'T-Shirt Size' },
-                    { selector: 'input[name="shirtName"]', name: 'Name on T-Shirt' } // ni awak tak letak name dalam HTML, kena tambah
+                    { selector: 'input[name="NameTshirt"]', name: 'Name on T-Shirt' } // ni awak tak letak name dalam HTML, kena tambah
                 ];
 
                 // Reset semua error state
                 form.find('input, select, textarea').removeClass('is-invalid');
-                form.find('.mb-3').removeClass('border border-danger p-2');
 
                 for (let field of fields) {
                     const el = form.find(field.selector);
@@ -517,7 +617,6 @@
 
                     if (!value) {
                         el.addClass('is-invalid');
-                        el.closest('.mb-3').addClass('border border-danger p-2');
 
                         Swal.fire({
                             icon: 'warning',
@@ -535,11 +634,48 @@
                     text: 'Proceeding to the next step.',
                     confirmButtonText: 'Continue'
                 }).then(() => {
-                    // proceedNextStep();
+                    $('#guardian-tab').click(); // Buka tab seterusnya
                 });
             });
 
-
+            $('#btnNextKeluarga').on('click', function () {
+                const form = $('#formPersonal');
+                const fields = [
+                    { selector: 'input[name="GuardianName"]', name: 'Guardian Name' },
+                    { selector: 'input[name="GuardianPhone"]', name: 'Guardian Phone' },
+                    { selector: 'input[name="GuardianOccup"]', name: 'Occupation' },
+                    { selector: 'input[name="GuardianRelation"]', name: 'Relation' }
+                ];
+                // Reset semua error state
+                form.find('input, select, textarea').removeClass('is-invalid');
+                for (let field of fields) {
+                    const el = form.find(field.selector);
+                    let value;
+                    if (field.isRadio) {
+                        value = el.filter(':checked').val();
+                    } else {
+                        value = el.val() ? el.val().trim() : '';
+                    }
+                    if (!value) {
+                        el.addClass('is-invalid');
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Missing Information',
+                            text: `Please enter ${field.name}`,
+                            confirmButtonText: 'OK'
+                        });
+                        return;
+                    }
+                }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'All Set!',
+                    text: 'Proceeding to the next step.',
+                    confirmButtonText: 'Continue'
+                }).then(() => {
+                    $('#school-tab').click(); // Buka tab seterusnya
+                });
+            )};
 
 
 
@@ -617,67 +753,7 @@
                 // proceedNextStep();
             });
 
-            function loadDistricts(selectedId = null) {
-                const $ddl = $('#daerahDropdown');
-                $ddl.prop('disabled', true).empty().append('<option value="">Loading districts...</option>');
-
-                $.get("{{ route('districts.list') }}", function(districts) {
-                    $ddl.empty().append('<option value="">-- Select District --</option>');
-
-                    $.each(districts, function(id, name) {
-                        $ddl.append(new Option(name, id));
-                    });
-
-                    if (selectedId) {
-                        $ddl.val(selectedId).trigger('change'); // trigger for select2 update
-                    }
-
-                    $ddl.prop('disabled', false);
-                });
-            }
-
-            function loadStates(selectedId = null) {
-                const $ddl = $('#schA_state');
-                $ddl.prop('disabled', true)
-                    .empty()
-                    .append('<option>Loading states…</option>');
-
-                $.get("{{ route('states.list') }}", function(states) {
-                    $ddl.empty().append('<option value="">-- Select State --</option>');
-                    $.each(states, function(id, name) {
-                    $ddl.append(new Option(name, id));
-                    });
-                    if (selectedId) {
-                    $ddl.val(selectedId).trigger('change');
-                    }
-                    $ddl.prop('disabled', false);
-                });
-            }
-
-            function loadNationality(selectedId = null) {
-                const $ddl = $('#countryList');
-                $ddl.prop('disabled', true)                 // disable dropdown sementara loading
-                    .empty()                                // kosongkan option sedia ada
-                    .append('<option>Loading citizens</option>');  // masukkan option loading
-
-                $.get("{{ route('nationality.list') }}", function(nationality) {  // fetch data via GET
-                    $ddl.empty().append('<option value="">-- Select Citizens --</option>'); // reset option
-                    
-                    // untuk setiap data nationality (id, name), buat option baru
-                    $.each(nationality, function(id, name) {
-                        $ddl.append(new Option(name, id));
-                    });
-
-                    // kalau ada selectedId, set nilai dropdown dan trigger change event
-                    if (selectedId) {
-                        $ddl.val(selectedId).trigger('change');
-                    }
-
-                    // enable dropdown semula bila dah siap
-                    $ddl.prop('disabled', false);
-                });
-            }
-
+            
         });
     </script>
 @endpush

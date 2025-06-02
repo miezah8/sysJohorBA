@@ -183,6 +183,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/districts', [SchoolController::class, 'getDistricts'])->name('districts.list');
     Route::get('/states',    [SchoolController::class, 'getStates'])->name('states.list');
     Route::get('/nationality', [AthleteController::class, 'getNationality'])->name('nationality.list');
+    Route::get('/school', [AthleteController::class, 'getSchool'])->name('school.list');
+    Route::get('/club', [AthleteController::class, 'getClub'])->name('club.list');
+    Route::get('/coach', [AthleteController::class, 'getCoach'])->name('coach.list');
 
     // ------------------------------
     // Modul: Sanction (resource + custom routes)
