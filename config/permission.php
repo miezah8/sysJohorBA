@@ -52,7 +52,7 @@ return [
          * basic default value but you may easily change it to any table you like.
          */
 
-        'model_has_permissions' => 'user_has_roles', //BAK:role_have_permissions
+        'model_has_permissions' => 'model_has_permissions', //BAK:role_have_permissions
 
         /*
          * When using the "HasRoles" trait from this package, we need to know which
