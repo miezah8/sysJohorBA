@@ -142,7 +142,7 @@ Route::middleware('auth')->group(function () {
     // Modul: Jurulatih
     // Permissions: view jurulatih, add jurulatih, edit jurulatih, delete jurulatih
     // ------------------------------
-    Route::middleware('permission:view coach')->group(function() {
+    /*Route::middleware('permission:view coach')->group(function() {
         Route::get('/coach',             [CoachController::class, 'index'])->name('coach.index');
         Route::get('/coach/{coach}',      [CoachController::class, 'show'])->name('coach.show');
     });
@@ -157,7 +157,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:delete coach')->group(function() {
         Route::delete('/coach/{coach}',   [CoachController::class, 'destroy'])->name('coach.destroy');
     });
-
+*/
     // ------------------------------
     // Modul: School
     // Permissions: view school, add school, edit school, delete school
@@ -187,9 +187,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/districts', [SchoolController::class, 'getDistricts'])->name('districts.list');
     Route::get('/states',    [SchoolController::class, 'getStates'])->name('states.list');
     Route::get('/nationality', [AthleteController::class, 'getNationality'])->name('nationality.list');
-    Route::get('/school', [AthleteController::class, 'getSchool'])->name('school.list');
-    Route::get('/club', [AthleteController::class, 'getClub'])->name('club.list');
-    Route::get('/coach', [AthleteController::class, 'getCoach'])->name('coach.list');
+    Route::get('/ajax/school', [AthleteController::class, 'getSchool'])->name('school.list'); //try tambah sebab pada bgian route bawah xjumpa .index>>/ajax
+    Route::get('/ajax/clubs', [AthleteController::class, 'getClub'])->name('club.list'); //try tambah sebab pada bgian route bawah xjumpa .index>>/ajax
+    Route::get('/ajax/coach', [AthleteController::class, 'getCoach'])->name('coach.list'); //try tambah sebab pada bgian route bawah xjumpa .index>>/ajax
 
     // ------------------------------
     // Modul: Sanction (resource + custom routes)
