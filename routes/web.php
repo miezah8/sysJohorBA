@@ -75,20 +75,20 @@ Route::middleware('auth')->group(function () {
     // Permissions: view athlete, add athlete, edit athlete, delete athlete
     // ------------------------------
     Route::middleware('permission:view athlete')->group(function() {
-        Route::get('/athlete',          [AthleteController::class, 'index'])->name('Athlete.index');
-        Route::get('/athlete/{athlete}',[AthleteController::class, 'show'])->name('Athlete.show');
-        //Route::get('/athlete', [AthleteController::class, 'index'])->name('athlete');
+        Route::get('/athlete', [AthleteController::class, 'index'])->name('Athlete.index');
+        Route::get('/athlete/{athlete}', [AthleteController::class, 'show'])->name('athlete.show');
     });
     Route::middleware('permission:add athlete')->group(function() {
-        Route::get('/athlete/formAthlete',   [AthleteController::class, 'create'])->name('athlete.formAthlete'); //create ganti formAthlete
-        Route::post('/athlete',         [AthleteController::class, 'store'])->name('Athlete.store');
+        Route::get('/athlete/create', [AthleteController::class, 'create'])->name('Athlete.form');
+        Route::post('/athlete', [AthleteController::class, 'store'])->name('athlete.store');
     });
     Route::middleware('permission:edit athlete')->group(function() {
-        Route::get('/athlete/{athlete}/edit', [AthleteController::class, 'edit'])->name('Athlete.edit');
-        Route::put('/athlete/{athlete}',      [AthleteController::class, 'update'])->name('Athlete.update');
+        Route::get('/athlete/{athlete}/edit', [AthleteController::class, 'edit'])->name('athlete.edit');
+        Route::put('/athlete/{athlete}', [AthleteController::class, 'update'])->name('athlete.update');
     });
+
     Route::middleware('permission:delete athlete')->group(function() {
-        Route::delete('/athlete/{athlete}',   [AthleteController::class, 'destroy'])->name('Athlete.destroy');
+        Route::delete('/athlete/{athlete}', [AthleteController::class, 'destroy'])->name('athlete.destroy');
     });
 
     // ------------------------------
@@ -119,7 +119,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/club',             [ClubController::class, 'index'])->name('clubs.index');
         Route::get('/club/{club}',      [ClubController::class, 'show'])->name('clubs.show');
         Route::get('/club/{club}/players', [ClubController::class, 'players'])->name('clubs.players');
-        Route::resource('clubs', ClubController::class);
+        // Route::resource('clubs', ClubController::class);
 
     });
     Route::middleware('permission:add club')->group(function() {
@@ -169,7 +169,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:edit school')->group(function() {
         //Route::get('/school/{school}/edit',   [SchoolController::class, 'edit'])->name('school.edit');
         //Route::put('/school/{school}',        [SchoolController::class, 'update'])->name('school.update');
-        Route::post('/school/show', [SchoolController::class, 'show'])->name('school.show');
+        // Route::post('/school/show', [SchoolController::class, 'show'])->name('school.show');
         Route::post('/school', [SchoolController::class, 'store'])->name('school.store');        
         Route::put('/school/{id}', [SchoolController::class, 'update'])->name('school.update');
     });
