@@ -6,7 +6,7 @@
         <!-- Card header -->
         <div class="card-header d-flex justify-content-between">
             <h5 class="mb-0">List of Athlete</h5>
-            <a href="{{ route('athlete.create') }}" class="btn btn-outline-success">
+            <a href="{{ route('athlete.form') }}" class="btn btn-outline-success">
                 <i class="fa-solid fa-plus me-1"></i> Add Athlete
             </a>
         </div>

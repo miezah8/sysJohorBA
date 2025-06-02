@@ -75,11 +75,11 @@ Route::middleware('auth')->group(function () {
     // Permissions: view athlete, add athlete, edit athlete, delete athlete
     // ------------------------------
     Route::middleware('permission:view athlete')->group(function() {
-        Route::get('/athlete', [AthleteController::class, 'index'])->name('Athlete.index');
-        Route::get('/athlete/{athlete}', [AthleteController::class, 'show'])->name('athlete.show');
+        Route::get('/athlete', [AthleteController::class, 'index'])->name('athlete.index');
+        // Route::get('/athlete/{athlete}', [AthleteController::class, 'show'])->name('athlete.show');
     });
     Route::middleware('permission:add athlete')->group(function() {
-        Route::get('/athlete/create', [AthleteController::class, 'create'])->name('Athlete.form');
+        Route::get('/athlete/form', [AthleteController::class, 'create'])->name('athlete.form');
         Route::post('/athlete', [AthleteController::class, 'store'])->name('athlete.store');
     });
     Route::middleware('permission:edit athlete')->group(function() {
@@ -182,6 +182,7 @@ Route::middleware('auth')->group(function () {
     // ------------------------------
     Route::get('/districts', [SchoolController::class, 'getDistricts'])->name('districts.list');
     Route::get('/states',    [SchoolController::class, 'getStates'])->name('states.list');
+    Route::get('/nationality', [AthleteController::class, 'getNationality'])->name('nationality.list');
 
     // ------------------------------
     // Modul: Sanction (resource + custom routes)

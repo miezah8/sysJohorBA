@@ -22,7 +22,7 @@
     {{-- Modul Atlet - hanya untuk admin atau coach --}}
     @hasanyrole('admin|coach|athlete')
     <li class="nav-item">
-        <a href="{{ route('Athlete.index') }}" class="nav-link" role="button">
+        <a href="{{ route('athlete.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
                 <i class="bi bi-person-walking"></i>
             </div>

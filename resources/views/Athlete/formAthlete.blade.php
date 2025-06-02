@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Athlete Module')
+@section('title', 'Athlete Module Form')
 
 @section('content')
     <!-- Begin: Card Pendaftaran Athlete -->
