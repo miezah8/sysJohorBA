@@ -15,8 +15,8 @@
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
-                        <th>School Name</th>
-                        <th>City</th>
+                        <th>Club Name</th>
+                        <th>Total Player</th>
                         <th>Action</th>
                     </tr>
                 </thead>
