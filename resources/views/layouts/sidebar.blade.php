@@ -30,21 +30,21 @@
         </a>
     </li>
     @endhasanyrole
-    @hasanyrole('admin|coach|club')
-    <li class="nav-item">
-        <a href="{{ route('clubs.index') }}" class="nav-link" role="button">
-            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
-                <i class="bi bi-people"></i>
-            </div>
-            <span class="nav-link-text ms-1">Club</span>
-        </a>
-    </li>
     <li class="nav-item">
         <a href="{{ route('coach.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
                 <i class="bi bi-person-badge"></i>
             </div>
             <span class="nav-link-text ms-1">Coach</span>
+        </a>
+    </li>
+     @hasanyrole('admin|coach|club')
+    <li class="nav-item">
+        <a href="{{ route('clubs.index') }}" class="nav-link" role="button">
+            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                <i class="bi bi-people"></i>
+            </div>
+            <span class="nav-link-text ms-1">Club</span>
         </a>
     </li>
     @endhasanyrole
