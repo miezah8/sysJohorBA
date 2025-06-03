@@ -1,5 +1,6 @@
 {{-- resources/views/sanction/create.blade.php --}}
 @extends('layouts.app')
+@section('title', 'Apply for Sanction')
 
 @section('content')
 <div class="card">
@@ -7,7 +8,7 @@
     <h5>Apply for Tournament Sanction</h5>
   </div>
   <div class="card-body">
-    <form action="{{ route('sanctions.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('sanction.store') }}" method="POST" enctype="multipart/form-data">
       @csrf
 
       {{-- Tournament Name --}}
@@ -26,18 +27,34 @@
         @enderror
       </div>
 
-      {{-- Tournament Date --}}
+      {{-- Tournament Start Date --}}
       <div class="mb-3">
-        <label for="tournament_date" class="form-label">Tournament Date *</label>
+        <label for="tournament_start_date" class="form-label">Tournament Start Date *</label>
         <input
           type="date"
-          id="tournament_date"
-          name="tournament_date"
-          class="form-control @error('tournament_date') is-invalid @enderror"
-          value="{{ old('tournament_date') }}"
+          id="tournament_start_date"
+          name="tournament_start_date"
+          class="form-control @error('tournament_start_date') is-invalid @enderror"
+          value="{{ old('tournament_start_date') }}"
           required
         >
-        @error('tournament_date')
+        @error('tournament_start_date')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      {{-- Tournament End Date --}}
+      <div class="mb-3">
+        <label for="tournament_end_date" class="form-label">Tournament End Date *</label>
+        <input
+          type="date"
+          id="tournament_end_date"
+          name="tournament_end_date"
+          class="form-control @error('tournament_end_date') is-invalid @enderror"
+          value="{{ old('tournament_end_date') }}"
+          required
+        >
+        @error('tournament_end_date')
           <div class="invalid-feedback">{{ $message }}</div>
         @enderror
       </div>
@@ -90,7 +107,7 @@
         @enderror
       </div>
 
-      {{-- Level --}}
+      {{-- Level (enum) --}}
       <div class="mb-3">
         <label for="level" class="form-label">Level *</label>
         <select
@@ -100,12 +117,35 @@
           required
         >
           <option value="">-- Select Level --</option>
-          <option value="state_junior"   {{ old('level')=='state_junior'?'selected':'' }}>State Junior</option>
-          <option value="state_adult"    {{ old('level')=='state_adult'   ?'selected':'' }}>State Adult</option>
-          <option value="national_junior"{{ old('level')=='national_junior'?'selected':'' }}>National Junior</option>
-          <option value="national_adult" {{ old('level')=='national_adult' ?'selected':'' }}>National Adult</option>
+          <option value="State Level Junior (under 18)"{{ old('level')=='State Level Junior (under 18)' ? ' selected':'' }}>
+            State Level Junior (under 18)
+          </option>
+          <option value="State Level Adult / Open"{{ old('level')=='State Level Adult / Open' ? ' selected':'' }}>
+            State Level Adult / Open
+          </option>
+          <option value="National Level Junior (under 18)"{{ old('level')=='National Level Junior (under 18)' ? ' selected':'' }}>
+            National Level Junior (under 18)
+          </option>
+          <option value="National Level Adult / Open"{{ old('level')=='National Level Adult / Open' ? ' selected':'' }}>
+            National Level Adult / Open
+          </option>
         </select>
         @error('level')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      {{-- Tournament History --}}
+      <div class="mb-3">
+        <label for="tournament_history" class="form-label">Brief History of Tournament *</label>
+        <textarea
+          id="tournament_history"
+          name="tournament_history"
+          class="form-control @error('tournament_history') is-invalid @enderror"
+          rows="4"
+          required
+        >{{ old('tournament_history') }}</textarea>
+        @error('tournament_history')
           <div class="invalid-feedback">{{ $message }}</div>
         @enderror
       </div>
@@ -126,7 +166,7 @@
       </div>
 
       <button type="submit" class="btn btn-primary">Submit Application</button>
-      <a href="{{ route('sanctions.index') }}" class="btn btn-secondary ms-2">Cancel</a>
+      <a href="{{ route('sanction.index') }}" class="btn btn-secondary ms-2">Cancel</a>
     </form>
   </div>
 </div>

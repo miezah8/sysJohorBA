@@ -5,15 +5,18 @@
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h5>Application Details</h5>
-    <a href="{{ route('sanctions.index') }}" class="btn btn-sm btn-secondary">← Back to My Applications</a>
+    <a href="{{ route('sanction.index') }}" class="btn btn-sm btn-secondary">← Back to My Applications</a>
   </div>
   <div class="card-body">
     <dl class="row">
       <dt class="col-sm-3">Tournament Name</dt>
       <dd class="col-sm-9">{{ $sanction->tournament_name }}</dd>
 
-      <dt class="col-sm-3">Date</dt>
-      <dd class="col-sm-9">{{ \Carbon\Carbon::parse($sanction->tournament_date)->format('d M Y') }}</dd>
+      <dt class="col-sm-3">Start Date</dt>
+      <dd class="col-sm-9">{{ \Carbon\Carbon::parse($sanction->tournament_start_date)->format('d M Y') }}</dd>
+
+      <dt class="col-sm-3">End Date</dt>
+      <dd class="col-sm-9">{{ \Carbon\Carbon::parse($sanction->tournament_end_date)->format('d M Y') }}</dd>
 
       <dt class="col-sm-3">Venue</dt>
       <dd class="col-sm-9">{{ $sanction->venue_name }}</dd>
@@ -49,7 +52,7 @@
       <ul>
         @foreach($sanction->documents as $doc)
           <li>
-            <a href="{{ Storage::url($doc->path) }}" target="_blank">
+            <a href="{{ asset('storage/' . $doc->path) }}" target="_blank">
               {{ $doc->filename }}
             </a>
           </li>

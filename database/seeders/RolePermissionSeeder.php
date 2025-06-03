@@ -41,6 +41,8 @@ class RolePermissionSeeder extends Seeder
         // 5. Assign permission tertentu kepada role lain
         Role::where('name', 'athlete')->first()?->syncPermissions([
             'view athlete',
+            'view_own sanction',
+            'apply sanction',
         ]);
 
         Role::where('name', 'coach')->first()?->syncPermissions([
@@ -48,6 +50,10 @@ class RolePermissionSeeder extends Seeder
             'add athlete',
             'view coach',
             'add coach',
+            'view club',
+            'add club',
+            'view_own sanction', 
+            'apply sanction',
         ]);
 
         Role::where('name', 'club')->first()?->syncPermissions([
@@ -58,12 +64,16 @@ class RolePermissionSeeder extends Seeder
         Role::where('name', 'organiser')->first()?->syncPermissions([
             'view achievement',
             'add achievement',
+            'view_own sanction', 
+            'apply sanction',
         ]);
 
         Role::where('name', 'state_ba')->first()?->syncPermissions([
             'view achievement',
             'edit achievement',
             'delete achievement',
+            'view_own sanction', 
+            'apply sanction',
         ]);
     }
 }
