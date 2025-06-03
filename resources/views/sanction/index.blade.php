@@ -9,11 +9,11 @@
 
             <div>
                 {{-- Show “Apply” only if user has the permission --}}
-                @can('apply sanction')
+                {{--@can('apply sanction')--}}
                     <a href="{{ route('sanction.create') }}" class="btn btn-behance me-2">
                         <i class="fa-solid fa-file-circle-plus me-1"></i> Apply
                     </a>
-                @endcan
+                {{--@endcan--}}
 
                 {{-- Show “Admin Review” only if user can review all sanctions --}}
                 @can('review sanction')

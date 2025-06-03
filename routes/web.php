@@ -57,18 +57,18 @@ Route::middleware(['auth','role:admin'])
      });
 
 
-// ==============================
-// ROUTE DASHBOARD (harus auth + verified)
-// ==============================
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth','verified'])->name('dashboard');
+    // ==============================
+    // ROUTE DASHBOARD (harus auth + verified)
+    // ==============================
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->middleware(['auth','verified'])->name('dashboard');
 
 
-// ==============================
-// ROUTE UTAMA (harus 'auth')
-// ==============================
-Route::middleware('auth')->group(function () {
+    // ==============================
+    // ROUTE UTAMA (harus 'auth')
+    // ==============================
+    Route::middleware('auth')->group(function () {
 
     // ------------------------------
     // Profile → Edit profil sendiri
@@ -200,19 +200,19 @@ Route::middleware('auth')->group(function () {
     // Middleware berbasis permission:
     //  - Organiser: apply & view own → sanction.apply, sanction.view_own
     //  - Reviewer: review (lihat semua & approve/reject) → sanction.review
-    Route::middleware('permission:view_own sanction')->group(function() {
+    //Route::middleware('permission:view_own sanction')->group(function() {
         Route::get('sanctions',           [SanctionController::class,'index'])->name('sanction.index');
         Route::get('sanctions/{sanction}',[SanctionController::class,'show'])->name('sanction.show');
-    });
-    Route::middleware('permission:apply sanction')->group(function() {
+    //});
+    //Route::middleware('permission:apply sanction')->group(function() {
         Route::get('sanctions/create',    [SanctionController::class,'create'])->name('sanction.create');
         Route::post('sanctions',          [SanctionController::class,'store'])->name('sanction.store');
-    });
-    Route::middleware('permission:review sanction')->group(function() {
+    //});
+    //Route::middleware('permission:review sanction')->group(function() {
         Route::get('admin/sanctions',            [SanctionController::class,'adminIndex'])->name('sanctions.admin.index');
         Route::get('admin/sanctions/{sanction}/edit', [SanctionController::class,'edit'])->name('sanctions.admin.edit');
         Route::put('admin/sanctions/{sanction}',      [SanctionController::class,'update'])->name('sanctions.admin.update');
-    });
+    //});
 
     // ------------------------------
     // Modul: Achievement
