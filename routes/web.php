@@ -139,26 +139,6 @@ Route::middleware('auth')->group(function () {
     });
 
     // ------------------------------
-    // Modul: Jurulatih
-    // Permissions: view jurulatih, add jurulatih, edit jurulatih, delete jurulatih
-    // ------------------------------
-    /*Route::middleware('permission:view coach')->group(function() {
-        Route::get('/coach',             [CoachController::class, 'index'])->name('coach.index');
-        Route::get('/coach/{coach}',      [CoachController::class, 'show'])->name('coach.show');
-    });
-    Route::middleware('permission:add coach')->group(function() {
-        Route::get('/coach/create',      [CoachController::class, 'create'])->name('coach.create');
-        Route::post('/coach',            [CoachController::class, 'store'])->name('coach.store');
-    });
-    Route::middleware('permission:edit coach')->group(function() {
-        Route::get('/coach/{coach}/edit', [CoachController::class, 'edit'])->name('coach.edit');
-        Route::put('/coach/{coach}',      [CoachController::class, 'update'])->name('coach.update');
-    });
-    Route::middleware('permission:delete coach')->group(function() {
-        Route::delete('/coach/{coach}',   [CoachController::class, 'destroy'])->name('coach.destroy');
-    });
-    */
-    // ------------------------------
     // Modul: School
     // Permissions: view school, add school, edit school, delete school
     // ------------------------------
@@ -195,7 +175,7 @@ Route::middleware('auth')->group(function () {
     // Permissions: view sanction, add sanction, edit sanction, delete sanction, sanction.review, sanction.apply
     // ------------------------------
     // Resource routes (index, create, store, show, edit, update, destroy)
-    Route::resource('sanction', SanctionController::class)
+    /*Route::resource('sanction', SanctionController::class)
         ->names([
             'index'   => 'sanction.index',
             'create'  => 'sanction.create',
@@ -204,22 +184,22 @@ Route::middleware('auth')->group(function () {
             'edit'    => 'sanction.edit',
             'update'  => 'sanction.update',
             'destroy' => 'sanction.destroy',
-        ]);
+        ]);*/
     // Middleware berbasis permission:
     //  - Organiser: apply & view own → sanction.apply, sanction.view_own
     //  - Reviewer: review (lihat semua & approve/reject) → sanction.review
     Route::middleware('permission:view_own sanction')->group(function() {
-        Route::get('sanctions',           [SanctionController::class,'index'])->name('sanctions.index');
-        Route::get('sanctions/{sanction}',[SanctionController::class,'show'])->name('sanctions.show');
+        Route::get('sanctions',           [SanctionController::class,'index'])->name('sanction.index');
+        Route::get('sanctions/{sanction}',[SanctionController::class,'show'])->name('sanction.show');
     });
     Route::middleware('permission:apply sanction')->group(function() {
-        Route::get('sanctions/create',    [SanctionController::class,'create'])->name('sanctions.create');
-        Route::post('sanctions',          [SanctionController::class,'store'])->name('sanctions.store');
+        Route::get('sanctions/create',    [SanctionController::class,'create'])->name('sanction.create');
+        Route::post('sanctions',          [SanctionController::class,'store'])->name('sanction.store');
     });
     Route::middleware('permission:review sanction')->group(function() {
         Route::get('admin/sanctions',            [SanctionController::class,'adminIndex'])->name('sanctions.admin.index');
-        Route::get('admin/sanctions/{sanction}/edit', [SanctionController::class,'edit'])->name('sanctions.edit');
-        Route::put('admin/sanctions/{sanction}',      [SanctionController::class,'update'])->name('sanctions.update');
+        Route::get('admin/sanctions/{sanction}/edit', [SanctionController::class,'edit'])->name('sanctions.admin.edit');
+        Route::put('admin/sanctions/{sanction}',      [SanctionController::class,'update'])->name('sanctions.admin.update');
     });
 
     // ------------------------------
