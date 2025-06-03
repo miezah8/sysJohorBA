@@ -89,6 +89,7 @@
             <span class="nav-link-text ms-1">Sanction</span>
         </a>
     </li>
+    {{--
         <li class="nav-item">
         <a href="{{ route('setting.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
