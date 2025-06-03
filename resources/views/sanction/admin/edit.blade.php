@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('breadcrumbParent', 'Sanction')
+@section('breadcrumbParentUrl', route('sanctions.admin.index'))
+@section('breadcrumbCurrent', 'Review Sanction Application')
+
 @section('content')
   <h4>Review Sanction Application: {{ $sanction->tournament_name }}</h4>
 

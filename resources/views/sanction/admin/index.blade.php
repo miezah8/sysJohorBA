@@ -2,6 +2,10 @@
 @extends('layouts.app')
 @section('title', 'Sanction Review Module')
 
+@section('breadcrumbParent', 'Sanction')
+@section('breadcrumbParentUrl', route('sanctions.admin.index'))
+@section('breadcrumbCurrent', 'All Sanction Application')
+
 @section('content')
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">

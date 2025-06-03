@@ -2,6 +2,8 @@
 @extends('layouts.app')
 @section('title', 'Sanction Module')
 
+
+
 @section('content')
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">

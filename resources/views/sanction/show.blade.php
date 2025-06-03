@@ -1,6 +1,10 @@
 {{-- resources/views/sanction/show.blade.php --}}
 @extends('layouts.app')
 
+@section('breadcrumbParent', 'Sanction')
+@section('breadcrumbParentUrl', route('sanction.index'))
+@section('breadcrumbCurrent', 'My Sanction Application')
+
 @section('content')
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
