@@ -5,9 +5,10 @@
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">
             <h5 class="mb-0">List of Coaches</h5>
-            <button class="btn btn-behance" data-bs-toggle="modal" data-bs-target="#schoolModal" data-mode="add">
+            {{-- <button class="btn btn-behance" data-mode="add">
                 <i class="fa-solid fa-plus me-1"></i>Add
-            </button>
+            </button> --}}
+            <a class="btn btn-behance" data-mode="add" href="{{ route('coach.create') }}"><i class="fa-solid fa-plus me-1"></i>Add</a>
         </div>
         <div class="table-responsive">
             <table class="table table-flush" id="datatable-search">

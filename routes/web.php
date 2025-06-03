@@ -100,15 +100,23 @@ Route::middleware('auth')->group(function () {
     // ------------------------------
     Route::middleware('permission:view coach')->group(function() {
         Route::get('/coach',            [CoachController::class, 'index'])->name('coach.index');
-        Route::get('/coach/{coach}',    [CoachController::class, 'show'])->name('coach.show');
+        // Route::get('/coach/{coach}',    [CoachController::class, 'show'])->name('coach.show');
         Route::get('/coach/{coach}/players', [CoachController::class, 'players'])->name('coach.players');
     });
+    // Route::middleware('permission:add coach')->group(function() {
+    //     Route::get('/coach/create',     [CoachController::class, 'create'])->name('coach.create');
+    //     Route::post('/coach',           [CoachController::class, 'store'])->name('coach.store');
+    // });
+    // Route::middleware('permission:edit coach')->group(function() {
+    //     Route::get('/coach/{coach}/edit',[CoachController::class, 'edit'])->name('coach.edit');
+    //     Route::put('/coach/{coach}',     [CoachController::class, 'update'])->name('coach.update');
+    // });
     Route::middleware('permission:add coach')->group(function() {
-        Route::get('/coach/create',     [CoachController::class, 'create'])->name('coach.create');
+        Route::get('/coach/add', [CoachController::class, 'form'])->name('coach.create');
         Route::post('/coach',           [CoachController::class, 'store'])->name('coach.store');
     });
     Route::middleware('permission:edit coach')->group(function() {
-        Route::get('/coach/{coach}/edit',[CoachController::class, 'edit'])->name('coach.edit');
+        Route::get('/coach/{id}/edit', [CoachController::class, 'form'])->name('coach.edit');
         Route::put('/coach/{coach}',     [CoachController::class, 'update'])->name('coach.update');
     });
     Route::middleware('permission:delete coach')->group(function() {
