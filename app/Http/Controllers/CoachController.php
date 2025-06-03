@@ -8,6 +8,7 @@ class CoachController extends Controller
 {
     public function index(Request $request)
     {
+        $coaches = Coach::all();
         $coachData = Coach::withCount('athletesCoach')->get();
 
         // $coach = coach::find('1');

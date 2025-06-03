@@ -9,6 +9,7 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\SanctionController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserInvitationMail;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,9 @@ Route::get('/', function () {
         ? redirect()->route('dashboard')
         : view('auth.login');
 });
+Route::get('/dashboard', [DashboardController::class, 'index'])
+     ->middleware(['auth','verified'])
+     ->name('dashboard');
 
 // ==============================
 // ROUTE ADMIN → Manage registrations & assign role/permission

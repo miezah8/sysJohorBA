@@ -18,6 +18,7 @@ class AthleteController extends Controller
     public function index(Request $request)
     {
         //  $Athlete = Athlete::all();
+        $athletes = Athlete::with('club')->paginate(20);
 
         $athlete = DB::table('athlete as a')
             ->leftjoin('school as b', 'a.school_id', '=', 'b.id_school')

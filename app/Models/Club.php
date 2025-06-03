@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Club extends Model
 {
+    use HasFactory;
+
     protected $table = 'club';
     protected $primaryKey = 'id_club';
     public $timestamps = false;
@@ -25,9 +28,11 @@ class Club extends Model
         return $this->hasMany(ClubFacilities::class, 'club_id', 'id_club');
     }
 
+    /**
+     * A club has many athletes.
+     */
     public function athletes()
     {
-        //return $this->hasMany(\App\Models\Athlete::class, 'club_id', 'id_club');
         return $this->hasMany(Athlete::class, 'club_id', 'id_club'); 
     }
 
@@ -36,4 +41,14 @@ class Club extends Model
     {
         return $this->athletes()->count();
     }
+
+    /**
+     * (Optional) If you track coaches under a club:
+     * A club has many coaches.
+     */
+    public function coaches()
+    {
+        return $this->hasMany(Coach::class, 'club_id', 'id_club');
+    }
+
 }
