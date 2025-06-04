@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('title', 'Club Module')
 
+@section('breadcrumbParent', 'Club')
+@section('breadcrumbParentUrl', route('clubs.index'))
+@section('breadcrumbCurrent', 'List of Clubs')
+
 @section('content')
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">
