@@ -31,15 +31,24 @@
                             <td>{{ $achieve->achieve_bm }}</td>
                             <td>{{ $achieve->achieve_bi }}</td>
                             <td>
+                                {{-- Edit button --}}
                                 <button
                                     class="btn btn-outline-info btn-edit"
-                                    data-id="{{ $achieve->id_achieve }}" {{-- note: use id_achieve if that is your PK --}}
+                                    data-id="{{ $achieve->id_achieve }}"
                                     data-bm="{{ $achieve->achieve_bm }}"
                                     data-bi="{{ $achieve->achieve_bi }}"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editAchievementModal"
                                 >
                                     <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                                </button>
+
+                                {{-- Delete button --}}
+                                <button
+                                    class="btn btn-outline-danger btn-delete"
+                                    data-id="{{ $achieve->id_achieve }}"
+                                >
+                                    <i class="fa-solid fa-trash me-1"></i> Delete
                                 </button>
                             </td>
                         </tr>
@@ -246,16 +255,16 @@ $(document).ready(function() {
         const payload = {
             achieve_bm: $('#edit_achieve_bm').val(),
             achieve_bi: $('#edit_achieve_bi').val(),
-            _method: 'PATCH',            // Laravel expects PATCH or PUT for update
+            _method: 'PATCH',            // Laravel expects PATCH (or PUT) for update
             _token: '{{ csrf_token() }}'
         };
 
-        // Build the URL by name, so you never mistype it:
+        // Construct the URL by name, so it never mistakes it:
         const updateUrl = "{{ url('achievement') }}/" + id;
 
         $.ajax({
             url: updateUrl,
-            method: 'POST', // always POST, Laravel will read _method=PATCH
+            method: 'POST', // always POST; Laravel reads _method=PATCH
             data: payload,
             success: function(response) {
                 $('#editAchievementModal').modal('hide');
@@ -265,6 +274,53 @@ $(document).ready(function() {
             error: function(xhr) {
                 console.error(xhr.responseJSON || xhr.responseText);
                 alert('Error! Please try again.');
+            }
+        });
+    });
+
+    //
+    // 5) “Delete” button: show confirmation + send DELETE to route('achievement.destroy', id)
+    //
+    $('#datatable-achievement').on('click', '.btn-delete', function() {
+        const deleteId = $(this).data('id');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/achievement/${deleteId}`,
+                    type: 'POST',
+                    data: {
+                        _method: 'DELETE',
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'The achievement has been deleted.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to delete. Please try again.'
+                        });
+                    }
+                });
             }
         });
     });

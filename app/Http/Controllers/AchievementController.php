@@ -67,5 +67,13 @@ class AchievementController extends Controller
         // Otherwise (non-AJAX), you could return a normal “show” page if you like:
         return view('achievement.show', compact('achievement'));
     }
+
+    public function destroy($id)
+    {
+        $achieve = Achievement::findOrFail($id);
+        $achieve->delete();
+        return response()->json(['message' => 'Achievement deleted']);
+    }
+
 }
 
