@@ -19,6 +19,7 @@ class Club extends Model
         'club_name',
         'created_at',
         'modified_on',
+        'deleted_at',   // <-- SoftDeletes will write here
         'email','phone','address','postcode','state','district',
     ];
 

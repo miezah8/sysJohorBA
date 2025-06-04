@@ -5,10 +5,16 @@
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">
             <h5 class="mb-0">List of Clubs</h5>
-            <button class="btn btn-behance" data-bs-toggle="modal" data-bs-target="#clubModal" data-mode="add">
+            <button
+                class="btn btn-behance"
+                data-bs-toggle="modal"
+                data-bs-target="#clubModal"
+                data-mode="add"
+            >
                 <i class="fa-solid fa-plus me-1"></i>Add Club
             </button>
         </div>
+
         <div class="table-responsive">
             <table class="table table-flush" id="datatable-search">
                 <thead class="thead-light">
@@ -25,14 +31,29 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $club->club_name }}</td>
                             <td>
-                                <a class="{{ $club->athletes_count> 0 ? 'text-danger fw-bold':'' }}" href="{{ route('clubs.players', $club->id_club) }}">
+                                <a
+                                    class="{{ $club->athletes_count > 0 ? 'text-danger fw-bold' : '' }}"
+                                    href="{{ route('clubs.players', $club->id_club) }}"
+                                >
                                     {{ $club->athletes_count }}
                                 </a>
                             </td>
                             <td>
-                                <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#clubModal"
-                                    data-mode="edit" data-id="{{ $club->id_club }}">
+                                <button
+                                    class="btn btn-outline-info"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#clubModal"
+                                    data-mode="edit"
+                                    data-id="{{ $club->id_club }}"
+                                >
                                     <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                                </button>
+
+                                <button
+                                    class="btn btn-outline-danger btn-delete"
+                                    data-id="{{ $club->id_club }}"
+                                >
+                                    <i class="fa-solid fa-trash me-1"></i> Delete
                                 </button>
                             </td>
                         </tr>
@@ -42,85 +63,128 @@
         </div>
     </div>
 
-    {{-- modal section --}}
-<div class="modal fade" id="clubModal" tabindex="-1" aria-labelledby="clubModalLabel" aria-hidden="true"
-    data-url="/clubs">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="clubModalLabel"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    {{--  —————— Modal (unchanged from your existing code) —————— --}}
+    <div class="modal fade" id="clubModal" tabindex="-1" aria-labelledby="clubModalLabel" aria-hidden="true" data-url="/clubs">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clubModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form id="clubForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="id_club">
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="club_name" class="form-label">Club Name *</label>
+                                <input
+                                    type="text"
+                                    id="club_name"
+                                    name="club_name"
+                                    class="form-control"
+                                    required
+                                >
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email *</label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    class="form-control"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone Number *</label>
+                                <input
+                                    type="text"
+                                    id="phone"
+                                    name="phone"
+                                    class="form-control"
+                                    required
+                                >
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sys_id" class="form-label">System ID</label>
+                                <input
+                                    type="text"
+                                    id="sys_id"
+                                    name="sys_id"
+                                    class="form-control"
+                                >
+                            </div>
+                        </div>
+
+                        <h6>Club Information</h6>
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea
+                                    id="address"
+                                    name="address"
+                                    class="form-control"
+                                ></textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="postcode" class="form-label">Postcode</label>
+                                <input
+                                    type="text"
+                                    id="postcode"
+                                    name="postcode"
+                                    class="form-control"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="state" class="form-label">State</label>
+                                <select id="state" name="state" class="form-select">
+                                    <option value="">Select State</option>
+                                    {{-- @foreach($states as $s) <option>{{ $s }}</option> @endforeach --}}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="district" class="form-label">District</label>
+                                <select id="district" name="district" class="form-select">
+                                    <option value="">Select State First</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <h6>Facilities</h6>
+                        <div id="facilities-container"></div>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-primary mt-2"
+                            id="add-facility"
+                        >
+                            <i class="fa-solid fa-plus me-1"></i> Add Facility
+                        </button>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >Cancel</button>
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            id="saveBtn"
+                        >Save</button>
+                    </div>
+                </form>
             </div>
-
-            <form id="clubForm">
-                <div class="modal-body">
-                <input type="hidden" name="id_club">
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                    <label for="club_name" class="form-label">Club Name *</label>
-                    <input type="text" id="club_name" name="club_name" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
-                    <label for="email" class="form-label">Email *</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                    <label for="phone" class="form-label">Phone Number *</label>
-                    <input type="text" id="phone" name="phone" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
-                    <label for="sys_id" class="form-label">System ID</label>
-                    <input type="text" id="sys_id" name="sys_id" class="form-control">
-                    </div>
-                </div>
-
-                <h6>Club Information</h6>
-                <div class="row mb-3">
-                    <div class="col-md-8">
-                    <label for="address" class="form-label">Address</label>
-                    <textarea id="address" name="address" class="form-control"></textarea>
-                    </div>
-                    <div class="col-md-4">
-                    <label for="postcode" class="form-label">Postcode</label>
-                    <input type="text" id="postcode" name="postcode" class="form-control">
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                    <label for="state" class="form-label">State</label>
-                    <select id="state" name="state" class="form-select">
-                        <option value="">Select State</option>
-                        {{-- @foreach($states as $s) <option>{{ $s }}</option> @endforeach --}}
-                    </select>
-                    </div>
-                    <div class="col-md-6">
-                    <label for="district" class="form-label">District</label>
-                    <select id="district" name="district" class="form-select">
-                        <option value="">Select State First</option>
-                    </select>
-                    </div>
-                </div>
-
-  <h6>Facilities</h6>
-  <div id="facilities-container"></div>
-  <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="add-facility">
-    <i class="fa-solid fa-plus me-1"></i> Add Facility
-  </button>
-</div>
-
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
-                </div>
-            </form>
         </div>
     </div>
-</div>
 @endsection
 
 @push('css')
@@ -150,33 +214,47 @@
 
 @push('scripts')
 <script>
-            
     $(document).ready(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
         // Initialize DataTable
-        const dataTableSearch = new simpleDatatables.DataTable(
-            "#datatable-search", {
-                searchable: true,
-                fixedHeight: true,
-            }
-        );
+        new simpleDatatables.DataTable("#datatable-search", {
+            searchable: true,
+            fixedHeight: true,
+        });
 
-        // Facility management
+        // Facility management (unchanged)
         $('#add-facility').click(function() {
             const facilityHtml = `
                 <div class="facility-entry mb-2 d-flex align-items-center">
                     <div class="flex-grow-1 me-2">
-                        <input type="text" class="form-control" name="facilities[][type]" placeholder="Facility Type" required>
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="facilities[][type]"
+                            placeholder="Facility Type"
+                            required
+                        >
                     </div>
                     <div class="me-2" style="width: 100px;">
-                        <input type="number" class="form-control" name="facilities[][quantity]" placeholder="Qty" min="1" value="1" required>
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="facilities[][quantity]"
+                            placeholder="Qty"
+                            min="1"
+                            value="1"
+                            required
+                        >
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-danger remove-facility">
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger remove-facility"
+                    >
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
@@ -189,7 +267,7 @@
         });
     });
 
-    // Modal handling
+    // Modal handling (unchanged)
     const $modal = $('#clubModal');
     const $form = $('#clubForm');
     const $modalTitle = $('#clubModalLabel');
@@ -217,7 +295,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `${ baseUrl }/${ id}`,   // baseUrl is '/clubs'
+                url: `${ baseUrl }/${ id }`,   // baseUrl is '/clubs'
                 data: {
                     selectedRecord: id
                 },
@@ -225,6 +303,12 @@
                     // Populate main form fields
                     $form.find('[name="club_name"]').val(data.club.club_name);
                     $form.find('[name="sys_id"]').val(data.club.sys_id);
+                    $form.find('[name="email"]').val(data.club.email);
+                    $form.find('[name="phone"]').val(data.club.phone);
+                    $form.find('[name="address"]').val(data.club.address);
+                    $form.find('[name="postcode"]').val(data.club.postcode);
+                    $form.find('[name="state"]').val(data.club.state);
+                    $form.find('[name="district"]').val(data.club.district);
 
                     // Populate facilities
                     if (data.facilities && data.facilities.length > 0) {
@@ -232,14 +316,30 @@
                             const facilityHtml = `
                                 <div class="facility-entry mb-2 d-flex align-items-center">
                                     <div class="flex-grow-1 me-2">
-                                        <input type="text" class="form-control" name="facilities[][type]" 
-                                            value="${facility.facility_type}" placeholder="Facility Type" required>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="facilities[][type]"
+                                            value="${facility.facility_type}"
+                                            placeholder="Facility Type"
+                                            required
+                                        >
                                     </div>
                                     <div class="me-2" style="width: 100px;">
-                                        <input type="number" class="form-control" name="facilities[][quantity]" 
-                                            value="${facility.quantity}" placeholder="Qty" min="1" required>
+                                        <input
+                                            type="number"
+                                            class="form-control"
+                                            name="facilities[][quantity]"
+                                            value="${facility.quantity}"
+                                            placeholder="Qty"
+                                            min="1"
+                                            required
+                                        >
                                     </div>
-                                    <button type="button" class="btn btn-sm btn-outline-danger remove-facility">
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-outline-danger remove-facility"
+                                    >
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -249,7 +349,7 @@
                     }
                 },
                 error: function(xhr) {
-                    alert('Failed to load club data: ' + xhr.responseJSON.message);
+                    alert('Failed to load club data: ' + (xhr.responseJSON?.message || xhr.status));
                     $modal.modal('hide');
                 },
                 complete: function() {
@@ -262,7 +362,7 @@
         }
     });
 
-    // Form submission
+    // Form submission (unchanged)
     $('#clubForm').on('submit', function(e) {
         e.preventDefault();
 
@@ -273,18 +373,21 @@
 
         $submitButton.prop('disabled', true).text('Saving...');
 
-        // Clear previous validation errors
         $form.find('.is-invalid').removeClass('is-invalid');
         $form.find('.invalid-feedback').remove();
 
-        // Prepare form data
         const formData = {
             club_name: $form.find('[name="club_name"]').val(),
+            email: $form.find('[name="email"]').val(),
+            phone: $form.find('[name="phone"]').val(),
             sys_id: $form.find('[name="sys_id"]').val(),
+            address: $form.find('[name="address"]').val(),
+            postcode: $form.find('[name="postcode"]').val(),
+            state: $form.find('[name="state"]').val(),
+            district: $form.find('[name="district"]').val(),
             facilities: []
         };
 
-        // Collect facilities data
         $('.facility-entry').each(function() {
             const type = $(this).find('input[name*="[type]"]').val();
             const quantity = $(this).find('input[name*="[quantity]"]').val();
@@ -303,14 +406,13 @@
             success: function(response) {
                 if (response.success) {
                     $modal.modal('hide');
-                    window.location.reload(); // Refresh to show changes
+                    window.location.reload();
                 } else {
                     alert(response.message || 'Operation failed');
                 }
             },
             error: function(xhr) {
                 if (xhr.status === 422) {
-                    // Validation errors
                     const errors = xhr.responseJSON.errors;
                     $.each(errors, function(key, value) {
                         const input = $form.find(`[name="${key}"]`);
@@ -318,7 +420,6 @@
                             input.addClass('is-invalid');
                             input.after(`<div class="invalid-feedback">${value[0]}</div>`);
                         } else {
-                            // Handle array fields (like facilities)
                             const match = key.match(/^facilities\.(\d+)\.(.+)$/);
                             if (match) {
                                 const index = match[1];
@@ -338,6 +439,51 @@
             },
             complete: function() {
                 $submitButton.prop('disabled', false).text('Save');
+            }
+        });
+    });
+
+    // ————— Soft‐delete “Delete” button handler —————
+    $(document).on('click', '.btn-delete', function() {
+        const clubId = $(this).data('id');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This will soft‐delete the club (it can be restored later).",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/clubs/${clubId}`,
+                    type: 'POST',
+                    data: {
+                        _method: 'DELETE',
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'The club has been moved to trash.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to delete. Please try again.'
+                        });
+                    }
+                });
             }
         });
     });
