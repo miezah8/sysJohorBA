@@ -105,31 +105,51 @@
                                         <label class="form-label required">Phone Number</label>
                                         <input type="tel" name="phone" id="phone" class="form-control">
                                     </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label class="form-label d-block required">Gender</label>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="gender" id="lelaki" value="Lelaki">
-                                            <label class="form-check-label" for="lelaki">Male</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="gender" id="perempuan" value="Perempuan">
-                                            <label class="form-check-label" for="perempuan">Female</label>
-                                        </div>
-                                    </div>
                                     <div class="col-md-5 mb-3">
                                         <label class="form-label required">Email</label>
                                         <input type="email" class="form-control" name="email">
                                     </div>
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label d-block required">Gender</label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="Male" value="M">
+                                            <label class="form-check-label" for="Male">Male</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="Female" value="F">
+                                            <label class="form-check-label" for="Female">Female</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label d-block required">Race</label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="race" id="Malay" value="Malay">
+                                            <label class="form-check-label" for="Malay">Malay</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="race" id="Cina" value="Cina">
+                                            <label class="form-check-label" for="Cina">Cina</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="race" id="India" value="India">
+                                            <label class="form-check-label" for="India">India</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                            <label class="form-label required">Picture</label>
+                                            <input type="file" class="form-control" name="picture" accept="image/*">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
                                         <label class="form-label required">Citizens</label>
                                         <select id="countryList" class="form-select select2" name="citizens">
                                             <option value="">-- Select Country --</option>
                                         </select>
                                     </div>
-
+                                    
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Address</label>
-                                        <textarea class="form-control" name="address" rows="8"></textarea>
+                                        <textarea class="form-control" name="address" rows="9"></textarea>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="row">
@@ -139,7 +159,7 @@
                                             </div>
                                             <div class="col-md-12 mb-3">
                                                 <label class="form-label required">State</label>
-                                                <select class="form-control select2" id="schA_state" name="sch_state" onchange="stateSch_change(this.value);">
+                                                <select class="form-control select2" id="schA_state" name="sch_state">
 									                <option value="">-- Select State --</option>
                                                 </select>
                                             </div>
@@ -153,11 +173,7 @@
                                     </div>
 
                                     <div class="row mb-3">
-                                        <div class="col-md-4">
-                                            <label class="form-label required">Picture</label>
-                                            <input type="file" class="form-control" name="picture" accept="image/*">
-                                        </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label class="form-label required">T-Shirt Size</label>
                                             <select class="form-select select2" name="size">
                                                 <option value="">-- Select Size --</option>
@@ -170,7 +186,7 @@
                                                 <option value="3XL">3XL</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label class="form-label required">Name on T-Shirt</label>
                                             <input type="text" class="form-control" name="NameTshirt">
                                         </div>
@@ -607,34 +623,30 @@
                     { selector: 'input[name="lastname"]', name: 'Last Name' },
                     { selector: 'input[name="idNumber"]', name: 'No. KP/Passport' },
                     { selector: 'input[name="phone"]', name: 'Phone Number' },
-                    { selector: 'input[name="gender"]', name: 'Gender', isRadio: true },
                     { selector: 'input[name="email"]', name: 'Email' },
+                    { selector: 'input[name="gender"]', name: 'Gender', isRadio: true },
+                    { selector: 'input[name="race"]', name: 'Race', isRadio: true },
+                    { selector: 'input[name="picture"]', name: 'Picture' },
                     { selector: '#countryList', name: 'Citizens' },
                     { selector: 'textarea[name="address"]', name: 'Address' },
                     { selector: 'input[name="postcode"]', name: 'Postcode' },
                     { selector: '#schA_state', name: 'State' },
                     { selector: '#daerahDropdown', name: 'Districts' },
-                    { selector: 'input[name="picture"]', name: 'Picture' },
                     { selector: 'select[name="size"]', name: 'T-Shirt Size' },
-                    { selector: 'input[name="NameTshirt"]', name: 'Name on T-Shirt' } // ni awak tak letak name dalam HTML, kena tambah
+                    { selector: 'input[name="NameTshirt"]', name: 'Name on T-Shirt' } 
                 ];
-
                 // Reset semua error state
                 form.find('input, select, textarea').removeClass('is-invalid');
-
                 for (let field of fields) {
                     const el = form.find(field.selector);
                     let value;
-
                     if (field.isRadio) {
                         value = el.filter(':checked').val();
                     } else {
                         value = el.val() ? el.val().trim() : '';
                     }
-
                     if (!value) {
                         el.addClass('is-invalid');
-
                         Swal.fire({
                             icon: 'warning',
                             title: 'Missing Information',
@@ -644,14 +656,13 @@
                         return;
                     }
                 }
-
                 Swal.fire({
                     icon: 'success',
                     title: 'All Set!',
                     text: 'Proceeding to the next step.',
                     confirmButtonText: 'Continue'
                 }).then(() => {
-                    $('#guardian-tab').click(); // Buka tab seterusnya
+                    $('#guardian-tab').click(); 
                 });
             });
 
@@ -888,8 +899,9 @@
 
             $('#btnSubmit').on('click', function () {
                 // Tentukan sama ada user guna form multiplayer atau form tab individu
-                const isMultiple = !$('#formMultiple').hasClass('d-none');
-
+                let isMultiple = !$('#formMultiple').hasClass('d-none');
+                let players = [];
+                let allData = {};
                 if (isMultiple) {
                     // ======================
                     // VALIDASI FORM MULTIPLAYER
@@ -903,7 +915,6 @@
                         const lastName = row.find('input[name="lastName[]"]').val()?.trim();
                         const email = row.find('input[name="email[]"]').val()?.trim();
                         const phone = row.find('input[name="phone[]"]').val()?.trim();
-                        const playerNum = i + 1;
 
                         // Reset dahulu semua invalid
                         row.find('input').removeClass('is-invalid');
@@ -964,7 +975,7 @@
                     // ======================
                     // AMBIL DATA MULTIPLAYER
                     // ======================
-                    const players = [];
+                   
                     rows.each(function () {
                         players.push({
                             firstName: $(this).find('input[name="firstName[]"]').val().trim(),
@@ -975,6 +986,8 @@
                     });
 
                     console.log("Multi Player Data:", players);
+
+                    // Kalau mahu terus submit, letakkan post/ajax di sini
                 }
                 else {
                     // ======================
@@ -988,14 +1001,15 @@
                                 { selector: 'input[name="lastname"]', name: 'Last Name' },
                                 { selector: 'input[name="idNumber"]', name: 'No. KP/Passport' },
                                 { selector: 'input[name="phone"]', name: 'Phone Number' },
-                                { selector: 'input[name="gender"]', name: 'Gender', isRadio: true },
                                 { selector: 'input[name="email"]', name: 'Email' },
+                                { selector: 'input[name="gender"]', name: 'Gender', isRadio: true },
+                                { selector: 'input[name="race"]', name: 'Race', isRadio: true },
+                                { selector: 'input[name="picture"]', name: 'Picture' },
                                 { selector: '#countryList', name: 'Citizens' },
                                 { selector: 'textarea[name="address"]', name: 'Address' },
                                 { selector: 'input[name="postcode"]', name: 'Postcode' },
                                 { selector: '#schA_state', name: 'State' },
                                 { selector: '#daerahDropdown', name: 'Districts' },
-                                { selector: 'input[name="picture"]', name: 'Picture' },
                                 { selector: 'select[name="size"]', name: 'T-Shirt Size' },
                                 { selector: 'input[name="NameTshirt"]', name: 'Name on T-Shirt' }
                             ]
@@ -1040,6 +1054,7 @@
                         block.form.find('input, select, textarea').removeClass('is-invalid');
 
                         if (block.isTable) {
+                            let tableValid = true;
                             $(block.tableSelector + ' tr').each(function () {
                                 const tournament = $(this).find('input[name="tournament"]');
                                 const ranking = $(this).find('select[name="ranking[]"]');
@@ -1047,26 +1062,32 @@
                                 const achieve = $(this).find('select[name="achieve[]"]');
                                 const year = $(this).find('input[name="year"]');
 
-                                if (!tournament.val().trim() || !ranking.val() || !category.val() || !achieve.val() || !year.val().trim()) {
+                                if (!tournament.val()?.trim() || !ranking.val() || !category.val() || !achieve.val() || !year.val()?.trim()) {
                                     tournament.addClass('is-invalid');
                                     ranking.addClass('is-invalid');
                                     category.addClass('is-invalid');
                                     achieve.addClass('is-invalid');
                                     year.addClass('is-invalid');
+
                                     Swal.fire({
                                         icon: 'warning',
                                         title: 'Missing Information',
                                         text: 'Please complete experience fields.',
                                         confirmButtonText: 'OK'
                                     });
-                                    allValid = false;
-                                    return false;
+                                    tableValid = false;
+                                    return false; // break out of .each loop
                                 }
                             });
+                            if (!tableValid) {
+                                allValid = false;
+                                break; // stop validation loop
+                            }
                         } else {
                             for (let field of block.fields) {
                                 const el = block.form.find(field.selector);
                                 let value = field.isRadio ? el.filter(':checked').val() : (el.val()?.trim() || '');
+
                                 if (!value) {
                                     el.addClass('is-invalid');
                                     Swal.fire({
@@ -1076,12 +1097,11 @@
                                         confirmButtonText: 'OK'
                                     });
                                     allValid = false;
-                                    return;
+                                    break;
                                 }
                             }
+                            if (!allValid) break;
                         }
-
-                        if (!allValid) break;
                     }
 
                     if (!allValid) return;
@@ -1097,15 +1117,11 @@
                         // KUMPUL SEMUA DATA
                         // ===========================
 
-                        const allData = {};
+                        
 
-                        // Contoh: Data dari tab lain (kalau ada)
-                        allData.someTabData = {
-                            exampleField1: $('#exampleField1').val()?.trim(),
-                            exampleField2: $('#exampleField2').val()?.trim(),
-                        };
-
-                        // Data dari MULTIPLAYER
+                        // ===========================
+                        // Data MULTI PLAYER (optional)
+                        // ===========================
                         const players = [];
                         $('#multiPlayerForm .multi-row .row').each(function () {
                             players.push({
@@ -1117,26 +1133,87 @@
                         });
                         allData.players = players;
 
-                        // Data dari SINGLE PLAYER (jika kamu ada dan sedang toggle tab)
-                        allData.singlePlayer = {
-                            firstName: $('#firstNameSingle').val()?.trim(),
-                            lastName: $('#lastNameSingle').val()?.trim(),
-                            email: $('#emailSingle').val()?.trim(),
-                            phone: $('#phoneSingle').val()?.trim()
+                        // ===========================
+                        // Data formPersonal
+                        // ===========================
+                        allData.formPersonal = {
+                            firstname: $('input[name="firstname"]').val()?.trim(),
+                            lastname: $('input[name="lastname"]').val()?.trim(),
+                            idNumber: $('input[name="idNumber"]').val()?.trim(),
+                            phone: $('input[name="phone"]').val()?.trim(),
+                            email: $('input[name="email"]').val()?.trim(),
+                            gender: $('input[name="gender"]:checked').val(),
+                            race: $('input[name="race"]:checked').val(),
+                            picture: $('input[name="picture"]').val()?.trim(),
+                            citizen: $('#countryList').val()?.trim(),
+                            address: $('textarea[name="address"]').val()?.trim(),
+                            postcode: $('input[name="postcode"]').val()?.trim(),
+                            state: $('#schA_state').val()?.trim(),
+                            district: $('#daerahDropdown').val()?.trim(),
+                            size: $('select[name="size"]').val()?.trim(),
+                            nameTshirt: $('input[name="NameTshirt"]').val()?.trim()
                         };
 
-                        // Akhirnya log semua data
+                        // ===========================
+                        // Data formGuardian
+                        // ===========================
+                        allData.formGuardian = {
+                            name: $('input[name="GuardianName"]').val()?.trim(),
+                            phone: $('input[name="GuardianPhone"]').val()?.trim(),
+                            occupation: $('input[name="GuardianOccup"]').val()?.trim(),
+                            relation: $('select[name="GuardianRelation"]').val()?.trim()
+                        };
+
+                        // ===========================
+                        // Data formSchool
+                        // ===========================
+                        allData.formSchool = {
+                            schoolId: $('#schoolDropdown').val()?.trim(),
+                            schoolCode: $('#CodeScholl').val()?.trim(),
+                            schoolAddress: $('#AddressSchool').val()?.trim(),
+                            schoolPostcode: $('#PosKod').val()?.trim(),
+                            schoolDistrict: $('#districts').val()?.trim(),
+                            schoolState: $('#state').val()?.trim()
+                        };
+
+                        // ===========================
+                        // Data formExperience
+                        // ===========================
+                        const experience = [];
+                        $('#experienceTableBody tr').each(function () {
+                            experience.push({
+                                tournament: $(this).find('input[name="tournament"]').val()?.trim(),
+                                ranking: $(this).find('select[name="ranking[]"]').val(),
+                                category: $(this).find('select[name="category[]"]').val(),
+                                achieve: $(this).find('select[name="achieve[]"]').val(),
+                                year: $(this).find('input[name="year"]').val()?.trim()
+                            });
+                        });
+                        allData.formExperience = experience;
+
+                        // ===========================
+                        // Data formClubCoach (jika ada)
+                        // ===========================
+                        allData.formClubCoach = {
+                            ClubId: $('#clubSelect').val()?.trim(),
+                            CoachId: $('#coachSelect').val()?.trim()
+                        };
+
+                        // ===========================
+                        // Akhir sekali, log semua data
+                        // ===========================
                         console.log("Data lengkap dari semua tab boleh dihantar:", allData);
-
-                        // Boleh terus POST ke server kalau nak
-                        // $.post('/api/save', allData, function(response) { ... });
-
+                        
+                        // Submit data to server example:
+                        // $.post('/api/save', allData, function(response) {
+                        //     // handle response
+                        // });
                     });
-
                 }
+                console.log(allData);
+                console.log(players);
+                //SaveData(allData, players);
             });
-
-
 
 
             // Auto clear error when typing/selecting
@@ -1211,7 +1288,25 @@
                 // proceedNextStep();
             });
 
-            
         });
+
+        function SaveData(AllData, MultipleData) {
+            const isMultiple = !$('#formMultiple').hasClass('d-none');
+            const url = isMultiple ? saveMultipleUrl : saveSingleUrl;
+            const dataToSend = isMultiple ? { players: MultipleData } : { allData: AllData };
+
+            $.ajax({
+                url,
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                contentType: 'application/json',
+                data: JSON.stringify(dataToSend),
+                success: (res) => alert('Berjaya!'),
+                error: (err) => alert('Ralat!')
+            });
+        }
+
     </script>
 @endpush
