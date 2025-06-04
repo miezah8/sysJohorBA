@@ -101,8 +101,12 @@
                                         <input type="text" class="form-control" name="lastname">
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">No. KP/Passport</label>
+                                        <label class="form-label required">No. IC/ Passport</label>
                                         <input type="text" class="form-control" name="idNumber">
+                                    </div>
+                                    <div class="col-md-6">
+                                            <label class="form-label required">Upload IC/ Passport</label>
+                                            <input type="file" class="form-control" name="picture" accept="image/*">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label required">Phone Number</label>
@@ -137,6 +141,10 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="race" id="India" value="India">
                                             <label class="form-check-label" for="India">India</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="race" id="Others" value="Others">
+                                            <label class="form-check-label" for="Others">Others</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -192,6 +200,14 @@
                                         <div class="col-md-6">
                                             <label class="form-label required">Name on T-Shirt</label>
                                             <input type="text" class="form-control" name="NameTshirt">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label required">Track Bottom Size</label>
+                                            <input type="text" class="form-control" name="trackbottom">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label required">Shoe Size</label>
+                                            <input type="text" class="form-control" name="shoe">
                                         </div>
                                     </div>
 
@@ -352,6 +368,9 @@
                                                     </td>
                                                     <td>
                                                         <input type="number" class="form-control" name="year">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" name="result">
                                                     </td>
                                                     <td class="text-center">
                                                         <button type="button" class="btn btn-danger btnRemoveExperience">
