@@ -200,14 +200,16 @@ Route::middleware(['auth','role:admin'])
     // Middleware berbasis permission:
     //  - Organiser: apply & view own → sanction.apply, sanction.view_own
     //  - Reviewer: review (lihat semua & approve/reject) → sanction.review
+    //Route::middleware('permission:apply sanction')->group(function() {
+        Route::get('sanctions/create', [SanctionController::class, 'create'])->name('sanction.create');
+        Route::post('sanctions',       [SanctionController::class, 'store'])->name('sanction.store');
+    //});
+    
     Route::middleware('permission:view_own sanction')->group(function() {
         Route::get('sanctions', [SanctionController::class, 'index'])->name('sanction.index');
     });
 
-    Route::middleware('permission:apply sanction')->group(function() {
-        Route::get('sanctions/create', [SanctionController::class, 'create'])->name('sanction.create');
-        Route::post('sanctions',       [SanctionController::class, 'store'])->name('sanction.store');
-    });
+
 
     Route::middleware('permission:view_own sanction')->group(function() {
         Route::get('sanctions/{sanction}', [SanctionController::class, 'show'])->name('sanction.show');
