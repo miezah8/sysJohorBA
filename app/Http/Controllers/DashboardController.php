@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Athlete;  //  Athlete model
+use App\Models\Coach;    //  Coach model
+use App\Models\Club;     //  Club model
 use Illuminate\Http\Request;
-use App\Models\Athlete;  // your Athlete model
-use App\Models\Coach;    // your Coach model
-use App\Models\Club;     // your Club model
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth','verified']);
+    }
+
     public function index()
     {
         // 1) Simple totals:
@@ -24,11 +30,13 @@ class DashboardController extends Controller
             ->pluck('athletes_count', 'club_name');
 
         // 3) Pass everything to the view
-        return view('dashboard', [
+        /*return view('dashboard', [
             'totalAthletes'   => $totalAthletes,
             'totalCoaches'    => $totalCoaches,
             'totalClubs'      => $totalClubs,
             'athletesPerClub' => $athletesPerClub,
-        ]);
+        ]);*/
+
+        return view('dashboard', compact('totalAthletes', 'totalCoaches', 'totalClubs', 'athletesPerClub'));
     }
 }

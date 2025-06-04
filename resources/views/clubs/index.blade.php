@@ -110,7 +110,7 @@
                                     required
                                 >
                             </div>
-                            <div class="col-md-6">
+                            {{--  <div class="col-md-6">
                                 <label for="sys_id" class="form-label">System ID</label>
                                 <input
                                     type="text"
@@ -118,7 +118,7 @@
                                     name="sys_id"
                                     class="form-control"
                                 >
-                            </div>
+                            </div>--}}
                         </div>
 
                         <h6>Club Information</h6>

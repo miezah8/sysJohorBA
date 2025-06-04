@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\AthleteController;
 use App\Http\Controllers\ClubController;
@@ -9,7 +9,7 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\SanctionController;
-use App\Http\Controllers\DashboardController;
+
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserInvitationMail;
 use Illuminate\Support\Facades\Route;
@@ -20,16 +20,16 @@ use Illuminate\Support\Facades\Auth;
 | Web Routes
 |--------------------------------------------------------------------------
 */
-
+/*
 Route::get('/', function () {
     return Auth::check()
         ? redirect()->route('dashboard')
         : view('auth.login');
-});
+});*/
+
 Route::get('/dashboard', [DashboardController::class, 'index'])
      ->middleware(['auth','verified'])
      ->name('dashboard');
-
 // ==============================
 // ROUTE ADMIN → Manage registrations & assign role/permission
 // Role: hanya 'admin' yang boleh akses
@@ -38,7 +38,7 @@ Route::middleware(['auth','role:admin'])
      ->prefix('admin')
      ->name('admin.users.')
      ->group(function() {
-         // Daftar semua pengguna (bisa ditambahkan filter status_user)
+         // Daftar semua pengguna (boleh ditambahkan filter status_user)
          Route::get('/',                [AdminUserController::class, 'index'])->name('index');
          // Form edit user tertentu (assign role/permission)
          Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('edit');
@@ -60,9 +60,9 @@ Route::middleware(['auth','role:admin'])
     // ==============================
     // ROUTE DASHBOARD (harus auth + verified)
     // ==============================
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['auth','verified'])->name('dashboard');
+    // Route::get('/dashboard', function () {
+    //     return view('dashboard');
+    // })->middleware(['auth','verified'])->name('dashboard');
 
 
     // ==============================

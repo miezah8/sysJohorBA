@@ -15,7 +15,8 @@
                             <div class="col-7 text-start">
                                 <p class="text-sm mb-1 text-capitalize font-weight-bold">Athletes</p>
                                 <h5 class="font-weight-bolder mb-0">
-                                   {{--   {{ $totalAthletes }} --}}
+                                     {{ $totalAthletes }}
+                                   
                                 </h5>
                                 <span class="text-sm text-success font-weight-bolder mt-auto mb-0">
                                     {{-- optionally show percent change --}}
@@ -37,7 +38,7 @@
                             <div class="col-7 text-start">
                                 <p class="text-sm mb-1 text-capitalize font-weight-bold">Coaches</p>
                                 <h5 class="font-weight-bolder mb-0">
-                                    {{-- {{ $totalCoaches }} --}}
+                                     {{ $totalCoaches }} 
                                 </h5>
                                 <span class="text-sm text-success font-weight-bolder mt-auto mb-0">
                                     {{-- optionally show percent change --}}
@@ -59,7 +60,7 @@
                             <div class="col-7 text-start">
                                 <p class="text-sm mb-1 text-capitalize font-weight-bold">Clubs</p>
                                 <h5 class="font-weight-bolder mb-0">
-                                    {{-- {{ $totalClubs }} --}}
+                                     {{ $totalClubs }} 
                                 </h5>
                                 <span class="text-sm text-success font-weight-bolder mt-auto mb-0">
                                     {{-- optionally show percent change --}}
@@ -91,7 +92,7 @@
 </div>
 @endsection
 
-{{-- 
+
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -127,4 +128,3 @@
     });
 </script>
 @endpush
---}}
