@@ -53,5 +53,19 @@ class AchievementController extends Controller
 
         return response()->json(['message' => 'Achievement updated successfully']);
     }
+
+    public function show(Achievement $achievement)
+    {
+        // If the request is AJAX (fetch in JS), return JSON:
+        if (request()->ajax()) {
+            return response()->json([
+                'achieve_bm' => $achievement->achieve_bm,
+                'achieve_bi' => $achievement->achieve_bi,
+            ]);
+        }
+
+        // Otherwise (non-AJAX), you could return a normal “show” page if you like:
+        return view('achievement.show', compact('achievement'));
+    }
 }
 

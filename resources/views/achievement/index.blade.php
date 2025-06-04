@@ -1,3 +1,4 @@
+{{-- resources/views/achievement/index.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Achievement Module')
 
@@ -5,7 +6,11 @@
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">
             <h5 class="mb-0">List of Achievements</h5>
-            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addAchievementModal">
+            <button
+                class="btn btn-outline-success"
+                data-bs-toggle="modal"
+                data-bs-target="#addAchievementModal"
+            >
                 <i class="fa-solid fa-plus me-1"></i> Add Achievement
             </button>
         </div>
@@ -26,11 +31,14 @@
                             <td>{{ $achieve->achieve_bm }}</td>
                             <td>{{ $achieve->achieve_bi }}</td>
                             <td>
-                                <button class="btn btn-outline-info btn-edit" 
-                                    data-id="{{ $achieve->id_achieve }}"
+                                <button
+                                    class="btn btn-outline-info btn-edit"
+                                    data-id="{{ $achieve->id_achieve }}" {{-- note: use id_achieve if that is your PK --}}
                                     data-bm="{{ $achieve->achieve_bm }}"
                                     data-bi="{{ $achieve->achieve_bi }}"
-                                    data-bs-toggle="modal" data-bs-target="#editAchievementModal">
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editAchievementModal"
+                                >
                                     <i class="fa-solid fa-pen-to-square me-1"></i> Edit
                                 </button>
                             </td>
@@ -42,28 +50,55 @@
     </div>
 
     {{-- Add Achievement Modal --}}
-    <div class="modal fade" id="addAchievementModal" tabindex="-1" aria-labelledby="addAchievementModalLabel" aria-hidden="true">
+    <div
+        class="modal fade"
+        id="addAchievementModal"
+        tabindex="-1"
+        aria-labelledby="addAchievementModalLabel"
+        aria-hidden="true"
+    >
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form id="addAchievementForm">
+                    @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="addAchievementModalLabel">Add Achievement</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="achieve_bm" class="form-label">Achievement BM</label>
-                            <input type="text" class="form-control" id="achieve_bm" name="achieve_bm" required>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="achieve_bm"
+                                name="achieve_bm"
+                                required
+                            >
                         </div>
 
                         <div class="mb-3">
                             <label for="achieve_bi" class="form-label">Achievement BI</label>
-                            <input type="text" class="form-control" id="achieve_bi" name="achieve_bi" required>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="achieve_bi"
+                                name="achieve_bi"
+                                required
+                            >
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Add Achievement</button>
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Add Achievement
+                        </button>
                     </div>
                 </form>
             </div>
@@ -71,36 +106,62 @@
     </div>
 
     {{-- Edit Achievement Modal --}}
-    <div class="modal fade" id="editAchievementModal" tabindex="-1" aria-labelledby="editAchievementModalLabel" aria-hidden="true">
+    <div
+        class="modal fade"
+        id="editAchievementModal"
+        tabindex="-1"
+        aria-labelledby="editAchievementModalLabel"
+        aria-hidden="true"
+    >
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form id="editAchievementForm">
+                    @csrf
+                    {{-- We will inject _method=PATCH in JS --}}
+                    <input type="hidden" id="edit_id_achieve" name="id_achieve">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editAchievementModalLabel">Edit Achievement</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" id="edit_id_achieve" name="id_achieve">
-
                         <div class="mb-3">
                             <label for="edit_achieve_bm" class="form-label">Achievement BM</label>
-                            <input type="text" class="form-control" id="edit_achieve_bm" name="achieve_bm" required>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="edit_achieve_bm"
+                                name="achieve_bm"
+                                required
+                            >
                         </div>
 
                         <div class="mb-3">
                             <label for="edit_achieve_bi" class="form-label">Achievement BI</label>
-                            <input type="text" class="form-control" id="edit_achieve_bi" name="achieve_bi" required>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="edit_achieve_bi"
+                                name="achieve_bi"
+                                required
+                            >
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Update Achievement</button>
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Update Achievement
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
 @endsection
 
 @push('css')
@@ -109,15 +170,13 @@
         table td:first-child {
             width: 1%;
             white-space: nowrap;
-            text-align: center
-                /* Prevents wrapping */
+            text-align: center; /* Prevents wrapping */
         }
 
         table th:last-child,
         table td:last-child {
             width: 15%;
             white-space: nowrap;
-            /* Optional, depending on content */
         }
 
         td {
@@ -127,78 +186,88 @@
 @endpush
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
+<script>
+$(document).ready(function() {
 
-            // Initialize datatable
-            const dataTable = new simpleDatatables.DataTable("#datatable-achievement", {
-                searchable: true,
-                fixedHeight: true,
-            });
+    // 1) Initialize Simple-DataTables
+    new simpleDatatables.DataTable("#datatable-achievement", {
+        searchable: true,
+        fixedHeight: true,
+    });
 
-            // When edit button clicked, populate modal inputs -regardless of pagination or re-rendering—will trigger your handler.
-            $('#datatable-achievement').on('click', '.btn-edit', function() {
-                const id = $(this).data('id');
-                const bm = $(this).data('bm');
-                const bi = $(this).data('bi');
+    //
+    // 2) “Edit” button: fill the fields in the modal
+    //
+    $('#datatable-achievement').on('click', '.btn-edit', function() {
+        const id = $(this).data('id');
+        const bm = $(this).data('bm');
+        const bi = $(this).data('bi');
 
-                $('#edit_id_achieve').val(id);
-                $('#edit_achieve_bm').val(bm);
-                $('#edit_achieve_bi').val(bi);
-            });
+        $('#edit_id_achieve').val(id);
+        $('#edit_achieve_bm').val(bm);
+        $('#edit_achieve_bi').val(bi);
+    });
 
-            // Handle form submit for adding a new achievement
-            $('#addAchievementForm').on('submit', function(e) {
-                e.preventDefault();
+    //
+    // 3) Submit “Add Achievement” via AJAX → POST to route('achievement.store')
+    //
+    $('#addAchievementForm').on('submit', function(e) {
+        e.preventDefault();
 
-                const data = {
-                    achieve_bm: $('#achieve_bm').val(),
-                    achieve_bi: $('#achieve_bi').val(),
-                    _token: '{{ csrf_token() }}' // Include CSRF token here
-                };
+        const payload = {
+            achieve_bm: $('#achieve_bm').val(),
+            achieve_bi: $('#achieve_bi').val(),
+            _token: '{{ csrf_token() }}'
+        };
 
-                $.ajax({
-                    url: '{{ route('achievement.store') }}',
-                    type: 'POST',
-                    data: data,
-                    success: function(response) {
-                        $('#addAchievementModal').modal('hide');
-                        location.reload();  // Reload the page to show updated data
-                        alert(response.message);
-                    },
-                    error: function(xhr) {
-                        alert('Error! Please try again.');
-                        console.error(xhr.responseText);  // Log the error response
-                    }
-                });
-            });
-
-            // Handle form submit for updating achievement
-            $('#editAchievementForm').on('submit', function(e) {
-                e.preventDefault();
-
-                const id = $('#edit_id_achieve').val();
-                const data = {
-                    achieve_bm: $('#edit_achieve_bm').val(),
-                    achieve_bi: $('#edit_achieve_bi').val(),
-                    _method: 'PUT',
-                    _token: '{{ csrf_token() }}'
-                };
-
-                $.ajax({
-                    url: `/achievement/${id}`,
-                    type: 'POST',
-                    data: data,
-                    success: function(response) {
-                        $('#editAchievementModal').modal('hide');
-                        location.reload();
-                        alert(response.message);
-                    },
-                    error: function(xhr) {
-                        alert('Error! Please try again.');
-                    }
-                });
-            });
+        $.ajax({
+            url: '{{ route('achievement.store') }}',
+            method: 'POST',
+            data: payload,
+            success: function(response) {
+                $('#addAchievementModal').modal('hide');
+                alert(response.message);
+                location.reload(); // reload so the new row appears
+            },
+            error: function(xhr) {
+                console.error(xhr.responseJSON || xhr.responseText);
+                alert('Error! Please try again.');
+            }
         });
-    </script>
+    });
+
+    //
+    // 4) Submit “Edit Achievement” via AJAX → PATCH to route('achievement.update', id)
+    //
+    $('#editAchievementForm').on('submit', function(e) {
+        e.preventDefault();
+
+        const id = $('#edit_id_achieve').val();
+        const payload = {
+            achieve_bm: $('#edit_achieve_bm').val(),
+            achieve_bi: $('#edit_achieve_bi').val(),
+            _method: 'PATCH',            // Laravel expects PATCH or PUT for update
+            _token: '{{ csrf_token() }}'
+        };
+
+        // Build the URL by name, so you never mistype it:
+        const updateUrl = "{{ url('achievement') }}/" + id;
+
+        $.ajax({
+            url: updateUrl,
+            method: 'POST', // always POST, Laravel will read _method=PATCH
+            data: payload,
+            success: function(response) {
+                $('#editAchievementModal').modal('hide');
+                alert(response.message);
+                location.reload();
+            },
+            error: function(xhr) {
+                console.error(xhr.responseJSON || xhr.responseText);
+                alert('Error! Please try again.');
+            }
+        });
+    });
+});
+</script>
 @endpush
