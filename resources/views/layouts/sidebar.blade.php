@@ -30,6 +30,7 @@
         </a>
     </li>
     @endhasanyrole
+    @hasanyrole('admin|coach')
     <li class="nav-item">
         <a href="{{ route('coach.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
@@ -38,6 +39,7 @@
             <span class="nav-link-text ms-1">Coach</span>
         </a>
     </li>
+    @endhasanyrole
      @hasanyrole('admin|coach|club')
     <li class="nav-item">
         <a href="{{ route('clubs.index') }}" class="nav-link" role="button">
@@ -48,39 +50,7 @@
         </a>
     </li>
     @endhasanyrole
-    {{-- Modul users - hanya untuk admin --}}
-    @role('admin')
-    <li class="nav-item">
-        <a href="{{ route('admin.users.index') }}" class="nav-link" role="button">
-            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
-                <i class="bi bi-person"></i>
-            </div>
-            <span class="nav-link-text ms-1">User</span>
-        </a>
-    </li>
-    @endrole
-    {{-- Modul school - hanya untuk admin --}}
-    @role('admin')
-    <li class="nav-item">
-        <a href="{{ route('school.index') }}" class="nav-link" role="button">
-            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
-                <i class="bi bi-building"></i>
-            </div>
-            <span class="nav-link-text ms-1">School</span>
-        </a>
-    </li>
-    @endrole
-    {{-- Modul achievement - hanya untuk admin --}}
-    @role('admin')
-    <li class="nav-item">
-        <a href="{{ route('achievement.index') }}" class="nav-link" role="button">
-            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
-                <i class="bi bi-trophy"></i>
-            </div>
-            <span class="nav-link-text ms-1">Achievement</span>
-        </a>
-    </li>
-    @endrole
+
     <li class="nav-item">
         <a href="{{ route('sanction.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
@@ -89,6 +59,55 @@
             <span class="nav-link-text ms-1">Sanction</span>
         </a>
     </li>
+            @role('admin')
+            <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#manage" class="nav-link " aria-controls="manage"
+                    role="button" aria-expanded="false">
+                    <div
+                        class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                        <i class="bi bi-gear" aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Manage</span>
+                </a>
+                <div class="collapse " id="manage">
+                    <ul class="nav ms-4 ps-3">
+                        {{-- Modul users - hanya untuk admin --}}
+                        @role('admin')
+                        <li class="nav-item">
+                            <a href="{{ route('admin.users.index') }}" class="nav-link" role="button">
+                                {{-- <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                                    <i class="bi bi-person"></i>
+                                </div> --}}
+                                <span class="nav-link-text ms-1">User</span>
+                            </a>
+                        </li>
+                        @endrole
+                        {{-- Modul school - hanya untuk admin --}}
+                        @role('admin')
+                        <li class="nav-item">
+                            <a href="{{ route('school.index') }}" class="nav-link" role="button">
+                                {{--<div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                                    <i class="bi bi-building"></i>
+                                </div> --}}
+                                <span class="nav-link-text ms-1">School</span>
+                            </a>
+                        </li>
+                        @endrole
+                        {{-- Modul achievement - hanya untuk admin --}}
+                        @role('admin')
+                        <li class="nav-item">
+                            <a href="{{ route('achievement.index') }}" class="nav-link" role="button">
+                                {{--<div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                                    <i class="bi bi-trophy"></i>
+                                </div> --}}
+                                <span class="nav-link-text ms-1">Achievement</span>
+                            </a>
+                        </li>
+                        @endrole
+                    </ul>
+                </div>
+            </li>
+            @endrole
     {{--
         <li class="nav-item">
         <a href="{{ route('setting.index') }}" class="nav-link" role="button">
