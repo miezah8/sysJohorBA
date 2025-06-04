@@ -2,16 +2,16 @@
 @extends('layouts.app')
 @section('title', 'Achievement Module')
 
+@section('breadcrumbParent', 'Achievement')
+{{-- @section('breadcrumbParentUrl', route('clubs.index'))  --}}
+@section('breadcrumbCurrent', 'List of Achievements')
+
 @section('content')
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">
             <h5 class="mb-0">List of Achievements</h5>
-            <button
-                class="btn btn-outline-success"
-                data-bs-toggle="modal"
-                data-bs-target="#addAchievementModal"
-            >
-                <i class="fa-solid fa-plus me-1"></i> Add Achievement
+            <button class="btn btn-behance" data-bs-toggle="modal" data-bs-target="#addAchievementModal" data-mode="add">
+                <i class="fa-solid fa-plus me-1"></i>Add Achievement
             </button>
         </div>
         <div class="table-responsive">
