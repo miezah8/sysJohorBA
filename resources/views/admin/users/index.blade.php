@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('title', 'User Module')
 
+@section('breadcrumbParent', 'User')
+{{-- @section('breadcrumbParentUrl', route('clubs.index'))  --}}
+@section('breadcrumbCurrent', 'Registered Users')
+
 @section('content')
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between align-items-center">
