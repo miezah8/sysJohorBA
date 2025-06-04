@@ -65,19 +65,22 @@
                     <!-- Begin: Tab Form -->
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button">Maklumat Peribadi</button>
+                            <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button">Personal Info</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="guardian-tab" data-bs-toggle="tab" data-bs-target="#guardian" type="button">Maklumat Penjaga</button>
+                            <button class="nav-link" id="guardian-tab" data-bs-toggle="tab" data-bs-target="#guardian" type="button">Guardian Info</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="school-tab" data-bs-toggle="tab" data-bs-target="#school" type="button">Maklumat Sekolah</button>
+                            <button class="nav-link" id="school-tab" data-bs-toggle="tab" data-bs-target="#school" type="button">School Info</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="experience-tab" data-bs-toggle="tab" data-bs-target="#experience" type="button">Maklumat Pengalaman</button>
+                            <button class="nav-link" id="experience-tab" data-bs-toggle="tab" data-bs-target="#experience" type="button">Achievements</button>
                         </li>
+                        {{-- <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="outfit-tab" data-bs-toggle="tab" data-bs-target="#outfit" type="button">Outfit Info</button>
+                        </li> --}}
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="coach-tab" data-bs-toggle="tab" data-bs-target="#coach" type="button">Maklumat Jurulatih & Kelab</button>
+                            <button class="nav-link" id="coach-tab" data-bs-toggle="tab" data-bs-target="#coach" type="button">Coach & Club Info</button>
                         </li>
                     </ul>
                     <!-- End: Tab Form -->
@@ -243,34 +246,34 @@
                                 <div class="row mt-3">
                                     <!-- Dropdown Nama Sekolah -->
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">Nama Sekolah</label>
+                                        <label class="form-label required">School Name</label>
                                         <select id="schoolDropdown" class="form-select select2">
                                             <option value="">-- Pilih Sekolah --</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">Kod Sekolah</label>
+                                        <label class="form-label required">School Code</label>
                                         <input type="text" class="form-control" id="CodeScholl" readonly>
                                     </div>
 
                                     <!-- Kiri: Alamat -->
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label required">Alamat Sekolah</label>
+                                        <label class="form-label required">School Address</label>
                                         <textarea class="form-control" rows="8" id="AddressSchool" readonly></textarea>
                                     </div>
 
                                     <!-- Kanan: Kod, Poskod, Negeri, Daerah -->
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label required">Poskod</label>
+                                            <label class="form-label required">Poscode</label>
                                             <input type="text" class="form-control" id="PosKod" readonly>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label required">Negeri</label>
+                                            <label class="form-label required">State</label>
                                             <input type="text" class="form-control" id="state" readonly>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label required">Daerah</label>
+                                            <label class="form-label required">District</label>
                                             <input type="text" class="form-control" id="districts" readonly>
                                         </div>
                                     </div>
@@ -295,11 +298,12 @@
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th class="required">Competition</th>
+                                                    <th class="required">Tournament</th>
                                                     <th class="required">Stage</th>
                                                     <th class="required">Category</th>
                                                     <th class="required">Achieve</th>
                                                     <th class="required">Year</th>
+                                                    <th class="required">Result</th>                                                    
                                                     <th class=""></th>
                                                 </tr>
                                             </thead>
