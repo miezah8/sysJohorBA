@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('title', 'Dashboard')
 
+@section('breadcrumbParent', 'Dashboard')
+@section('breadcrumbParentUrl', route('dashboard'))
+@section('breadcrumbCurrent', 'Welcome')
+
 @section('content')
 <div class="container">
     <h4>Welcome, {{ Auth::user()->name }}!</h4>
