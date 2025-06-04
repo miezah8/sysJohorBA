@@ -1,12 +1,16 @@
 @extends('layouts.app')
 @section('title', 'School Module')
 
+@section('breadcrumbParent', 'School')
+{{-- @section('breadcrumbParentUrl', route('clubs.index'))  --}}
+@section('breadcrumbCurrent', 'List of School')
+
 @section('content')
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">
             <h5 class="mb-0">List of School</h5>
             <button class="btn btn-behance" data-bs-toggle="modal" data-bs-target="#schoolModal" data-mode="add">
-                <i class="fa-solid fa-plus me-1"></i>Add
+                <i class="fa-solid fa-plus me-1"></i>Add School
             </button>
         </div>
         <div class="table-responsive">
