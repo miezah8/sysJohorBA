@@ -29,7 +29,7 @@ class CoachController extends Controller
     {
         $coach = $id ? Coach::findOrFail($id) : null;
 
-        return view('coach.form', compact('coach'));
+        return view('coach.form.index', compact('coach'));
     }
 
     public function store(Request $request)
