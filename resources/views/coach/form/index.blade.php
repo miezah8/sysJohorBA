@@ -63,36 +63,43 @@
             color: #f44336 !important;
         }
 
-    
+        thead th {
+            text-align: center;
+            /* Horizontal centering */
+            vertical-align: middle;
+            /* Vertical centering */
+        }
+
+
         /* .card-body {
-            background: #ffffff;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
-        }
+                background: #ffffff;
+                padding: 1.5rem;
+                border-radius: 0.75rem;
+                box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
+            }
 
-        .nav-tabs .nav-link {
-            color: #6b7280;
-            font-weight: 600;
-            padding: 0.75rem 1rem;
-            transition: color 0.3s ease, background-color 0.3s ease;
-        }
+            .nav-tabs .nav-link {
+                color: #6b7280;
+                font-weight: 600;
+                padding: 0.75rem 1rem;
+                transition: color 0.3s ease, background-color 0.3s ease;
+            }
 
-        .nav-tabs .nav-link.active {
-            color: #111827;
-            background-color: transparent;
-            border-bottom: 3px solid #2563eb;
-        }
+            .nav-tabs .nav-link.active {
+                color: #111827;
+                background-color: transparent;
+                border-bottom: 3px solid #2563eb;
+            }
 
-        .nav-tabs .nav-link:hover {
-            color: #2563eb;
-        }
+            .nav-tabs .nav-link:hover {
+                color: #2563eb;
+            }
 
-        .tab-content {
-            color: #374151;
-            font-size: 16px;
-            line-height: 1.6;
-        } */
+            .tab-content {
+                color: #374151;
+                font-size: 16px;
+                line-height: 1.6;
+            } */
     </style>
 @endpush
 
