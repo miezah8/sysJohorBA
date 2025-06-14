@@ -20,12 +20,12 @@ use Illuminate\Support\Facades\Auth;
 | Web Routes
 |--------------------------------------------------------------------------
 */
-
+/*
 Route::get('/', function () {
     return Auth::check()
         ? redirect()->route('dashboard')
         : view('auth.login');
-});
+});*/
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
      ->middleware(['auth','verified'])
