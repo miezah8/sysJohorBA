@@ -40,7 +40,7 @@
         </a>
     </li>
     @endhasanyrole
-     @hasanyrole('admin|coach|club')
+    @hasanyrole('admin|coach|club')
     <li class="nav-item">
         <a href="{{ route('clubs.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
@@ -59,6 +59,16 @@
             <span class="nav-link-text ms-1">Sanction</span>
         </a>
     </li>
+   
+    <li class="nav-item">
+        <a href="{{ route('reports.index') }}" class="nav-link" role="button">
+            <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                <i class="bi bi-people"></i>
+            </div>
+            <span class="nav-link-text ms-1">Report</span>
+        </a>
+    </li>
+    
             @role('admin')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#manage" class="nav-link " aria-controls="manage"
@@ -101,6 +111,17 @@
                                     <i class="bi bi-trophy"></i>
                                 </div> --}}
                                 <span class="nav-link-text ms-1">Achievement</span>
+                            </a>
+                        </li>
+                        @endrole
+                        {{-- Modul Fasiliti - hanya untuk admin --}}
+                        @role('admin')
+                        <li class="nav-item">
+                            <a href="{{ route('facilities.index') }}" class="nav-link" role="button">
+                                {{--<div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+                                    <i class="bi bi-trophy"></i>
+                                </div> --}}
+                                <span class="nav-link-text ms-1">Facility</span>
                             </a>
                         </li>
                         @endrole
