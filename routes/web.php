@@ -9,6 +9,8 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\SanctionController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\FacilityController;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserInvitationMail;
@@ -55,8 +57,40 @@ Route::middleware(['auth','role:admin'])
          Route::post('users/{user}/review',[AdminUserController::class, 'approve'])->name('approve');
          Route::post('users/{user}/reject',[AdminUserController::class, 'reject'])->name('reject');
      });
+     
+/*Route::middleware(['auth','role:admin'])
+     ->prefix('reports')
+     ->name('reports.')
+     ->group(function(){
+         Route::get('/',               [ReportController::class,'index'])->name('index');
+         Route::get('create',          [ReportController::class,'create'])->name('create');
+         Route::post('/',              [ReportController::class,'store'])->name('store');
+         Route::get('{report}',        [ReportController::class,'show'])->name('show');
+         Route::post('{report}/run',   [ReportController::class,'generate'])->name('generate');
+         Route::get('{report}/export', [ReportController::class,'export'])->name('export');
+         Route::delete('{report}',     [ReportController::class,'destroy'])->name('destroy');
+     });*/
+  Route::middleware(['auth','verified'])->group(function(){
+  // list all reports
+  Route::get('/reports', [ReportController::class,'index'])
+       ->name('reports.index');
+
+  // run & view a single report
+  Route::post('/reports/{report}/run', [ReportController::class,'run'])
+       ->name('reports.run');
+
+  // export CSV
+  Route::post('/reports/{report}/export', [ReportController::class,'export'])
+       ->name('reports.export');
+});
 
 
+Route::middleware('auth')->group(function(){
+    Route::get('/facilities',          [FacilityController::class,'index'])->name('facilities.index');
+    Route::post('/facilities',         [FacilityController::class,'store'])->name('facilities.store');
+    Route::put('/facilities/{id}',     [FacilityController::class,'update'])->name('facilities.update');
+    Route::delete('/facilities/{id}',  [FacilityController::class,'destroy'])->name('facilities.destroy');
+});
     // ==============================
     // ROUTE DASHBOARD (harus auth + verified)
     // ==============================
@@ -252,6 +286,8 @@ Route::middleware(['auth','role:admin'])
         Route::put('/setting',              [SettingController::class, 'update'])->name('setting.update');
     });
 });
+
+
 
 Route::get('/test-mail', function () {
     // Give yourself a dummy URL or token
