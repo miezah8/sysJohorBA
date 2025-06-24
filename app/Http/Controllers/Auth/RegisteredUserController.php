@@ -44,7 +44,7 @@ class RegisteredUserController extends Controller
             'email'         => $request->email,
             'password'      => Hash::make($request->password),
             'status_user'   => '0',            // pending
-            'first_login'   => '1',            // jika mahu logic first-login
+            'first_login'   => '1',            // logic first-login
         ]);
 
         // 3. Trigger event Registered (jika anda guna event listener lain)
@@ -57,6 +57,7 @@ class RegisteredUserController extends Controller
 
         // 5. Jangan login auto, terus redirect ke halaman “thank you” atau login
         return redirect()->route('login')
-                         ->with('status', 'Terima kasih! Pendaftaran anda telah diterima. Tunggu verifikasi daripada admin.');
+                         ->with('status', 'Thank you! Your Registration has been sent to System Admin. 
+                         Please wait for Admin verification.');
     }
 }
