@@ -115,7 +115,46 @@ Route::middleware('auth')->group(function(){
     // Modul: Athlete
     // Permissions: view athlete, add athlete, edit athlete, delete athlete
     // ------------------------------
-    Route::middleware('permission:view athlete')->group(function() {
+/*    Route::resource('athlete', AthleteController::class)
+     ->only(['index','create','store','show'])
+     ->middleware('auth');
+*/
+    // View / list athletes
+    Route::get('/athlete', [AthleteController::class, 'index'])
+        ->name('athlete.index')
+        ->middleware(['auth','permission:view athlete']);
+
+    // Show the “create new” form
+    Route::get('/athlete/create', [AthleteController::class, 'create'])
+        ->name('athlete.create')
+        ->middleware(['auth','permission:add athlete']);
+
+    // Store new athlete
+    Route::post('/athlete', [AthleteController::class, 'store'])
+        ->name('athlete.store')
+        ->middleware(['auth','permission:add athlete']);
+
+    // Show single athlete details
+    Route::get('/athlete/{athlete}', [AthleteController::class, 'show'])
+        ->name('athlete.show')
+        ->middleware(['auth','permission:view athlete']);
+
+    // Show the “edit” form
+    Route::get('/athlete/{athlete}/edit', [AthleteController::class, 'edit'])
+        ->name('athlete.edit')
+        ->middleware(['auth','permission:edit athlete']);
+
+    // Update athlete
+    Route::put('/athlete/{athlete}', [AthleteController::class, 'update'])
+        ->name('athlete.update')
+        ->middleware(['auth','permission:edit athlete']);
+
+    // (and if you support delete:)
+    Route::delete('/athlete/{athlete}', [AthleteController::class, 'destroy'])
+        ->name('athlete.destroy')
+        ->middleware(['auth','permission:delete athlete']);
+
+/*    Route::middleware('permission:view athlete')->group(function() {
         Route::get('/athlete', [AthleteController::class, 'index'])->name('athlete.index');
         Route::get('/athlete/sch/{id}', [AthleteController::class, 'show'])->name('athlete.show');
     });
@@ -131,7 +170,7 @@ Route::middleware('auth')->group(function(){
     Route::middleware('permission:delete athlete')->group(function() {
         Route::delete('/athlete/{athlete}', [AthleteController::class, 'destroy'])->name('athlete.destroy');
     });
-
+*/
     // ------------------------------
     // Modul: Coach (jika terpisah)
     // Permissions: view coach, add coach, edit coach, delete coach

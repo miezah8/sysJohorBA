@@ -47,6 +47,20 @@ class RegisteredUserController extends Controller
             'first_login'   => '1',            // logic first-login
         ]);
 
+        // 2b) Create an empty (or partially‐populated) detail row
+        $user->detail()->create([
+            'ic_no'           => $request->ic_number,
+            'nationality'     => null,    // or default country id
+            'address'         => '',      // or null if you make the column nullable
+            'postcode'        => '',
+            'district_id'     => 0,       // or null / a default “unknown” district
+            'state_id'        => 0,       // likewise
+            'gender'          => '-',     // you could default to '-'
+            'race'            => '',
+            'profile_picture' => '',
+            'ic_picture'      => null,
+        ]);
+
         // 3. Trigger event Registered (jika anda guna event listener lain)
         event(new Registered($user));
 
@@ -57,7 +71,7 @@ class RegisteredUserController extends Controller
 
         // 5. Jangan login auto, terus redirect ke halaman “thank you” atau login
         return redirect()->route('login')
-                         ->with('status', 'Thank you! Your Registration has been sent to System Admin. 
+                         ->with('status', 'Thank you! Your Registration is has been sent to System Admin. 
                          Please wait for Admin verification.');
     }
 }

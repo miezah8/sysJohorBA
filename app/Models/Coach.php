@@ -49,5 +49,10 @@ class Coach extends Model
     {
         return $this->hasMany(Athlete::class, 'coach_id', 'id_coach');
     }
+    
+    public function educations()
+    {
+        return $this->morphMany(\App\Models\Education::class, 'educationable');
+    }
 
 }

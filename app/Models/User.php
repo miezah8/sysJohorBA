@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\UserDetail;
 
 class User extends Authenticatable
 {
@@ -32,6 +33,11 @@ class User extends Authenticatable
         'registration_status',
     ];
 
+         public function detail()
+        {
+            return $this->hasOne(UserDetail::class, 'user_id');
+        }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -54,4 +60,6 @@ class User extends Authenticatable
         'status_user' => 'boolean',
         'last_login' => 'datetime',
     ];
+
+
 }

@@ -1,22 +1,20 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Athlete extends Model
 {
-
     use HasFactory;
-    
-    protected $table      = 'athlete';    // actual table name
-    protected $primaryKey = 'id_athlete'; // custom primary key
-    public $timestamps    = false;        // because you're not using Laravel's default timestamps
+
+    protected $table      = 'athlete';
+    protected $primaryKey = 'id_athlete';
+    public $timestamps    = false;
 
     protected $fillable = [
         'user_id',
-        'sys_id',
         'coach_id',
         'school_id',
         'club_id',
@@ -28,33 +26,49 @@ class Athlete extends Model
         'modified_on',
     ];
 
-    public function coachAthletes()
+    // RELATIONSHIPS
+
+    /** Link back to the main User record */
+    public function user()
     {
-        return $this->belongsTo(Coach::class, 'coach_id', 'id_coach');
+        return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');
     }
- 
-    /**
-     * Accessor: full_name = "First Last"
-     */
+
+    /** One‐to‐one guardian (by shared sys_id) */
+    public function guardian()
+    {
+        return $this->hasOne(\App\Models\Guardian::class, 'athlete_id', 'id_athlete');
+    }
+
+    /** School info */
+    public function school()
+    {
+        return $this->belongsTo(\App\Models\School::class, 'school_id', 'id_school');
+    }
+
+    /** Club info */
+    public function club()
+    {
+        return $this->belongsTo(\App\Models\Club::class, 'club_id', 'id_club');
+    }
+
+    /** Coach info */
+    public function coach()
+    {
+        return $this->belongsTo(\App\Models\Coach::class, 'coach_id', 'id_coach');
+    }
+
+    /** All of this athlete’s tournament results */
+    public function experiences()
+    {
+        return $this->morphMany(\App\Models\Experience::class, 'experiencable');
+    }
+
+    // ACCESSORS
+
+    /** “First Last” */
     public function getFullNameAttribute()
     {
         return trim("{$this->athlete_fname} {$this->athlete_lname}");
     }
-     /**
-     * An athlete belongs to a single club.
-     */
-    public function club()
-    {
-        return $this->belongsTo(Club::class, 'club_id', 'id_club');
-    }
-
-    /**
-     * An athlete belongs to a single coach.
-     */
-    public function coach()
-    {
-        return $this->belongsTo(Coach::class, 'coach_id', 'id_coach');
-    }
-
-
 }

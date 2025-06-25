@@ -201,6 +201,14 @@
                                             <label class="form-label required">Name on T-Shirt</label>
                                             <input type="text" class="form-control" name="NameTshirt">
                                         </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label required">Track Bottom Size</label>
+                                            <input type="text" class="form-control" name="trackbottom">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label required">Shoe Size</label>
+                                            <input type="text" class="form-control" name="shoe">
+                                        </div>
                                     </div>
 
                                     <div class="text-end">
@@ -310,7 +318,8 @@
                                                     <th class="required">Stage</th>
                                                     <th class="required">Category</th>
                                                     <th class="required">Achieve</th>
-                                                    <th class="required">Year</th>                                                    
+                                                    <th class="required">Year</th>
+                                                    <th class="required">Result</th>                                                    
                                                     <th class=""></th>
                                                 </tr>
                                             </thead>
@@ -359,6 +368,9 @@
                                                     </td>
                                                     <td>
                                                         <input type="number" class="form-control" name="year">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" name="result">
                                                     </td>
                                                     <td class="text-center">
                                                         <button type="button" class="btn btn-danger btnRemoveExperience">
