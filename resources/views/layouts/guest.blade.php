@@ -18,7 +18,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
                 <a href="/">
-                    <img src="http://127.0.0.1:8000/images/logo_pbj1.png" class="w-40 h-40 fill-current text-gray-500 mx-auto d-block" />
+                    <img src="{{ asset('images/logo_pbj1.png') }}" class="w-40 h-40 fill-current text-gray-500 mx-auto d-block" alt="Logo"/>
                     {{--  <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> --}}
                     <span class="ms-100 font-weight-bold">Johor BA Information Management System</span>
                 </a>
