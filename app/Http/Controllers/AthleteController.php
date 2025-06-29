@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Achievement;
 use Illuminate\Http\Request;
 use App\Models\Athlete;
 use App\Models\Club;
 use App\Models\Coach;
 use App\Models\Nationality;
 use App\Models\School;
+use App\Models\District;
 use Illuminate\Support\Facades\DB;
 
 class AthleteController extends Controller
@@ -15,7 +17,7 @@ class AthleteController extends Controller
     /**
      * Display a paginated listing of athletes.
      */
-    public function index(Request $request)
+    public function index()
     {
         // Eager-load everything the index table needs:
 /*        $athletes = Athlete::with(['club', 'school', 'coach'])
@@ -25,7 +27,9 @@ class AthleteController extends Controller
     $athleteData = DB::table('athlete as a')
       ->leftJoin('club as c','a.club_id','=','c.id_club')
       ->leftJoin('school as b','a.school_id','=','b.id_school')
-      ->selectRaw("a.id_athlete, CONCAT(a.athlete_fname,' ',a.athlete_lname) as full_name, c.club_name, b.school_name")
+      ->leftJoin('users as d','a.user_id','=','d.id')
+      //->selectRaw("a.id_athlete, CONCAT(a.athlete_fname,' ',a.athlete_lname) as full_name, c.club_name, b.school_name")
+      ->selectRaw("a.id_athlete, d.name AS full_name, c.club_name, b.school_name")
       ->get();
 
     return view('athlete.index', compact('athleteData'));
@@ -34,19 +38,22 @@ class AthleteController extends Controller
     /**
      * Show the form for creating a new athlete.
      */
-    public function create()
+    public function create(Request $request)
     {
         // For your dropdowns in the multi-step form:
         $nationalities = Nationality::pluck('nationality_name', 'id_nationality');
-        $states        = \DB::table('state')->pluck('state_name', 'id_state');
-        $districts     = []; // loaded dynamically via AJAX
+        $states        = DB::table('state')->pluck('state_name', 'id_state');
+        // only load districts if ?state_id=… is present
+        $districts = $request->filled('state_id')
+        ? District::where('state_id',$request->state_id)->pluck('district_name','id_district') : []; // loaded dynamically via AJAX
         $schools       = School::pluck('school_name', 'id_school');
         $clubs         = Club::pluck('club_name', 'id_club');
         $coaches       = Coach::pluck('coach_fname', 'id_coach');
+        $achievement   = Achievement::pluck('achieve_bi', 'id_achieve');
 
-        return view('athlete.formAthlete', compact(
+        return view('athlete.create', compact(
             'nationalities', 'states', 'districts',
-            'schools', 'clubs', 'coaches'
+            'schools', 'clubs', 'coaches', 'achievement'
         ));
     }
 

@@ -20,7 +20,7 @@
         </a>
     </li>
     {{-- Modul Atlet - hanya untuk admin atau coach --}}
-    @hasanyrole('admin|coach|athlete')
+    {{--@hasanyrole('admin|coach|athlete')--}}
     <li class="nav-item">
         <a href="{{ route('athlete.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
@@ -29,7 +29,7 @@
             <span class="nav-link-text ms-1">Athlete</span>
         </a>
     </li>
-    @endhasanyrole
+    {{--@endhasanyrole--}}
     @hasanyrole('admin|coach')
     <li class="nav-item">
         <a href="{{ route('coach.index') }}" class="nav-link" role="button">

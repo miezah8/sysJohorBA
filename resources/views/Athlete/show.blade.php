@@ -40,8 +40,8 @@
 
         <dt class="col-sm-3">Postcode / State / District</dt>
         <dd class="col-sm-9">
-          {{ $athlete->postcode }} /
-          {{ $athlete->state_name }} /
+          {{ $athlete->postcode }} 
+          {{ $athlete->state_name }} 
           {{ $athlete->district_name }}
         </dd>
 
@@ -91,8 +91,8 @@
 
           <dt class="col-sm-3">Postcode / State / District</dt>
           <dd class="col-sm-9">
-            {{ $athlete->school->postcode }} /
-            {{ $athlete->school->state_name }} /
+            {{ $athlete->school->postcode }} 
+            {{ $athlete->school->state_name }} 
             {{ $athlete->school->district_name }}
           </dd>
         </dl>
