@@ -11,10 +11,10 @@
       @csrf
 
       {{-- Switch to invite multiple athletes --}}
-      <div class="form-check form-switch mb-4">
+      {{--<div class="form-check form-switch mb-4">
         <input class="form-check-input" type="checkbox" id="switchMode">
         <label class="form-check-label" for="switchMode">Invite Athlete</label>
-      </div>
+      </div>--}}
 
       {{-- Multiple Invite Form --}}
       <div id="formMultiple" class="d-none">
