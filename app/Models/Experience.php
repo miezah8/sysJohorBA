@@ -6,12 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Experience extends Model
 {
+    protected $table      = 'experiences';
+    protected $primaryKey = 'id_exp';
+
+    // Map the default timestamp fields
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'modified_on';
+
     protected $fillable = [
         'tournament',
-        'stage',
+        'ranking',
         'category',
+        'achieve_id',
         'year',
-        'achievement_id',
+         // polymorphic keys…
+        'experiencable_id',
+        'experiencable_type',
     ];
 
     public function experiencable()
@@ -22,7 +32,7 @@ class Experience extends Model
     public function achievement()
     {
         return $this->belongsTo(\App\Models\Achievement::class,
-                               'achievement_id',
+                               'achieve_id',
                                'id_achieve');
     }
 }

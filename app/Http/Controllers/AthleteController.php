@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Achievement;
-use Illuminate\Http\Request;
 use App\Models\Athlete;
 use App\Models\Club;
 use App\Models\Coach;
 use App\Models\Nationality;
 use App\Models\School;
 use App\Models\District;
+use App\Models\Guardian;
+use App\Models\Experience;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class AthleteController extends Controller
 {
@@ -62,12 +65,21 @@ class AthleteController extends Controller
      */
     public function store(Request $request)
     {
+        $userId = $request->user()->id;
         // Here you'd validate each tab’s data, then:
         $data = $request->validate([
+            // Personal tab 
             'firstname'   => 'required|string|max:150',
-            'lastname'    => 'required|string|max:150',
-            'idNumber'    => 'required|string|max:20|unique:users,ic_number',
-            'email'       => 'required|email|unique:users,email',
+            
+            // ignore current user so we don’t collide with ourselves
+              'idNumber'    => [
+                'required','string','max:20',
+                Rule::unique('users','ic_number')->ignore($userId),
+            ],
+            'email'       => [
+                'required','email',
+                Rule::unique('users','email')->ignore($userId),
+            ],
             'phone'       => 'required|string|max:20',
             'gender'      => 'required|in:M,F',
             'race'        => 'required|string|max:30',
@@ -85,7 +97,7 @@ class AthleteController extends Controller
             'GuardianRelation' => 'required|string|max:50',
             // school tab:
             'schoolDropdown'   => 'required|integer|exists:school,id_school',
-            // experience tab (array of rows):
+            // Achievements tab:
             'tournament'       => 'required|array',
             'tournament.*'     => 'required|string|max:200',
             'ranking'          => 'required|array',
@@ -99,30 +111,99 @@ class AthleteController extends Controller
             // coach & club tab:
             'coachSelect'      => 'required|integer|exists:coach,id_coach',
             'clubSelect'       => 'required|integer|exists:club,id_club',
+            'declaration'      => 'required|accepted',
         ]);
 
-        // 1) Create the User + UserDetail record...
-        // 2) Create Athlete (with the new sys_id from user)...
-        // 3) Create Guardian, Experience rows, etc.
+        DB::beginTransaction();
 
-        // For brevity, we’ll just show the Athlete create:
-        $athlete = Athlete::create([
-            'user_id'       => auth()->id(),      // or the new user’s ID
-            'coach_id'      => $data['coachSelect'],
-            'school_id'     => $data['schoolDropdown'],
-            'club_id'       => $data['clubSelect'],
-            'athlete_fname' => $data['firstname'],
-            'athlete_lname' => $data['lastname'],
-            'tshirt_size'   => $data['tshirt_size'],
-            'shirt_name'    => $data['NameTshirt'],
-            'created_at'    => now(),
-            'modified_on'   => now(),
-        ]);
+        try {
+            // 1) Update User record
+            $user = $request->user();
+            $user->ic_number  = $data['idNumber'];
+            $user->contact_no = $data['phone'];
+            $user->save();
+            
+            // 1b) Upsert into user_detail
+            $user->detail()->updateOrCreate(
+                [ 'user_id' => $user->id ],
+                [
+                'ic_no'         => $data['idNumber'],
+                'nationality'   => $data['citizens'],
+                'address'       => $data['address'],
+                'postcode'      => $data['postcode'],
+                'state_id'      => $data['sch_state'],
+                'district_id'   => $data['districts'],
+                'gender'        => $data['gender'],
+                'race'          => $data['race'],
+                // file uploads for pictures:
+                'profile_picture' => $request->file('profile_picture') 
+                                        ? $request->file('profile_picture')->store('profile_pics','public')
+                                        : null,
+                'ic_picture'      => $request->file('ic_picture') 
+                                        ? $request->file('ic_picture')->store('ic_pics','public')
+                                        : null,
+                ]
+            );
 
-        // ...then guardian, experiences, etc.
+            // 2) Create Athlete
+            $athlete = Athlete::create([
+                'user_id'       => $user->id,
+                'coach_id'      => $data['coachSelect'],
+                'school_id'     => $data['schoolDropdown'],
+                'club_id'       => $data['clubSelect'],
+                'athlete_fname' => $data['firstname'],
+                'athlete_lname' => '', 
+                'tshirt_size'   => $data['tshirt_size'],
+                'shirt_name'    => $data['NameTshirt'],
+                'created_at'    => now(),
+                'modified_on'   => now(),
+            ]);
 
-        return redirect()->route('athlete.index')
-                         ->with('success', 'Athlete registered successfully.');
+            // 3) Guardian
+            $athlete->guardian()->create([
+                'name'  => $data['GuardianName'],
+                'phone' => $data['GuardianPhone'],
+                'occupation'     => $data['GuardianOccup'],
+                'relation'       => $data['GuardianRelation'],
+            ]);
+
+            // 4) Experiences (polymorphic)
+            foreach ($data['tournament'] as $i => $tourn) {
+                $athlete->experiences()->create([
+                    'tournament'     => $tourn,
+                    'ranking'        => $data['ranking'][$i],
+                    'category'       => $data['category'][$i],
+                    'achieve_id'     => $data['achieve'][$i],
+                    'year'           => $data['year'][$i],
+                ]);
+            }
+
+            DB::commit();
+
+        // if this was an AJAX request, return JSON
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'message'  => 'Athlete registered successfully.',
+                'redirect' => route('athlete.index'),
+            ]);
+        }
+            // otherwise fall back to a normal redirect:
+            return redirect()
+                ->route('athlete.index')
+                ->with('success','Athlete registered successfully.');
+        }
+        catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error("AthleteController@store Error: {$e->getMessage()} in {$e->getFile()}:{$e->getLine()}");
+            if ($request->ajax()) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
+            return back()
+                ->withInput()
+                ->with('error','Something went wrong; please try again.');
+        }               
     }
 
     /**
@@ -134,13 +215,77 @@ class AthleteController extends Controller
         $athlete->load([
             'guardian',
             'school',
-            'experiences', 
-            'coach', 
-            'club'
+            'experiences.achievement',
+            'coach',
+            'club',
+            'user.detail.state',
+            'user.detail.district',
+            'user.detail.nationality',
         ]);
 
         return view('athlete.show', compact('athlete'));
     }
 
     // Edit, update, destroy can follow the same pattern…
+        //
+    // JSON endpoints for dynamic dropdowns
+    //
+
+    /** GET /ajax/nationalities */
+    public function nationalityList()
+    {
+        return response()->json(Nationality::pluck('nationality_name','id_nationality'));
+    }
+
+    /** GET /ajax/states */
+    public function stateList()
+    {
+        return response()->json(DB::table('state')->pluck('state_name','id_state'));
+    }
+
+    /** GET /ajax/districts?state_id=XX */
+    public function districtList(Request $request)
+    {
+        $request->validate([
+          'state_id'=>'required|integer|exists:state,id_state'
+        ]);
+        return response()->json(
+            District::where('state_id',$request->state_id)
+                    ->pluck('district_name','id_district')
+        );
+    }
+
+    public function getSchool(Request $request)
+    {
+        $request->validate([
+        'school_id' => 'required|integer|exists:school,id_school'
+        ]);
+        return School::where('id_school', $request->school_id)
+                    ->select(['sch_code','sc_address','postcode'])
+                    ->first();
+    }
+
+    /** GET /ajax/schools */
+    public function schoolList()
+    {
+        return response()->json(School::pluck('school_name','id_school'));
+    }
+
+    /** GET /ajax/clubs */
+    public function clubList()
+    {
+        return response()->json(Club::pluck('club_name','id_club'));
+    }
+
+    /** GET /ajax/coaches */
+    public function coachList()
+    {
+        return response()->json(Coach::pluck('coach_fname','id_coach'));
+    }
+
+    /** GET /ajax/achievements */
+    public function achievementList()
+    {
+        return response()->json(Achievement::pluck('achieve_bi','id_achieve'));
+    }
 }

@@ -128,7 +128,11 @@ Route::middleware('auth')->group(function(){
     Route::get('/athlete/create', [AthleteController::class, 'create'])
         ->name('athlete.create')
         ->middleware(['auth','permission:add athlete']);
-
+    
+    Route::get('/districts', [AthleteController::class,'districtList'])->name('districts.list');
+    Route::get('/ajax/states',    [AthleteController::class, 'stateList'])->name('states.list');
+    Route::get('/ajax/school', [AthleteController::class, 'getSchool'])->name('school.list');
+    
     // Store new athlete
     Route::post('/athlete', [AthleteController::class, 'store'])
         ->name('athlete.store')

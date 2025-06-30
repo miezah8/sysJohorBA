@@ -8,41 +8,62 @@
     </div>
     <div class="card-body">
 
+    @php
+      $detail = $athlete->user->detail; 
+    @endphp
+
       {{-- Personal Info --}}
       <h5>Personal Info</h5>
       <dl class="row">
-        <dt class="col-sm-3">First Name</dt>
-        <dd class="col-sm-9">{{ $athlete->athlete_fname }}</dd>
 
-        <dt class="col-sm-3">Last Name</dt>
-        <dd class="col-sm-9">{{ $athlete->athlete_lname }}</dd>
+        <dt class="col-sm-3">Profile Picture</dt>
+        <dd class="col-sm-9">
+          @if($detail->profile_picture)
+            <img src="{{ asset('storage/'.$detail->profile_picture) }}" 
+                class="img-thumbnail" width="150" alt="Profile">
+          @else
+            <em>— none —</em>
+          @endif
+        </dd>
+
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">{{ $athlete->athlete_fname }}</dd>
 
         <dt class="col-sm-3">IC / Passport</dt>
         <dd class="col-sm-9">{{ $athlete->ic_number }}</dd>
 
+        <dt class="col-sm-3">IC / Passport Copy</dt>
+        <dd class="col-sm-9">
+          @if($detail->ic_picture)
+            <a href="{{ asset('storage/'.$detail->ic_picture) }}" target="_blank">View Upload</a>
+          @else
+            <em>— none —</em>
+          @endif
+        </dd>
+
         <dt class="col-sm-3">Phone</dt>
-        <dd class="col-sm-9">{{ $athlete->phone }}</dd>
+        <dd class="col-sm-9">{{ $detail->contact_no }}</dd>
 
         <dt class="col-sm-3">Email</dt>
-        <dd class="col-sm-9">{{ $athlete->email }}</dd>
+        <dd class="col-sm-9">{{ $athlete->user->email }}</dd>
 
         <dt class="col-sm-3">Gender</dt>
         <dd class="col-sm-9">{{ $athlete->gender === 'M' ? 'Male' : 'Female' }}</dd>
 
         <dt class="col-sm-3">Race</dt>
-        <dd class="col-sm-9">{{ ucfirst($athlete->race) }}</dd>
+        <dd class="col-sm-9">{{ ucfirst($detail->race) }}</dd>
 
         <dt class="col-sm-3">Nationality</dt>
-        <dd class="col-sm-9">{{ $athlete->nationality_name /* from join */ }}</dd>
+        <dd class="col-sm-9">{{ $detail->nationality->nationality_name ?? '–' }}</dd>
 
         <dt class="col-sm-3">Address</dt>
-        <dd class="col-sm-9">{{ $athlete->address }}</dd>
+        <dd class="col-sm-9">{{ $detail->address }}</dd>
 
         <dt class="col-sm-3">Postcode / State / District</dt>
         <dd class="col-sm-9">
-          {{ $athlete->postcode }} 
-          {{ $athlete->state_name }} 
-          {{ $athlete->district_name }}
+          {{ $detail->postcode }} 
+          {{ $detail->state->state_name ?? '–' }} 
+          {{ $detail->district->district_name ?? '–' }}
         </dd>
 
         <dt class="col-sm-3">T-Shirt Size</dt>
@@ -59,10 +80,10 @@
       @if($athlete->guardian)
         <dl class="row">
           <dt class="col-sm-3">Name</dt>
-          <dd class="col-sm-9">{{ $athlete->guardian->guardian_name }}</dd>
+          <dd class="col-sm-9">{{ $athlete->guardian->name }}</dd>
 
           <dt class="col-sm-3">Phone</dt>
-          <dd class="col-sm-9">{{ $athlete->guardian->contact_no }}</dd>
+          <dd class="col-sm-9">{{ $athlete->guardian->phone }}</dd>
 
           <dt class="col-sm-3">Occupation</dt>
           <dd class="col-sm-9">{{ $athlete->guardian->occupation }}</dd>
@@ -132,7 +153,7 @@
                     @endswitch
                   </td>
                   <td>{{ $exp->category }}</td>
-                  <td>{{ $exp->achieve_text /* map via achievement lookup */ }}</td>
+                  <td>{{ $exp->achievement->achieve_bi /* map via achievement lookup */ }}</td>
                   <td>{{ $exp->year }}</td>
                 </tr>
               @endforeach
@@ -148,20 +169,12 @@
       <dl class="row">
         <dt class="col-sm-3">Coach</dt>
         <dd class="col-sm-9">
-          @if($athlete->coach)
-            {{ $athlete->coach->coach_name }}
-          @else
-            <em>–</em>
-          @endif
+          {{ optional($athlete->coach)->coach_fname ?? '–' }}
         </dd>
 
         <dt class="col-sm-3">Club</dt>
         <dd class="col-sm-9">
-          @if($athlete->club)
-            {{ $athlete->club->club_name }}
-          @else
-            <em>–</em>
-          @endif
+          {{ optional($athlete->club)->club_name ?? '–' }}
         </dd>
       </dl>
 
