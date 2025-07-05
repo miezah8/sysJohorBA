@@ -230,6 +230,163 @@ class AthleteController extends Controller
         //
     // JSON endpoints for dynamic dropdowns
     //
+/**
+ * Show the form for editing the specified athlete.
+ */
+public function edit(Athlete $athlete)
+{
+    // dropdowns
+    $nationalities = Nationality::pluck('nationality_name','id_nationality');
+    $states        = DB::table('state')->pluck('state_name','id_state');
+    // load only districts for this athlete’s saved state (via user_detail)
+    $detail    = optional($athlete->user->detail);
+    $districts = $detail->state_id
+               ? District::where('state_id',$detail->state_id)
+                         ->pluck('district_name','id_district')
+               : collect();
+
+    $schools     = School::pluck('school_name','id_school');
+    $clubs       = Club::pluck('club_name','id_club');
+    $coaches     = Coach::pluck('coach_fname','id_coach');
+    $achievement = Achievement::pluck('achieve_bi','id_achieve');
+
+    return view('athlete.edit', compact(
+      'athlete','nationalities','states','districts',
+      'schools','clubs','coaches','achievement'
+    ));
+}
+
+/**
+ * Update the specified athlete in storage.
+ */
+public function update(Request $request, Athlete $athlete)
+{
+    // 1) Update users table
+    $user = $athlete->user;
+    $user->contact_no = $request->input('phone');
+    $user->save();
+
+    // 1b) Pull out the existing detail (if any)
+    $oldDetail = $user->detail;
+
+    // Build the payload for upsert, falling back to the old filenames if no new upload
+    $detailData = [
+        'ic_no'          => $user->ic_number,
+        'nationality'    => $request->input('citizens'),
+        'address'        => $request->input('address'),
+        'postcode'       => $request->input('postcode'),
+        'state_id'       => $request->input('sch_state'),
+        'district_id'    => $request->input('districts'),
+        'gender'         => $request->input('gender'),
+        'race'           => $request->input('race'),
+        'profile_picture'=> $request->hasFile('profile_picture')
+                             ? $request->file('profile_picture')->store('profile_pics','public')
+                             : optional($oldDetail)->profile_picture,
+        'ic_picture'     => $request->hasFile('ic_picture')
+                             ? $request->file('ic_picture')->store('ic_pics','public')
+                             : optional($oldDetail)->ic_picture,
+    ];
+
+    // Actually upsert into user_detail
+    $user->detail()->updateOrCreate(
+        ['user_id' => $user->id],
+        $detailData
+    );
+
+    // 2) Update athlete table
+    $athlete->update([
+        'coach_id'     => $request->input('coachSelect'),
+        'club_id'      => $request->input('clubSelect'),
+        'school_id'    => $request->input('schoolDropdown'),
+        'athlete_fname'=> $request->input('firstname'),
+        'tshirt_size'  => $request->input('size'),
+        'shirt_name'   => $request->input('NameTshirt'),
+        'modified_on'  => now(),
+    ]);
+
+    // 3) Upsert Guardian
+    $athlete->guardian()->updateOrCreate(
+        ['athlete_id' => $athlete->id_athlete],
+        [
+          'name'       => $request->input('GuardianName'),
+          'phone'      => $request->input('GuardianPhone'),
+          'occupation' => $request->input('GuardianOccup'),
+          'relation'   => $request->input('GuardianRelation'),
+        ]
+    );
+/*
+    // 4) Refresh Experiences
+    $athlete->experiences()->delete();
+    foreach ($request->input('tournament') as $i => $tourn) {
+        $athlete->experiences()->create([
+            'tournament'   => $tourn,
+            'ranking'      => $request->input("ranking.$i"),
+            'category'     => $request->input("category.$i"),
+            'achieve_id'   => $request->input("achieve.$i"),
+            'year'         => $request->input("year.$i"),
+            'created_at'   => now(),
+            'modified_on'  => now(),
+        ]);
+    }
+*/
+    // true “sync” style update for experience
+    // pull in the arrays (default to empty arrays if missing)
+  // a) pull out submitted IDs (dropping blanks)
+  $submitted = collect($request->input('experience_id', []))
+      ->filter()            // remove '' entries
+      ->map(fn($id)=>(int)$id)
+      ->all();
+
+  // b) delete any experiences the user removed
+  $existing = $athlete->experiences()->pluck('id_exp')->all();
+  $toDelete = array_diff($existing, $submitted);
+  if ($toDelete) {
+      \App\Models\Experience::destroy($toDelete);
+  }
+
+  // c) loop through each index of the form arrays
+  foreach ($request->input('tournament', []) as $i => $tourn) {
+      // if ALL fields blank, skip this slot
+      if (
+        trim($tourn)==='' &&
+        trim($request->input("ranking.$i"))==='' &&
+        trim($request->input("category.$i"))==='' &&
+        trim($request->input("achieve.$i"))==='' &&
+        trim($request->input("year.$i"))===''
+      ) {
+          continue;
+      }
+
+      // assemble the common data
+      $payload = [
+        'tournament'  => $tourn,
+        'ranking'     => $request->input("ranking.$i"),
+        'category'    => $request->input("category.$i"),
+        'achieve_id'  => $request->input("achieve.$i"),
+        'year'        => $request->input("year.$i"),
+        'modified_on' => now(),
+      ];
+
+      $idExp = (int) $request->input("experience_id.$i");
+
+      if ($idExp && in_array($idExp, $existing, true)) {
+        // UPDATE an existing record
+        $athlete->experiences()
+                ->where('id_exp', $idExp)
+                ->update($payload);
+      } else {
+        // CREATE a brand-new record
+        $payload['created_at'] = now();
+        $athlete->experiences()->create($payload);
+      }
+  }
+
+    return redirect()
+        ->route('athlete.show', $athlete)
+        ->with('success','Athlete updated successfully.');
+}
+
+
 
     /** GET /ajax/nationalities */
     public function nationalityList()
