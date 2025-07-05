@@ -92,9 +92,20 @@ class UserController extends Controller
     }
 */    
     public function assignRole(Request $request)
-    {
+    {   
+        // 1) Validate incoming data
+        $data = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'roles'   => 'sometimes|array',
+            'roles.*' => 'exists:roles,name',
+        ]);
+        // 2) Find the user
         $user = User::findOrFail($request->user_id);
+        // 3) Sync the roles
         $user->syncRoles($request->roles ?? []);
+        // 4) Mark them active
+        $user->status_user = '1';
+        $user->save();
 
         return redirect()->back()->with('success', 'User roles updated successfully.');
     }
