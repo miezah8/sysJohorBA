@@ -15,5 +15,10 @@ class State extends Model
         'state_code',
         'code_state',
     ];
+
+    public function districts()
+    {
+        return $this->hasMany(District::class, 'state_id', 'id_state');
+    }
     
 }

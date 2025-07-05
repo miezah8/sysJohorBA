@@ -11,14 +11,18 @@
       @if($players->count())
         <table class="table" id="datatable-search">
           <thead>
-            <tr><th>#</th><th>First Name</th><th>Last Name</th><!-- … --></tr>
+            <tr>
+              <th>#</th><th>Athlete Name</th>
+              {{-- <th>Last Name</th> --}}
+              <!-- … -->
+            </tr>
           </thead>
           <tbody>
             @foreach($players as $i => $p)
               <tr>
                 <td>{{ $i + $players->firstItem() }}</td>
                 <td>{{ $p->athlete_fname }}</td>
-                <td>{{ $p->athlete_lname }}</td>
+                {{-- <td>{{ $p->athlete_lname }}</td> --}}
               </tr>
             @endforeach
           </tbody>

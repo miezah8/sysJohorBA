@@ -12,11 +12,20 @@ class ClubFacilities extends Model
 
     protected $fillable = [
         'club_id',
-        'facility_type',
+        'facility_id',
         'quantity',
         'created_at',
         'modified_on',
     ];
+    
+    
+    public function facilityType()
+    {
+        return $this->belongsTo(\App\Models\Facility::class,
+                                'facility_id',     // FK on this table
+                                'id'        // PK on facilities table
+        );
+    }
 
     // Relationship: Facility belongs to a club
     public function club()

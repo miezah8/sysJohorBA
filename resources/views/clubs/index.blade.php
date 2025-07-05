@@ -1,3 +1,4 @@
+{{-- resources/views/clubs/index.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Club Module')
 
@@ -6,490 +7,374 @@
 @section('breadcrumbCurrent', 'List of Clubs')
 
 @section('content')
-    <div class="card p-2">
-        <div class="card-header d-flex justify-content-between">
-            <h5 class="mb-0">List of Clubs</h5>
-            <button
-                class="btn btn-behance"
-                data-bs-toggle="modal"
-                data-bs-target="#clubModal"
-                data-mode="add"
-            >
-                <i class="fa-solid fa-plus me-1"></i>Add Club
-            </button>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-flush" id="datatable-search">
-                <thead class="thead-light">
-                    <tr>
-                        <th>No</th>
-                        <th>Club Name</th>
-                        <th>Total Players</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($clubs as $index => $club)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $club->club_name }}</td>
-                            <td>
-                                <a
-                                    class="{{ $club->athletes_count > 0 ? 'text-danger fw-bold' : '' }}"
-                                    href="{{ route('clubs.players', $club->id_club) }}"
-                                >
-                                    {{ $club->athletes_count }}
-                                </a>
-                            </td>
-                            <td>
-                                <button
-                                    class="btn btn-outline-info"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#clubModal"
-                                    data-mode="edit"
-                                    data-id="{{ $club->id_club }}"
-                                >
-                                    <i class="fa-solid fa-pen-to-square me-1"></i> Edit
-                                </button>
-
-                                <button
-                                    class="btn btn-outline-danger btn-delete"
-                                    data-id="{{ $club->id_club }}"
-                                >
-                                    <i class="fa-solid fa-trash me-1"></i> Delete
-                                </button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+  <div class="card p-2">
+    <div class="card-header d-flex justify-content-between">
+      <h5 class="mb-0">List of Clubs</h5>
+      <button class="btn btn-behance"
+              data-bs-toggle="modal"
+              data-bs-target="#clubModal"
+              data-mode="add">
+        <i class="fa-solid fa-plus me-1"></i>Add Club
+      </button>
     </div>
 
-    {{--  —————— Modal (unchanged from your existing code) —————— --}}
-    <div class="modal fade" id="clubModal" tabindex="-1" aria-labelledby="clubModalLabel" aria-hidden="true" data-url="/clubs">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="clubModalLabel"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+    {{-- TABLE --}}
+    <div class="table-responsive">
+      <table class="table table-flush" id="datatable-search">
+        <thead class="thead-light">
+          <tr>
+            <th>No</th>
+            <th>Club Name</th>
+            <th>Total Players</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($clubs as $i => $club)
+            <tr>
+              <td>{{ $i + 1 }}</td>
+              <td>{{ $club->club_name }}</td>
+              <td>
+                <a href="{{ route('clubs.players', $club->id_club) }}"
+                   class="{{ $club->athletes_count>0?'text-danger fw-bold':'' }}">
+                  {{ $club->athletes_count }}
+                </a>
+              </td>
+              <td>
+                <button class="btn btn-outline-info"
+                        data-bs-toggle="modal"
+                        data-bs-target="#clubModal"
+                        data-mode="edit"
+                        data-id="{{ $club->id_club }}">
+                  <i class="fa-solid fa-pen-to-square me-1"></i>Edit
+                </button>
+                <button class="btn btn-outline-danger btn-delete"
+                        data-id="{{ $club->id_club }}">
+                  <i class="fa-solid fa-trash me-1"></i>Delete
+                </button>
+              </td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-                <form id="clubForm">
-                    <div class="modal-body">
-                        <input type="hidden" name="id_club">
+  {{-- CLUB MODAL --}}
+  <div class="modal fade" id="clubModal" tabindex="-1"
+       aria-labelledby="clubModalLabel" aria-hidden="true"
+       data-url="/clubs">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="clubModalLabel"></h5>
+          <button type="button" class="btn-close"
+                  data-bs-dismiss="modal"></button>
+        </div>
+        <form id="clubForm">
+          <div class="modal-body">
+            <input type="hidden" name="id_club">
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="club_name" class="form-label">Club Name *</label>
-                                <input
-                                    type="text"
-                                    id="club_name"
-                                    name="club_name"
-                                    class="form-control"
-                                    required
-                                >
-                            </div>
-                            <div class="col-md-6">
-                                <label for="email" class="form-label">Email *</label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    class="form-control"
-                                    required
-                                >
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="phone" class="form-label">Phone Number *</label>
-                                <input
-                                    type="text"
-                                    id="phone"
-                                    name="phone"
-                                    class="form-control"
-                                    required
-                                >
-                            </div>
-                            {{--  <div class="col-md-6">
-                                <label for="sys_id" class="form-label">System ID</label>
-                                <input
-                                    type="text"
-                                    id="sys_id"
-                                    name="sys_id"
-                                    class="form-control"
-                                >
-                            </div>--}}
-                        </div>
-
-                        <h6>Club Information</h6>
-                        <div class="row mb-3">
-                            <div class="col-md-8">
-                                <label for="address" class="form-label">Address</label>
-                                <textarea
-                                    id="address"
-                                    name="address"
-                                    class="form-control"
-                                ></textarea>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="postcode" class="form-label">Postcode</label>
-                                <input
-                                    type="text"
-                                    id="postcode"
-                                    name="postcode"
-                                    class="form-control"
-                                >
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="state" class="form-label">State</label>
-                                <select id="state" name="state" class="form-select">
-                                    <option value="">Select State</option>
-                                    {{-- @foreach($states as $s) <option>{{ $s }}</option> @endforeach --}}
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="district" class="form-label">District</label>
-                                <select id="district" name="district" class="form-select">
-                                    <option value="">Select State First</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <h6>Facilities</h6>
-                        <div id="facilities-container"></div>
-                        <button
-                            type="button"
-                            class="btn btn-sm btn-outline-primary mt-2"
-                            id="add-facility"
-                        >
-                            <i class="fa-solid fa-plus me-1"></i> Add Facility
-                        </button>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >Cancel</button>
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                            id="saveBtn"
-                        >Save</button>
-                    </div>
-                </form>
+            {{-- Club Name & Email --}}
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Club Name *</label>
+                <input name="club_name" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email *</label>
+                <input name="email" type="email" class="form-control" required>
+              </div>
             </div>
-        </div>
+
+            {{-- Phone --}}
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Phone Number *</label>
+                <input name="phone" class="form-control" required>
+              </div>
+            </div>
+
+            {{-- Information --}}
+            <h6>Club Information</h6>
+            <div class="row mb-3">
+              <div class="col-md-8">
+                <label class="form-label">Address</label>
+                <textarea name="address" class="form-control"></textarea>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Postcode</label>
+                <input name="postcode" class="form-control">
+              </div>
+            </div>
+
+            {{-- State & District --}}
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">State</label>
+                <select name="state_id" id="state" class="form-select" required>
+                  <option value="">Select State</option>
+                  @foreach($states as $s)
+                    <option value="{{ $s->id_state }}">{{ $s->state_name }}</option>
+                  @endforeach
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">District</label>
+                <select name="district_id" id="district" class="form-select" required>
+                  <option value="">Select State First</option>
+                </select>
+              </div>
+            </div>
+
+            {{-- Facilities --}}
+            <h6>Facilities</h6>
+            <div id="facilities-container"></div>
+            <button type="button"
+                    id="add-facility"
+                    class="btn btn-sm btn-outline-primary mt-2">
+              <i class="fa-solid fa-plus me-1"></i>Add Facility
+            </button>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">Cancel</button>
+            <button type="submit"
+                    class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 @endsection
 
 @push('css')
-    <style>
-        table th:first-child,
-        table td:first-child {
-            width: 1%;
-            white-space: nowrap;
-            text-align: center;
-        }
-
-        table th:last-child,
-        table td:last-child {
-            width: 15%;
-            white-space: nowrap;
-        }
-
-        td {
-            font-size: 0.875em;
-        }
-
-        .text-danger {
-            color: #f44336 !important;
-        }
-    </style>
+<style>
+  table th:first-child, table td:first-child {
+    width:1%; white-space:nowrap; text-align:center;
+  }
+  table th:last-child, table td:last-child {
+    width:15%; white-space:nowrap;
+  }
+  td { font-size:.875em; }
+  .text-danger { color:#f44336!important; }
+</style>
 @endpush
 
 @push('scripts')
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+$(function(){
+  // CSRF for AJAX
+  $.ajaxSetup({
+    headers:{ 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+  });
 
-        // Initialize DataTable
-        new simpleDatatables.DataTable("#datatable-search", {
-            searchable: true,
-            fixedHeight: true,
-        });
+  // Data from server
+  const STATES        = @json($states);
+  const FACILITY_NAMES= @json($facilityNames);
+  const DISTRICTS_URL = "{{ url('api/districts') }}";
 
-        // Facility management (unchanged)
-        $('#add-facility').click(function() {
-            const facilityHtml = `
-                <div class="facility-entry mb-2 d-flex align-items-center">
-                    <div class="flex-grow-1 me-2">
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="facilities[][type]"
-                            placeholder="Facility Type"
-                            required
-                        >
-                    </div>
-                    <div class="me-2" style="width: 100px;">
-                        <input
-                            type="number"
-                            class="form-control"
-                            name="facilities[][quantity]"
-                            placeholder="Qty"
-                            min="1"
-                            value="1"
-                            required
-                        >
-                    </div>
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-outline-danger remove-facility"
-                    >
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            `;
-            $('#facilities-container').append(facilityHtml);
-        });
+  const $modal     = $('#clubModal');
+  const $form      = $('#clubForm');
+  const $submitBtn = $form.find('button[type="submit"]');
+  const baseUrl    = $modal.data('url');       // '/clubs'
+  const storeUrl   = "{{ route('clubs.store') }}";
+  const updateUrl  = "{{ url('clubs') }}";
 
-        $(document).on('click', '.remove-facility', function() {
-            $(this).closest('.facility-entry').remove();
-        });
+  // 1) Init DataTable
+  new simpleDatatables.DataTable("#datatable-search", {
+    searchable:true, fixedHeight:true
+  });
+
+  // 2) Add Facility
+  $('#add-facility').click(function(){
+    let options = FACILITY_NAMES.map(f=>
+      `<option value="${f.id}">${f.name}</option>`
+    ).join('');
+    $('#facilities-container').append(`
+      <div class="facility-entry mb-2 d-flex align-items-center">
+        <select name="facilities[][facility_id]" class="form-select me-2" required>
+          <option value="">Select Facility</option>${options}
+        </select>
+        <input name="facilities[][quantity]" type="number" min="1"
+               class="form-control me-2" style="width:100px" value="1" required>
+        <button type="button" class="btn btn-sm btn-outline-danger remove-facility">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+    `);
+  });
+
+  // Remove one
+  $(document).on('click','.remove-facility',function(){
+    $(this).closest('.facility-entry').remove();
+  });
+
+    // Populate the State <select> on modal show
+  function loadStates(selected=null) {
+    let html = '<option value="">Select State</option>';
+    STATES.forEach(s => {
+      html += `<option value="${s.id_state}"${s.id_state==selected?' selected':''}>${s.state_name}</option>`;
     });
+    $('#state').html(html);
+  }
 
-    // Modal handling (unchanged)
-    const $modal = $('#clubModal');
-    const $form = $('#clubForm');
-    const $modalTitle = $('#clubModalLabel');
-    const $submitButton = $form.find('button[type="submit"]');
-    const baseUrl = $modal.data('url');
-    const storeUrl = "{{ route('clubs.store') }}";
-    const updateUrl = "{{ url('/clubs') }}";
+  // 3) State → District AJAX
+  $('#state').change(function(){
+    let sid = this.value;
+    if(!sid){
+      return $('#district').html('<option value="">Select State First</option>');
+    }
+    fetch(`${DISTRICTS_URL}/${sid}`)
+      .then(r=>r.json())
+      .then(list=>{
+        let opts = '<option value="">Select District</option>';
+        list.forEach(d=>{
+          opts += `<option value="${d.id_district}">${d.district_name}</option>`;
+        });
+        $('#district').html(opts);
+      });
+  });
 
-    $modal.on('show.bs.modal', function(event) {
-        const button = $(event.relatedTarget);
-        const mode = button.data('mode');
-        const id = button.data('id');
+  // 4) Modal show: add vs edit
+  $modal.on('show.bs.modal', function(e){
+    let btn  = $(e.relatedTarget),
+        mode = btn.data('mode'),
+        id   = btn.data('id');
 
-        $form.trigger('reset');
-        $('#facilities-container').empty();
-        $form.find('.is-invalid').removeClass('is-invalid');
-        $form.find('.invalid-feedback').remove();
-        $submitButton.prop('disabled', false).text('Save');
+    // reset
+    $form.trigger('reset');
+    $('#facilities-container').empty();
+    $form.find('.is-invalid').removeClass('is-invalid');
+    $form.find('.invalid-feedback').remove();
+    $submitBtn.prop('disabled',false);
 
-        if (mode === 'edit' && id) {
-            $modalTitle.text('Edit Club');
-            $submitButton.text('Save Changes');
-            $form.find('[name="id_club"]').val(id);
-            $submitButton.prop('disabled', true).text('Loading...');
+    // Reset district select
+    $('#district').html('<option value="">Select State First</option>');
 
-            $.ajax({
-                type: 'GET',
-                url: `${ baseUrl }/${ id }`,   // baseUrl is '/clubs'
-                data: {
-                    selectedRecord: id
-                },
-                success: function(data) {
-                    // Populate main form fields
-                    $form.find('[name="club_name"]').val(data.club.club_name);
-                    $form.find('[name="sys_id"]').val(data.club.sys_id);
-                    $form.find('[name="email"]').val(data.club.email);
-                    $form.find('[name="phone"]').val(data.club.phone);
-                    $form.find('[name="address"]').val(data.club.address);
-                    $form.find('[name="postcode"]').val(data.club.postcode);
-                    $form.find('[name="state"]').val(data.club.state);
-                    $form.find('[name="district"]').val(data.club.district);
+    if(mode==='edit' && id){
+      $modal.find('.modal-title').text('Edit Club');
+      $submitBtn.text('Save Changes').prop('disabled',true);
+      // fetch data
+      $.getJSON(`${baseUrl}/${id}`, function(res){
+        let c = res.club;
+        $form.find('[name="id_club"]').val(c.id_club);
+        $form.find('[name="club_name"]').val(c.club_name);
+        $form.find('[name="email"]').val(c.email);
+        $form.find('[name="phone"]').val(c.phone);
+        $form.find('[name="address"]').val(c.address);
+        $form.find('[name="postcode"]').val(c.postcode);
 
-                    // Populate facilities
-                    if (data.facilities && data.facilities.length > 0) {
-                        data.facilities.forEach(function(facility) {
-                            const facilityHtml = `
-                                <div class="facility-entry mb-2 d-flex align-items-center">
-                                    <div class="flex-grow-1 me-2">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            name="facilities[][type]"
-                                            value="${facility.facility_type}"
-                                            placeholder="Facility Type"
-                                            required
-                                        >
-                                    </div>
-                                    <div class="me-2" style="width: 100px;">
-                                        <input
-                                            type="number"
-                                            class="form-control"
-                                            name="facilities[][quantity]"
-                                            value="${facility.quantity}"
-                                            placeholder="Qty"
-                                            min="1"
-                                            required
-                                        >
-                                    </div>
-                                    <button
-                                        type="button"
-                                        class="btn btn-sm btn-outline-danger remove-facility"
-                                    >
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            `;
-                            $('#facilities-container').append(facilityHtml);
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    alert('Failed to load club data: ' + (xhr.responseJSON?.message || xhr.status));
-                    $modal.modal('hide');
-                },
-                complete: function() {
-                    $submitButton.prop('disabled', false).text('Save');
-                }
-            });
-        } else {
-            $modalTitle.text('Add Club');
-            $submitButton.text('Add Club');
-        }
-    });
+        // select state & then load districts
+        $('#state').val(c.state_id).trigger('change');
+        setTimeout(()=>$('#district').val(c.district_id),300);
 
-    // Form submission (unchanged)
-    $('#clubForm').on('submit', function(e) {
-        e.preventDefault();
+        // facilities
+        res.facilities.forEach(fac=>{
+          let options = FACILITY_NAMES.map(f=>
+            `<option value="${f.id}"${f.id==fac.facility_id?' selected':''}>${f.name}</option>`
+          ).join('');
+          $('#facilities-container').append(`
+            <div class="facility-entry mb-2 d-flex align-items-center">
+              <select name="facilities[][facility_id]" class="form-select me-2" required>
+                <option value="">Select Facility</option>
+                ${options}
+              </select>
+              <input name="facilities[][quantity]" type="number" min="1"
+                     class="form-control me-2" style="width:100px"
+                     value="${fac.quantity}" required>
+              <button type="button" class="btn btn-sm btn-outline-danger remove-facility">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          `);
+        });
+      })
+      .fail(()=>alert('Failed to load club data'))
+      .always(()=>$submitBtn.prop('disabled',false));
+    }
+    else {
+      $modal.find('.modal-title').text('Add Club');
+      $submitBtn.text('Add Club');
+    }
+  });
 
-        const $form = $(this);
-        const $submitButton = $form.find('button[type="submit"]');
-        const id = $form.find('[name="id_club"]').val();
-        const isEdit = Boolean(id);
-
-        $submitButton.prop('disabled', true).text('Saving...');
-
-        $form.find('.is-invalid').removeClass('is-invalid');
-        $form.find('.invalid-feedback').remove();
-
-        const formData = {
-            club_name: $form.find('[name="club_name"]').val(),
-            email: $form.find('[name="email"]').val(),
-            phone: $form.find('[name="phone"]').val(),
-            sys_id: $form.find('[name="sys_id"]').val(),
-            address: $form.find('[name="address"]').val(),
-            postcode: $form.find('[name="postcode"]').val(),
-            state: $form.find('[name="state"]').val(),
-            district: $form.find('[name="district"]').val(),
-            facilities: []
+  // 5) Form submit AJAX
+  $form.submit(function(ev){
+    ev.preventDefault();
+    let id   = $form.find('[name="id_club"]').val(),
+        isEd = Boolean(id),
+        url  = isEd ? `${updateUrl}/${id}` : storeUrl,
+        payload = {
+          club_name: $form.find('[name="club_name"]').val(),
+          email:     $form.find('[name="email"]').val(),
+          phone:     $form.find('[name="phone"]').val(),
+          address:   $form.find('[name="address"]').val(),
+          postcode:  $form.find('[name="postcode"]').val(),
+          state_id:  $form.find('[name="state_id"],[name="state"]').val(),
+          district_id:$form.find('[name="district_id"],[name="district"]').val(),
+          facilities:[]
         };
 
-        $('.facility-entry').each(function() {
-            const type = $(this).find('input[name*="[type]"]').val();
-            const quantity = $(this).find('input[name*="[quantity]"]').val();
-            if (type && quantity) {
-                formData.facilities.push({
-                    type: type,
-                    quantity: quantity
-                });
-            }
-        });
-
-        $.ajax({
-            type: 'POST',
-            url: isEdit ? `${updateUrl}/${id}` : storeUrl,
-            data: isEdit ? {...formData, _method: 'PUT'} : formData,
-            success: function(response) {
-                if (response.success) {
-                    $modal.modal('hide');
-                    window.location.reload();
-                } else {
-                    alert(response.message || 'Operation failed');
-                }
-            },
-            error: function(xhr) {
-                if (xhr.status === 422) {
-                    const errors = xhr.responseJSON.errors;
-                    $.each(errors, function(key, value) {
-                        const input = $form.find(`[name="${key}"]`);
-                        if (input.length) {
-                            input.addClass('is-invalid');
-                            input.after(`<div class="invalid-feedback">${value[0]}</div>`);
-                        } else {
-                            const match = key.match(/^facilities\.(\d+)\.(.+)$/);
-                            if (match) {
-                                const index = match[1];
-                                const field = match[2];
-                                const facilityEntry = $('.facility-entry').eq(index);
-                                if (facilityEntry.length) {
-                                    const input = facilityEntry.find(`input[name*="[${field}]"]`);
-                                    input.addClass('is-invalid');
-                                    input.after(`<div class="invalid-feedback">${value[0]}</div>`);
-                                }
-                            }
-                        }
-                    });
-                } else {
-                    alert('An error occurred. Please try again.');
-                }
-            },
-            complete: function() {
-                $submitButton.prop('disabled', false).text('Save');
-            }
-        });
+    $('.facility-entry').each(function(){
+      let id = $(this).find('select').val(),
+          qty  = $(this).find('input').val();
+      if(id && qty) payload.facilities.push({facility_id:id,quantity:qty});
     });
 
-    // ————— Soft‐delete “Delete” button handler —————
-    $(document).on('click', '.btn-delete', function() {
-        const clubId = $(this).data('id');
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "This will soft‐delete the club (it can be restored later).",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: `/clubs/${clubId}`,
-                    type: 'POST',
-                    data: {
-                        _method: 'DELETE',
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function() {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Deleted!',
-                            text: 'The club has been moved to trash.',
-                            timer: 2000,
-                            showConfirmButton: false
-                        }).then(() => {
-                            location.reload();
-                        });
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Failed to delete. Please try again.'
-                        });
-                    }
-                });
+    $submitBtn.prop('disabled',true).text('Saving...');
+    $.ajax({
+      url, method:'POST',
+      data: isEd?{...payload,_method:'PUT'}:payload,
+        success(res) {
+        if (res.success) {
+            // show a green “success” popup with your message
+            Swal.fire({
+            icon: 'success',
+            title: res.message || (isEd ? 'Club updated!' : 'New club added!'),
+            showConfirmButton: false,
+            timer: 1500
+            }).then(() => {
+            // only after the toast disappears do we hide & reload
+            $modal.modal('hide');
+            location.reload();
+            });
+        } else {
+            Swal.fire('Oops', res.message || 'Something went wrong', 'error');
+        }
+        },
+      error(xhr){
+        if(xhr.status===422){
+          let errs = xhr.responseJSON.errors;
+          Object.keys(errs).forEach(k=>{
+            let el = $form.find(`[name="${k}"]`);
+            if(el.length){
+              el.addClass('is-invalid')
+                .after(`<div class="invalid-feedback">${errs[k][0]}</div>`);
             }
-        });
+          });
+        } else alert('Error occurred');
+      },
+      complete(){
+        $submitBtn.prop('disabled',false).text(isEd?'Save Changes':'Add Club');
+      }
+
+
+      
     });
+  });
+
+  // 6) Delete handler
+  $(document).on('click','.btn-delete',function(){
+    if(!confirm('Delete this club?')) return;
+    let id = $(this).data('id');
+    $.post(`${baseUrl}/${id}`,{_method:'DELETE'},()=>{
+      location.reload();
+    });
+  });
+});
 </script>
 @endpush

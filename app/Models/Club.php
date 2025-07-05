@@ -15,12 +15,11 @@ class Club extends Model
 
     protected $fillable = [
         'user_id',
-        'sys_id',
-        'club_name',
+        'club_name', 
         'created_at',
         'modified_on',
         'deleted_at',   // <-- SoftDeletes will write here
-        'email','phone','address','postcode','state','district',
+        'email','phone','address','postcode','state_id','district_id',
     ];
 
     // Relationship: A club has many facilities
@@ -51,5 +50,15 @@ class Club extends Model
     {
         return $this->hasMany(Coach::class, 'club_id', 'id_club');
     }
+
+    public function show(Club $club){
+    $club->load('facilities');
+    return response()->json([
+        'success'=>true,
+        'club'=>$club,
+        'facilities'=>$club->facilities
+    ]);
+}
+
 
 }

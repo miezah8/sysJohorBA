@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\UserInvitationMail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Models\District;
 
 /*
 |--------------------------------------------------------------------------
@@ -226,6 +227,13 @@ Route::middleware('auth')->group(function(){
     Route::middleware('permission:delete club')->group(function() {
         Route::delete('/clubs/{club}',   [ClubController::class, 'destroy'])->name('clubs.destroy');
     });
+
+    Route::get('/api/districts/{state_id}', function($state_id) {
+        return District::where('state_id', $state_id)
+                    ->select('id_district','district_name')
+                    ->get();
+    });
+
 
     // ------------------------------
     // Modul: School
