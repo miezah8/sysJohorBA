@@ -77,7 +77,7 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label required">Full Name</label>
-                <input type="text" name="firstname" class="form-control" value="{{ old('firstname',$first) }}" readonly>
+                <input type="text" name="firstname" class="form-control" value="{{ old('firstname',$first) }}" >
               </div>
               {{-- Profile Picture Upload --}}
               <div class="col-md-6 mb-3">
@@ -92,7 +92,7 @@
               </div>              
               <div class="col-md-6 mb-3">
                 <label class="form-label required">No. IC/Passport</label>
-                <input type="text" class="form-control" name="idNumber" value="{{ auth()->user()->ic_number }}" readonly>
+                <input type="text" class="form-control" name="idNumber" value="{{ auth()->user()->ic_number }}" >
                 {{-- no @error here --}}
               </div>
 
@@ -110,7 +110,7 @@
 
               <div class="col-md-6 mb-3">
                 <label class="form-label required">Email</label>
-                <input type="email" name="email" class="form-control" value="{{ auth()->user()->email }}" readonly>
+                <input type="email" name="email" class="form-control" value="{{ auth()->user()->email }}" >
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label required">Phone Number</label>
