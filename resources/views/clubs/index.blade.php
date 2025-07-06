@@ -25,6 +25,7 @@
           <tr>
             <th>No</th>
             <th>Club Name</th>
+            <th>Have Facility</th>
             <th>Total Players</th>
             <th>Action</th>
           </tr>
@@ -34,6 +35,10 @@
             <tr>
               <td>{{ $i + 1 }}</td>
               <td>{{ $club->club_name }}</td>
+               <td>
+                {{-- show Yes if at least one facility --}}
+                {{ $club->facilities_count > 0 ? 'Yes' : 'No' }}
+              </td>
               <td>
                 <a href="{{ route('clubs.players', $club->id_club) }}"
                    class="{{ $club->athletes_count>0?'text-danger fw-bold':'' }}">
@@ -41,6 +46,15 @@
                 </a>
               </td>
               <td>
+               <button
+                  class="btn btn-outline-secondary me-1"
+                  data-bs-toggle="modal"
+                  data-bs-target="#clubModal"
+                  data-mode="view"
+                  data-id="{{ $club->id_club }}"
+                >
+                  <i class="fa-solid fa-eye me-1"></i> View
+                </button>
                 <button class="btn btn-outline-info"
                         data-bs-toggle="modal"
                         data-bs-target="#clubModal"
@@ -239,68 +253,79 @@ $(function(){
       });
   });
 
-  // 4) Modal show: add vs edit
-  $modal.on('show.bs.modal', function(e){
-    let btn  = $(e.relatedTarget),
-        mode = btn.data('mode'),
-        id   = btn.data('id');
+$modal.on('show.bs.modal', function(e) {
+  const btn  = $(e.relatedTarget);
+  const mode = btn.data('mode');   // 'add' | 'edit' | 'view'
+  const id   = btn.data('id');
 
-    // reset
-    $form.trigger('reset');
-    $('#facilities-container').empty();
-    $form.find('.is-invalid').removeClass('is-invalid');
-    $form.find('.invalid-feedback').remove();
-    $submitBtn.prop('disabled',false);
+  // reset form state
+  $form.trigger('reset');
+  $('#facilities-container').empty();
+  $form.find('input,textarea,select').prop('disabled', false);
+  $('#add-facility').show();
+  $submitBtn.show().prop('disabled', false);
+  $form.find('.is-invalid').removeClass('is-invalid').next('.invalid-feedback').remove();
 
-    // Reset district select
-    $('#district').html('<option value="">Select State First</option>');
+  // always reset modal title
+  if (mode === 'add') {
+    $modal.find('.modal-title').text('Add Club');
+    $submitBtn.text('Add Club');
+    loadStates();  // repopulate states
+  }
+  else {
+    // fetch club data
+    $submitBtn.prop('disabled', true);
+    $.getJSON(`${baseUrl}/${id}`, function(res) {
+      const c = res.club;
+      // populate fields
+      $form.find('[name="id_club"]').val(c.id_club);
+      $form.find('[name="club_name"]').val(c.club_name);
+      $form.find('[name="email"]').val(c.email);
+      $form.find('[name="phone"]').val(c.phone);
+      $form.find('[name="address"]').val(c.address);
+      $form.find('[name="postcode"]').val(c.postcode);
 
-    if(mode==='edit' && id){
-      $modal.find('.modal-title').text('Edit Club');
-      $submitBtn.text('Save Changes').prop('disabled',true);
-      // fetch data
-      $.getJSON(`${baseUrl}/${id}`, function(res){
-        let c = res.club;
-        $form.find('[name="id_club"]').val(c.id_club);
-        $form.find('[name="club_name"]').val(c.club_name);
-        $form.find('[name="email"]').val(c.email);
-        $form.find('[name="phone"]').val(c.phone);
-        $form.find('[name="address"]').val(c.address);
-        $form.find('[name="postcode"]').val(c.postcode);
+      // state & district
+      $('#state').val(c.state_id).trigger('change');
+      setTimeout(() => $('#district').val(c.district_id), 300);
 
-        // select state & then load districts
-        $('#state').val(c.state_id).trigger('change');
-        setTimeout(()=>$('#district').val(c.district_id),300);
+      // facilities
+      res.facilities.forEach(fac => {
+        const options = FACILITIES.map(f =>
+          `<option value="${f.id}"${f.id == fac.facility_id ? ' selected' : ''}>${f.name}</option>`
+        ).join('');
+        $('#facilities-container').append(`
+          <div class="facility-entry mb-2 d-flex align-items-center">
+            <select name="facilities[][facility_id]" class="form-select me-2" required>
+              <option value="">Select Facility</option>${options}
+            </select>
+            <input name="facilities[][quantity]" type="number" min="1"
+                   class="form-control me-2" style="width:100px"
+                   value="${fac.quantity}" required>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-facility">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        `);
+      });
+    })
+    .fail(() => alert('Failed to load club data'))
+    .always(() => {
+      // adjust UI depending on mode
+      if (mode === 'view') {
+        $modal.find('.modal-title').text('View Club');
+        // disable all inputs
+        $form.find('input,textarea,select').prop('disabled', true);
+        $('#add-facility,.remove-facility').hide();
+        $submitBtn.hide();
+      } else {
+        $modal.find('.modal-title').text('Edit Club');
+        $submitBtn.text('Save Changes').prop('disabled', false);
+      }
+    });
+  }
+});
 
-        // facilities
-        res.facilities.forEach(fac=>{
-          let options = FACILITY_NAMES.map(f=>
-            `<option value="${f.id}"${f.id==fac.facility_id?' selected':''}>${f.name}</option>`
-          ).join('');
-          $('#facilities-container').append(`
-            <div class="facility-entry mb-2 d-flex align-items-center">
-              <select name="facilities[][facility_id]" class="form-select me-2" required>
-                <option value="">Select Facility</option>
-                ${options}
-              </select>
-              <input name="facilities[][quantity]" type="number" min="1"
-                     class="form-control me-2" style="width:100px"
-                     value="${fac.quantity}" required>
-              <button type="button" class="btn btn-sm btn-outline-danger remove-facility">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </div>
-          `);
-        });
-      })
-      .fail(()=>alert('Failed to load club data'))
-      .always(()=>$submitBtn.prop('disabled',false));
-    }
-    else {
-      $modal.find('.modal-title').text('Add Club');
-      $submitBtn.text('Add Club');
-    }
-  });
 
   // 5) Form submit AJAX
   $form.submit(function(ev){

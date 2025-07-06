@@ -23,7 +23,7 @@ class ClubController extends Controller
      */
     public function index()
     {
-        $clubs          = Club::withCount('athletes')->get();
+        $clubs          = Club::withCount(['athletes','facilities'])->get();
         $states         = State::orderBy('state_name')->get();
         // pluck the facility *names* into $facilityNames
         $facilityNames  = Facility::where('status',1)->orderBy('name')->get();
