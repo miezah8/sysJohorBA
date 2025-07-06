@@ -12,7 +12,7 @@
         <div class="list-group-item d-flex justify-content-between align-items-center">
           <div>
             <strong>{{ $r->name }}</strong><br>
-            <small>Created by {{ $r->creator->name }} on {{ $r->created_at->format('d M, Y') }}</small>
+            <small>Created by {{ $r->creator->name }} on {{ $r->created_at->format('d M Y') }}</small>
           </div>
           <div>
             <form action="{{ route('reports.run',$r) }}" method="POST" class="d-inline">

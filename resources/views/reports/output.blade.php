@@ -3,13 +3,24 @@
 
 @section('content')
   <div class="card p-2">
-    <div class="card-header d-flex justify-content-between">
-      <h5 class="mb-0">{{ $report->name }}</h5>
-      <form action="{{ route('reports.export',$report) }}" method="POST">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5>{{ $report->name }}</h5>
+    <div>
+      {{-- Export CSV --}}
+      <form action="{{ route('reports.export', $report) }}" method="POST" class="d-inline">
         @csrf
-        <button class="btn btn-outline-secondary btn-sm">Export CSV</button>
+        <button type="submit" class="btn btn-success btn-sm">
+          Export CSV
+        </button>
       </form>
+
+      {{-- Back to Reports Index --}}
+      <a href="{{ route('reports.index') }}"
+         class="btn btn-secondary btn-sm ms-2">
+        Back
+      </a>
     </div>
+  </div>
 
     <div class="table-responsive">
       @if($registrations->isEmpty())
