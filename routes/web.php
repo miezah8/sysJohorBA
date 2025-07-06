@@ -17,6 +17,8 @@ use App\Mail\UserInvitationMail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Models\District;
+use Illuminate\Support\Facades\Storage;
+use App\Models\SanctionDocument;
 
 /*
 |--------------------------------------------------------------------------
@@ -298,6 +300,24 @@ Route::middleware('auth')->group(function(){
 
     Route::middleware('permission:view_own sanction')->group(function() {
         Route::get('sanctions/{sanction}', [SanctionController::class, 'show'])->name('sanction.show');
+        Route::get('sanctions/{sanction}/documents/{doc}', function($sanctionId, $docId) {
+        // 1) Load the record (optionally: verify it belongs to the current user)
+        $doc = SanctionDocument::where('sanction_request_id',$sanctionId)
+                            ->findOrFail($docId);
+        // 2) Make sure it exists on disk
+        $disk   = Storage::disk('public');
+        $path   = $doc->path;  // e.g. "1/myfile.pdf"
+        if (! $disk->exists($path)) {
+            abort(404, 'File not found');
+        }
+
+        // 3) Stream it back
+        return response()->file(
+        $disk->path($path),
+        [ 'Content-Disposition' => 'inline; filename="'.$doc->filename.'"' ]
+        );
+    })->name('sanction.documents.view')
+    ->middleware(['auth','permission:view_own sanction']);                            
     });
 
     Route::middleware('permission:review sanction')->group(function() {

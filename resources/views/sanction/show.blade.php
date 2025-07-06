@@ -56,8 +56,9 @@
       <ul>
         @foreach($sanction->documents as $doc)
           <li>
-            <a href="{{ asset('storage/' . $doc->path) }}" target="_blank">
-              {{ $doc->filename }}
+    <a href="{{ route('sanction.documents.view', [$sanction->id, $doc->id]) }}"
+       target="_blank">
+      {{ $doc->filename }}
             </a>
           </li>
         @endforeach
