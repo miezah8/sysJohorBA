@@ -102,7 +102,7 @@ class ReportController extends Controller
                     fputcsv($out, [
                       $a->athlete_fname . ' ' . $a->athlete_lname,
                       $a->user->ic_number,
-                      optional($a->school)->name,
+                      optional($a->school)->school_name,
                     ]);
                 }
                 fclose($out);
