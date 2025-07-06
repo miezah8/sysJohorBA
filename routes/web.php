@@ -91,8 +91,8 @@ Route::middleware(['auth','role:admin'])
 Route::middleware('auth')->group(function(){
     Route::get('/facilities',          [FacilityController::class,'index'])->name('facilities.index');
     Route::post('/facilities',         [FacilityController::class,'store'])->name('facilities.store');
-    Route::put('/facilities/{id}',     [FacilityController::class,'update'])->name('facilities.update');
-    Route::delete('/facilities/{id}',  [FacilityController::class,'destroy'])->name('facilities.destroy');
+    Route::match(['put','patch'], '/facilities/{facility}', [FacilityController::class,'update'])->name('facilities.update');
+    Route::delete('/facilities/{facility}',  [FacilityController::class,'destroy'])->name('facilities.destroy');
 });
     // ==============================
     // ROUTE DASHBOARD (harus auth + verified)

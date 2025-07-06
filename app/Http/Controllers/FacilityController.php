@@ -25,17 +25,21 @@ class FacilityController extends Controller
             'status' => 'required|in:active,inactive',
         ]);
 
-        Facility::create($data);
+        $facility = Facility::create($data);
 
+        if ($request->ajax()) {
+            return response()->json(['message' => 'Facility created successfully']);
+        }
+                
         return redirect()
             ->route('facilities.index')
             ->with('success','Facility created.');
     }
 
-    public function edit(Facility $facility)
-    {
-        return view('facilities.edit', compact('facility'));
-    }
+    // public function edit(Facility $facility)
+    // {
+    //     return view('facilities.edit', compact('facility'));
+    // }
 
     public function update(Request $request, Facility $facility)
     {
@@ -46,14 +50,23 @@ class FacilityController extends Controller
 
         $facility->update($data);
 
+        if ($request->ajax()) {
+            return response()->json(['message' => 'Facility updated successfully']);
+        }
+
         return redirect()
             ->route('facilities.index')
             ->with('success','Facility updated.');
     }
 
-    public function destroy(Facility $facility)
+    public function destroy(Request $request, Facility $facility)
     {
         $facility->delete();
+
+        if ($request->ajax()) {
+            return response()->json(['message' => 'Facility deleted successfully']);
+        }
+
         return redirect()
             ->route('facilities.index')
             ->with('success','Facility deleted.');
