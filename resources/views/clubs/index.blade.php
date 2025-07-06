@@ -187,9 +187,9 @@ $(function(){
   });
 
   // Data from server
-  const STATES        = @json($states);
-  const FACILITY_NAMES= @json($facilityNames);
-  const DISTRICTS_URL = "{{ url('api/districts') }}";
+  const STATES       = @json($states);
+  const FACILITIES   = @json($facilityNames);
+  const DISTRICTS_URL= "{{ url('api/districts') }}";
 
   const $modal     = $('#clubModal');
   const $form      = $('#clubForm');
@@ -199,13 +199,11 @@ $(function(){
   const updateUrl  = "{{ url('clubs') }}";
 
   // 1) Init DataTable
-  new simpleDatatables.DataTable("#datatable-search", {
-    searchable:true, fixedHeight:true
-  });
+  new simpleDatatables.DataTable("#datatable-search", { searchable:true, fixedHeight:true });
 
   // 2) Add Facility
   $('#add-facility').click(function(){
-    let options = FACILITY_NAMES.map(f=>
+    let options = FACILITIES.map(f=>
       `<option value="${f.id}">${f.name}</option>`
     ).join('');
     $('#facilities-container').append(`
@@ -227,178 +225,157 @@ $(function(){
     $(this).closest('.facility-entry').remove();
   });
 
-    // Populate the State <select> on modal show
+  // Load states dropdown
   function loadStates(selected=null) {
     let html = '<option value="">Select State</option>';
-    STATES.forEach(s => {
+    STATES.forEach(s=>{
       html += `<option value="${s.id_state}"${s.id_state==selected?' selected':''}>${s.state_name}</option>`;
     });
     $('#state').html(html);
   }
 
-  // 3) State → District AJAX
-  $('#state').change(function(){
-    let sid = this.value;
-    if(!sid){
-      return $('#district').html('<option value="">Select State First</option>');
+  // Load districts and optionally select
+  function loadDistricts(stateId, selectedDist=null) {
+    const $ddl = $('#district');
+    if (!stateId) {
+      return $ddl.html('<option value="">Select State First</option>');
     }
-    fetch(`${DISTRICTS_URL}/${sid}`)
+    fetch(`${DISTRICTS_URL}/${stateId}`)
       .then(r=>r.json())
       .then(list=>{
-        let opts = '<option value="">Select District</option>';
+        let html = '<option value="">Select District</option>';
         list.forEach(d=>{
-          opts += `<option value="${d.id_district}">${d.district_name}</option>`;
+          html += `<option value="${d.id_district}">${d.district_name}</option>`;
         });
-        $('#district').html(opts);
+        $ddl.html(html);
+        if(selectedDist) $ddl.val(selectedDist);
+      })
+      .catch(()=> $ddl.html('<option value="">Error loading</option>'));
+  }
+
+  // bind change for add-mode
+  $('#state').change(()=> loadDistricts($('#state').val()));
+
+  // Modal show handler
+  $modal.on('show.bs.modal', function(e) {
+    const btn  = $(e.relatedTarget);
+    const mode = btn.data('mode');   // 'add' | 'edit' | 'view'
+    const id   = btn.data('id');
+
+    // reset form state
+    $form.trigger('reset');
+    $('#facilities-container').empty();
+    $form.find('input,textarea,select').prop('disabled', false);
+    $('#add-facility').show();
+    $submitBtn.show().prop('disabled', false);
+    $form.find('.is-invalid').removeClass('is-invalid').next('.invalid-feedback').remove();
+
+    if (mode === 'add') {
+      $modal.find('.modal-title').text('Add Club');
+      $submitBtn.text('Add Club');
+      loadStates();
+      $('#district').html('<option value="">Select State First</option>');
+    }
+    else {
+      $submitBtn.prop('disabled', true);
+      $.getJSON(`${baseUrl}/${id}`, function(res) {
+        const c = res.club;
+        $form.find('[name="id_club"]').val(c.id_club);
+        $form.find('[name="club_name"]').val(c.club_name);
+        $form.find('[name="email"]').val(c.email);
+        $form.find('[name="phone"]').val(c.phone);
+        $form.find('[name="address"]').val(c.address);
+        $form.find('[name="postcode"]').val(c.postcode);
+
+        // state & district
+        $('#state').val(c.state_id);
+        loadDistricts(c.state_id, c.district_id);
+
+        // facilities
+        res.facilities.forEach(fac => {
+          const options = FACILITIES.map(f =>
+            `<option value="${f.id}"${f.id==fac.facility_id?' selected':''}>${f.name}</option>`
+          ).join('');
+          $('#facilities-container').append(`
+            <div class="facility-entry mb-2 d-flex align-items-center">
+              <select name="facilities[][facility_id]" class="form-select me-2" required>
+                <option value="">Select Facility</option>${options}
+              </select>
+              <input name="facilities[][quantity]" type="number" min="1"
+                     class="form-control me-2" style="width:100px"
+                     value="${fac.quantity}" required>
+              <button type="button" class="btn btn-sm btn-outline-danger remove-facility">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          `);
+        });
+      })
+      .fail(() => alert('Failed to load club data'))
+      .always(() => {
+        if (mode === 'view') {
+          $modal.find('.modal-title').text('View Club');
+          $form.find('input,textarea,select').prop('disabled', true);
+          $('#add-facility,.remove-facility').hide();
+          $submitBtn.hide();
+        } else {
+          $modal.find('.modal-title').text('Edit Club');
+          $submitBtn.text('Save Changes').prop('disabled', false);
+        }
       });
+    }
   });
 
-$modal.on('show.bs.modal', function(e) {
-  const btn  = $(e.relatedTarget);
-  const mode = btn.data('mode');   // 'add' | 'edit' | 'view'
-  const id   = btn.data('id');
-
-  // reset form state
-  $form.trigger('reset');
-  $('#facilities-container').empty();
-  $form.find('input,textarea,select').prop('disabled', false);
-  $('#add-facility').show();
-  $submitBtn.show().prop('disabled', false);
-  $form.find('.is-invalid').removeClass('is-invalid').next('.invalid-feedback').remove();
-
-  // always reset modal title
-  if (mode === 'add') {
-    $modal.find('.modal-title').text('Add Club');
-    $submitBtn.text('Add Club');
-    loadStates();  // repopulate states
-  }
-  else {
-    // fetch club data
-    $submitBtn.prop('disabled', true);
-    $.getJSON(`${baseUrl}/${id}`, function(res) {
-      const c = res.club;
-      // populate fields
-      $form.find('[name="id_club"]').val(c.id_club);
-      $form.find('[name="club_name"]').val(c.club_name);
-      $form.find('[name="email"]').val(c.email);
-      $form.find('[name="phone"]').val(c.phone);
-      $form.find('[name="address"]').val(c.address);
-      $form.find('[name="postcode"]').val(c.postcode);
-
-      // state & district
-      $('#state').val(c.state_id).trigger('change');
-      setTimeout(() => $('#district').val(c.district_id), 300);
-
-      // facilities
-      res.facilities.forEach(fac => {
-        const options = FACILITIES.map(f =>
-          `<option value="${f.id}"${f.id == fac.facility_id ? ' selected' : ''}>${f.name}</option>`
-        ).join('');
-        $('#facilities-container').append(`
-          <div class="facility-entry mb-2 d-flex align-items-center">
-            <select name="facilities[][facility_id]" class="form-select me-2" required>
-              <option value="">Select Facility</option>${options}
-            </select>
-            <input name="facilities[][quantity]" type="number" min="1"
-                   class="form-control me-2" style="width:100px"
-                   value="${fac.quantity}" required>
-            <button type="button" class="btn btn-sm btn-outline-danger remove-facility">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
-        `);
-      });
-    })
-    .fail(() => alert('Failed to load club data'))
-    .always(() => {
-      // adjust UI depending on mode
-      if (mode === 'view') {
-        $modal.find('.modal-title').text('View Club');
-        // disable all inputs
-        $form.find('input,textarea,select').prop('disabled', true);
-        $('#add-facility,.remove-facility').hide();
-        $submitBtn.hide();
-      } else {
-        $modal.find('.modal-title').text('Edit Club');
-        $submitBtn.text('Save Changes').prop('disabled', false);
-      }
-    });
-  }
-});
-
-
-  // 5) Form submit AJAX
+  // Form submit AJAX
   $form.submit(function(ev){
     ev.preventDefault();
-    let id   = $form.find('[name="id_club"]').val(),
-        isEd = Boolean(id),
-        url  = isEd ? `${updateUrl}/${id}` : storeUrl,
+    let id    = $form.find('[name="id_club"]').val(),
+        isEd  = Boolean(id),
+        url   = isEd ? `${updateUrl}/${id}` : storeUrl,
         payload = {
           club_name: $form.find('[name="club_name"]').val(),
           email:     $form.find('[name="email"]').val(),
           phone:     $form.find('[name="phone"]').val(),
           address:   $form.find('[name="address"]').val(),
           postcode:  $form.find('[name="postcode"]').val(),
-          state_id:  $form.find('[name="state_id"],[name="state"]').val(),
-          district_id:$form.find('[name="district_id"],[name="district"]').val(),
+          state_id:  $form.find('[name="state_id"]').val(),
+          district_id:$form.find('[name="district_id"]').val(),
           facilities:[]
         };
 
     $('.facility-entry').each(function(){
-      let id = $(this).find('select').val(),
-          qty  = $(this).find('input').val();
-      if(id && qty) payload.facilities.push({facility_id:id,quantity:qty});
+      let fid = $(this).find('select').val(),
+          qty = $(this).find('input').val();
+      if(fid && qty) payload.facilities.push({facility_id:fid,quantity:qty});
     });
 
     $submitBtn.prop('disabled',true).text('Saving...');
     $.ajax({
-      url, method:'POST',
-      data: isEd?{...payload,_method:'PUT'}:payload,
-        success(res) {
-        if (res.success) {
-            // show a green “success” popup with your message
-            Swal.fire({
-            icon: 'success',
-            title: res.message || (isEd ? 'Club updated!' : 'New club added!'),
-            showConfirmButton: false,
-            timer: 1500
-            }).then(() => {
-            // only after the toast disappears do we hide & reload
-            $modal.modal('hide');
-            location.reload();
-            });
-        } else {
-            Swal.fire('Oops', res.message || 'Something went wrong', 'error');
-        }
-        },
+      url, method:'POST', data: isEd?{...payload,_method:'PUT'}:payload,
+      success(res) {
+        Swal.fire({ icon:'success', title: res.message|| (isEd?'Club updated':'Club added'), showConfirmButton:false, timer:1500 })
+          .then(()=>{ $modal.modal('hide'); location.reload(); });
+      },
       error(xhr){
         if(xhr.status===422){
           let errs = xhr.responseJSON.errors;
           Object.keys(errs).forEach(k=>{
             let el = $form.find(`[name="${k}"]`);
-            if(el.length){
-              el.addClass('is-invalid')
-                .after(`<div class="invalid-feedback">${errs[k][0]}</div>`);
-            }
+            if(el.length){ el.addClass('is-invalid').after(`<div class="invalid-feedback">${errs[k][0]}</div>`); }
           });
-        } else alert('Error occurred');
+        } else Swal.fire('Error','Something went wrong','error');
       },
       complete(){
         $submitBtn.prop('disabled',false).text(isEd?'Save Changes':'Add Club');
       }
-
-
-      
     });
   });
 
-  // 6) Delete handler
+  // Delete handler
   $(document).on('click','.btn-delete',function(){
     if(!confirm('Delete this club?')) return;
     let id = $(this).data('id');
-    $.post(`${baseUrl}/${id}`,{_method:'DELETE'},()=>{
-      location.reload();
-    });
+    $.post(`${baseUrl}/${id}`,{_method:'DELETE'},()=> location.reload());
   });
 });
 </script>
