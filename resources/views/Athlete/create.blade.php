@@ -145,7 +145,7 @@
               <div class="col-md-6 mb-3">
                 <label class="form-label required">Nationality</label>
                 <select name="citizens" class="form-select select2">
-                  <option value="">-- Select Country --</option>
+                  <option value="">-- Select Nationality --</option>
                   @foreach($nationalities as $id=>$name)
                     <option value="{{ $id }}" {{ old('citizens')==$id?'selected':'' }}>{{ $name }}</option>
                   @endforeach
@@ -166,7 +166,7 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label class="form-label required">State</label>
-                <select id="schA_state" name="sch_state" class="form-select select2">
+                <select id="schA_state" name="sch_state" class="form-select">
                   <option value="">-- Select State --</option>
                   @foreach($states as $id=>$nm)
                     <option value="{{ $id }}" {{ old('sch_state')==$id?'selected':'' }}>{{ $nm }}</option>
@@ -176,7 +176,7 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label class="form-label required">District</label>
-                <select id="daerahDropdown" name="districts" class="form-select select2">
+                <select id="daerahDropdown" name="districts" class="form-select">
                   <option value="">-- Select District --</option>
                   @foreach($districts as $id=>$nm)
                     <option value="{{ $id }}" {{ old('districts')==$id?'selected':'' }}>{{ $nm }}</option>
@@ -188,7 +188,7 @@
               <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label class="form-label required">T-Shirt Size</label>
-                                            <select class="form-select select2" name="tshirt_size">
+                                            <select class="form-select" name="tshirt_size">
                                                 <option value="">-- Select Size --</option>
                                                 <option value="XS">XS</option>
                                                 <option value="S">S</option>
@@ -230,7 +230,7 @@
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label required">Relation</label>
-                <select name="GuardianRelation" class="form-select select2">
+                <select name="GuardianRelation" class="form-select">
                   <option value="">-- Select Relation --</option>
                   <option value="Parent"   {{ old('GuardianRelation')=='Parent'?'selected':'' }}>Parent</option>
                   <option value="Siblings" {{ old('GuardianRelation')=='Siblings'?'selected':'' }}>Siblings</option>
@@ -250,7 +250,7 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label required">School Name</label>
-                <select id="schoolDropdown" name="schoolDropdown" class="form-select select2">
+                <select id="schoolDropdown" name="schoolDropdown" class="form-select select2" data-placeholder="Search School…">
                   <option value="">-- Select School --</option>
                   @foreach($schools as $id=>$nm)
                     <option value="{{ $id }}" {{ old('schoolDropdown')==$id?'selected':'' }}>{{ $nm }}</option>
@@ -288,7 +288,7 @@
                   <tr>
                     <td><input type="text" name="tournament[]" class="form-control"></td>
                     <td>
-                      <select name="ranking[]" class="form-select select2">
+                      <select name="ranking[]" class="form-select">
                         <option value="">-- Stage --</option>
                         @foreach([1=>'Sekolah',2=>'Daerah/Zon',3=>'Negeri',4=>'Kebangsaan',5=>'Antarabangsa'] as $v=>$lbl)
                           <option value="{{ $v }}">{{ $lbl }}</option>
@@ -296,7 +296,7 @@
                       </select>
                     </td>
                     <td>
-                      <select name="category[]" class="form-select select2">
+                      <select name="category[]" class="form-select">
                         <option value="">-- Category --</option>
                         @foreach(['MS','WS','MD','WD','MXD'] as $c)
                           <option value="{{ $c }}">{{ $c }}</option>
@@ -304,7 +304,7 @@
                       </select>
                     </td>
                     <td>
-                      <select name="achieve[]" class="form-select select2">
+                      <select name="achieve[]" class="form-select">
                         <option value="">-- Achieve --</option>
                         @foreach($achievement as $aid=>$aname)
                           <option value="{{ $aid }}">{{ $aname }}</option>
@@ -390,6 +390,8 @@
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- 2) Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script>
   $(function(){
       // Flash messages
@@ -399,6 +401,13 @@
       @if(session('error'))
         Swal.fire('Error','{{ session('error') }}','error');
       @endif 
+
+    // Initialize Select2 once it’s loaded
+    $('.select2').select2({
+      placeholder: function(){ return $(this).data('placeholder') },
+      allowClear: true,
+      width: '100%'
+    });
 
     // Toggle multiple vs single
     $('#switchMode').on('change', () => {
