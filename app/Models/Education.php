@@ -26,11 +26,8 @@ class Education extends Model
         return $this->morphTo();
     }
 
-    /**
-     * If you want, you can also define a helper to fetch the institution:
-     */
     public function institution()
     {
-        return $this->belongsTo(Institution::class, 'institution_id');
+        return $this->belongsTo(Institution::class,'institution_id','id');
     }
 }
