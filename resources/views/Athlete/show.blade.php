@@ -54,7 +54,7 @@
         <dd class="col-sm-9">{{ ucfirst($detail->race) }}</dd>
 
         <dt class="col-sm-3">Nationality</dt>
-        <dd class="col-sm-9">{{ $detail->nationality->nationality_name ?? '–' }}</dd>
+        <dd class="col-sm-9">{{ $detail->nationalityRelation->nationality_name ?? '–' }}</dd>
 
         <dt class="col-sm-3">Address</dt>
         <dd class="col-sm-9">{{ $detail->address }}</dd>
