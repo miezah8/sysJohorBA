@@ -3,7 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Coach extends Model
 {
@@ -17,11 +17,27 @@ class Coach extends Model
         'user_id',
         'club_id',
         'coach_fname',
-        'coach_lname',
+        //'coach_lname',
         'created_at',
         'modified_on',
     ];
 
+    /**
+     * The coach's personal details linked via user_id
+     */
+    public function userDetail(): HasOne
+    {
+        return $this->hasOne(UserDetail::class, 'user_id', 'user_id');
+    }    
+
+    /**
+     * The user record for this coach
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+    
     public function athletesCoach()
     {
         return $this->hasMany(Athlete::class, 'coach_id', 'id_coach');
@@ -55,4 +71,13 @@ class Coach extends Model
         return $this->morphMany(\App\Models\Education::class, 'educationable');
     }
 
+    public function coachExperience()
+    {
+        return $this->hasMany(CoachExperience::class, 'coach_id', 'id_coach');
+    }
+
+    public function coachCourse()
+    {
+        return $this->hasMany(CoachCourse::class, 'coach_id', 'id_coach');
+    }    
 }

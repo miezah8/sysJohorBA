@@ -220,7 +220,7 @@ class AthleteController extends Controller
             'club',
             'user.detail.state',
             'user.detail.district',
-            'user.detail.nationality',
+            'user.detail.nationalityRelation',
         ]);
 
         return view('athlete.show', compact('athlete'));
