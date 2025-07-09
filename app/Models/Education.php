@@ -10,6 +10,9 @@ class Education extends Model
     protected $primaryKey = 'id_edu';
     public $timestamps = true; // you have created_at & modified_on
 
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'modified_on';
+
     protected $fillable = [
         'institution_id',
         'education_level',

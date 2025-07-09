@@ -10,8 +10,12 @@ use App\Models\Nationality;
 use App\Models\Institution;
 use App\Models\Course;
 use App\Models\CoachCourse;
+use App\Models\CoachExperience;
+use App\Models\Education;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CoachController extends Controller
 {
@@ -44,9 +48,13 @@ class CoachController extends Controller
         $coach->user       = auth()->user();
 
         // provide an “empty” detail so your blade can still do $coach->userDetail->xxx
-        $detail = new UserDetail();
-        $coach->userDetail = $detail;
-
+        $coach->userDetail = new UserDetail();
+       
+        // give Blade one “blank” entry for each repeatable block:
+        $coach->setRelation('educations',       collect([new Education()]));
+        $coach->setRelation('coachExperience',  collect([new CoachExperience()]));
+        $coach->setRelation('coachCourse',      collect([new CoachCourse()]));
+        
         return view('coach.create', compact(
           'states','districts','clubs','coach','nationalities','institution', 'courses'
         ));
@@ -57,11 +65,13 @@ class CoachController extends Controller
      */
     public function edit(Coach $coach)
     {
-        // eager‐load detail (or null)
-        $coach->load('userDetail');
-        if (! $coach->userDetail) {
-            $coach->userDetail = new UserDetail();
-        }
+        // eager‐load everything the edit.blade needs
+        $coach->load([
+        'userDetail',
+        'educations.institution',
+        'coachExperience',
+        'coachCourse.course',
+        ]);
         
         $states         = State::pluck('state_name','id_state');
         $districts      = District::where('state_id',$coach->userDetail->state_id)
@@ -71,7 +81,7 @@ class CoachController extends Controller
         $institution    = Institution::pluck('ipt_name','id');
         $courses = Course::pluck('course_name','id_course');
 
-        return view('coach.create', compact(
+        return view('coach.edit', compact(
           'states','districts','clubs','coach','nationalities','institution', 'courses'
         ));
     }
@@ -85,8 +95,10 @@ class CoachController extends Controller
     /**
      * Store new coach.  Only require `club_id` + `declaration` if they exist (i.e. final step).
      */
+    
     public function store(Request $request)
     {
+        //dd($request->all());
         // 1) base rules (always apply these)
         $rules = [
             'gambar'      => 'nullable|image|max:2048',
@@ -100,7 +112,7 @@ class CoachController extends Controller
             'negeri'      => 'required|exists:state,id_state',
             'daerah'      => 'required|exists:district,id_district',
             'poskod'      => 'required|string|max:10',
-            'jantina'     => 'required|in:Lelaki,Perempuan',
+            'jantina'     => 'required|in:M,F',
             'ethnicity'   => 'required|string|max:50',
             // Academic
             'academic.*.education_level' => 'required|string',
@@ -121,21 +133,25 @@ class CoachController extends Controller
             'qualification.*.accreditation' => 'nullable|string',
             'qualification.*.cert_number'   => 'nullable|string',
             'qualification.*.cert_file'     => 'nullable|file',
+            'club_id'     => 'required|exists:club,id_club',
+            'declaration' => 'accepted',
         ];
 
-        // 2) only if club_id is present in this payload, require it
-        if ($request->has('club_id')) {
-            $rules['club_id'] = 'required|exists:club,id_club';
-        }
+        // // 2) only if club_id is present in this payload, require it
+        // if ($request->has('club_id')) {
+        //     $rules['club_id'] = 'required|exists:club,id_club';
+        // }
 
-        // 3) only if declaration is present, require it
-        if ($request->has('declaration')) {
-            $rules['declaration'] = 'accepted';
-        }
+        // // 3) only if declaration is present, require it
+        // if ($request->has('declaration')) {
+        //     $rules['declaration'] = 'accepted';
+        // }
 
         $data = $request->validate($rules);
 
         try {
+             DB::transaction(function() use($data, $request) {
+
         // 4) create the coach (or fill in the FK on updates if you switch to updateOrCreate)
         $coach = Coach::create([
             'user_id'     => Auth::id(),
@@ -157,7 +173,7 @@ class CoachController extends Controller
             $ip = $request->file('ic_picture')->store('profiles','public');
         }
 
-        // 7) user detail
+        // 7) upsert user detail
         UserDetail::updateOrCreate(
             ['user_id' => Auth::id()],
             [
@@ -169,26 +185,29 @@ class CoachController extends Controller
                 'district_id'     => $data['daerah'],
                 'gender'          => $data['jantina'],
                 'race'            => $data['ethnicity'],
-                'profile_picture' => $pp ?? null,
-                'ic_picture'      => $ip ?? null,
+                'profile_picture' => $pp,
+                'ic_picture'      => $ip,
             ]
         );
 
-        // 8) polymorphic academics
+        // 8) loop academics
+        if (! empty($data['academic'])) {
         foreach($data['academic'] as $acad) {
             $coach->educations()->create([
                 'institution_id'  => $acad['institution_id'],
                 'education_level' => $acad['education_level'],
                 'year'            => $acad['year'],
             ]);
-        }
+        }}
 
         // 9) experiences
+        if (! empty($data['experience'])) {
         foreach($data['experience'] as $exp) {
             $coach->coachExperience()->create($exp);
-        }
+        }}
 
         // 10) qualifications / courses
+        if (! empty($data['qualification'])) {
         foreach($data['qualification'] as $qual) {
             $item = [
                 'course_id'     => $qual['course_id'], 
@@ -201,87 +220,168 @@ class CoachController extends Controller
                 $item['cert_attach'] = $qual['cert_file']->store('certs','public');
             }
             $coach->coachCourse()->create($item);
-        }
+        }}
+
+        });
 
         return redirect()
                 ->route('coach.index')
                 ->with('success','Coach successfully created.');
         
+
         } catch (\Throwable $e) {
-        \Log::error('Coach store failed: '.$e->getMessage());
+             // log the full exception
+            Log::error("Coach::store failed: " . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+
         // send the user back with all their input + an error flash
         return back()
             ->withInput()
-            ->with('error', 'Something went wrong saving your coach: '.$e->getMessage());
+            ->with('error', 'Something went wrong saving your coach:\n\n'.$e->getMessage());
     }
     }
 
 
 
 
-    /**
-     * Update coach personal detail
-     */
-    public function update(Request $request, $id)
-    {
-        $coach = Coach::findOrFail($id);
+/**
+ * Update an existing coach and all its related data.
+ */
+public function update(Request $request, $id)
+{
+    // Fetch coach + existing relationships
+    $coach = Coach::with(['educations','coachExperience','coachCourse'])
+                  ->findOrFail($id);
 
-        $data = $request->validate([
-            'gambar'      => 'nullable|image|max:2048',
-            'nama_penuh'  => 'required|string|max:150',
-            'emel'        => 'required|email|max:255',
-            'no_tel'      => 'required|string|max:20',
-            'nationality' => 'required|string|max:100',
-            'no_kad'      => 'required|string|max:50',
-            'alamat'      => 'required|string',
-            'negeri'      => 'required|exists:state,id_state',
-            'daerah'      => 'required|exists:district,id_district',
-            'poskod'      => 'required|string|max:10',
-            'jantina'     => 'required|in:Lelaki,Perempuan',
-            'ethnicity'   => 'required|string|max:50',
-            'club_id'     => 'nullable|integer',
-            'coach_fname' => 'nullable|string|max:150',
-            'coach_lname' => 'nullable|string|max:150',
-        ]);
+    // 1) Validation rules (same as store)
+    $rules = [
+        'gambar'      => 'nullable|image|max:2048',
+        'ic_picture'  => 'nullable|image|max:2048',
+        'nama_penuh'  => 'required|string|max:150',
+        'emel'        => 'required|email|max:255',
+        'no_tel'      => 'required|string|max:20',
+        'nationality' => 'required|string|max:100',
+        'no_kad'      => 'required|string|max:50',
+        'alamat'      => 'required|string',
+        'negeri'      => 'required|exists:state,id_state',
+        'daerah'      => 'required|exists:district,id_district',
+        'poskod'      => 'required|string|max:10',
+        'jantina'     => 'required|in:M,F',
+        'ethnicity'   => 'required|string|max:50',
+        // Academic
+        'academic.*.education_level' => 'required|string',
+        'academic.*.institution_id'  => 'required|exists:ipt_list,id',
+        'academic.*.year'            => 'required|digits:4',
+        // Experience
+        'experience.*.activity'     => 'required|string',
+        'experience.*.position'     => 'nullable|string',
+        'experience.*.level'        => 'nullable|string',
+        'experience.*.organized_by' => 'nullable|string',
+        'experience.*.start_date'   => 'nullable|date',
+        'experience.*.end_date'     => 'nullable|date|after_or_equal:experience.*.start_date',
+        // Qualification / Courses
+        'qualification.*.course_id'    => 'required|exists:course,id_course',
+        'qualification.*.level'        => 'nullable|string',
+        'qualification.*.pass_date'    => 'nullable|date',
+        'qualification.*.accreditation'=> 'nullable|string',
+        'qualification.*.cert_number'  => 'nullable|string',
+        'qualification.*.cert_file'    => 'nullable|file',
+        // Club & declaration are only on final tab
+        'club_id'     => 'required|exists:club,id_club',
+        'declaration' => 'accepted',
+    ];
 
-        // update coach record
+    $data = $request->validate($rules);
+
+    DB::transaction(function() use ($coach, $data, $request) {
+        // 2) update coach, userDetail, wipe & recreate academics/experiences
         $coach->update([
-            'club_id'    => $data['club_id']    ?? $coach->club_id,
-            'coach_fname'=> $data['coach_fname'] ?? $coach->coach_fname,
-            'coach_lname'=> $data['coach_lname'] ?? $coach->coach_lname,
+            'club_id'     => $data['club_id'],
+            'coach_fname' => $data['nama_penuh'],
         ]);
 
-        // update user email & phone
+        // 3) Update user email & phone
         $coach->user->update([
             'email'      => $data['emel'],
             'contact_no' => $data['no_tel'],
         ]);
 
-        // new picture?
+        // 4) Store uploaded files
         if ($request->hasFile('gambar')) {
-            $path = $request->file('gambar')
-                            ->store('coaches','public');
+            $pic = $request->file('gambar')->store('profiles','public');
+        }
+        if ($request->hasFile('ic_picture')) {
+            $ic  = $request->file('ic_picture')->store('profiles','public');
         }
 
-        // update personal detail
+        // 5) Update or create user detail
         UserDetail::updateOrCreate(
             ['user_id' => $coach->user_id],
             [
-                'ic_no'          => $data['no_kad'],
-                'nationality'    => $data['nationality'],
-                'address'        => $data['alamat'],
-                'postcode'       => $data['poskod'],
-                'state_id'       => $data['negeri'],
-                'district_id'    => $data['daerah'],
-                'gender'         => $data['jantina'],
-                'race'           => $data['ethnicity'],
-                'profile_picture'=> $path ?? null,
+                'ic_no'           => $data['no_kad'],
+                'nationality'     => $data['nationality'],
+                'address'         => $data['alamat'],
+                'postcode'        => $data['poskod'],
+                'state_id'        => $data['negeri'],
+                'district_id'     => $data['daerah'],
+                'gender'          => $data['jantina'],
+                'race'            => $data['ethnicity'],
+                'profile_picture' => $pic ?? null,
+                'ic_picture'      => $ic  ?? null,
             ]
         );
 
-        // JSON for your AJAX
-        return response()->json(['message' => 'Personal info updated']);
-    }
+        // 6) Wipe & re-create all academics
+        $coach->educations()->delete();
+        foreach ($data['academic'] as $acad) {
+            $coach->educations()->create([
+                'institution_id'  => $acad['institution_id'],
+                'education_level' => $acad['education_level'],
+                'year'            => $acad['year'],
+            ]);
+        }
+
+        // 7) Wipe & re-create all experiences
+        $coach->coachExperience()->delete();
+        foreach ($data['experience'] as $exp) {
+            $coach->coachExperience()->create($exp);
+        }
+
+        // 8) courses/certifications
+        foreach ($data['qualification'] as $i => $qual) {
+        // 1) store new file if uploaded
+        if ($request->hasFile("qualification.{$i}.cert_file")) {
+            $path = $request
+                    ->file("qualification.{$i}.cert_file")
+                    ->store('certs','public');
+        }
+        // 2) else reuse the hidden field
+        elseif (! empty($qual['existing_cert_attach'])) {
+            $path = $qual['existing_cert_attach'];
+        }
+        // 3) finally fallback to empty string (never null)
+        else {
+            $path = '';
+        }
+
+        $coach->coachCourse()->create([
+          'course_id'    => $qual['course_id'],
+          'course_level' => $qual['level']         ?? null,
+          'pass_date'    => $qual['pass_date']     ?? null,
+          'recognition'  => $qual['accreditation'] ?? null,
+          'cert_siri'    => $qual['cert_number']   ?? null,
+          'cert_attach'  => $path,
+        ]);
+      }
+    });
+
+    return redirect()
+           ->route('coach.index')
+           ->with('success','Coach updated successfully.');
+}
+
+
 
     public function show(Coach $coach)
 {

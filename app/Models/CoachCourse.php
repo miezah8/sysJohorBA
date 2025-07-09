@@ -22,6 +22,8 @@ class CoachCourse extends Model
 
     public function course()
     {
-        return $this->hasMany(CoachCourse::class,'course_id','id_course');
-    }   
+        return $this->belongsTo(\App\Models\Course::class,
+                               'course_id',   // FK on coach_course
+                               'id_course');  // PK on course
+    }  
 }

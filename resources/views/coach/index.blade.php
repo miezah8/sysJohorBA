@@ -35,10 +35,16 @@
                                 <i class="fa-solid fa-eye me-1"></i> View
                                 </a>
 
-                                <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#coachModal"
+                                {{-- Edit button --}}
+                                <a href="{{ route('coach.edit',$coach->id_coach) }}"
+                                class="btn btn-outline-info">
+                                <i class="fa-solid fa-eye me-1"></i> Edit
+                                </a>
+
+                                {{-- <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#coachModal"
                                     data-mode="edit" data-id="{{ $coach->id_coach }}">
                                     <i class="fa-solid fa-pen-to-square me-1"></i> Edit
-                                </button>
+                                </button> --}}
                                 {{-- <button class="btn btn-outline-danger btn-delete" data-id="{{ $coach->id_coach }}">
                                     <i class="fa-solid fa-trash me-1"></i> Delete
                                 </button> --}}
