@@ -15,7 +15,7 @@
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
-                        <th>Club Name</th>
+                        <th>Coach Name</th>
                         <th>Total Player</th>
                         <th>Action</th>
                     </tr>
@@ -29,6 +29,12 @@
                                     href="{{ route('coach.players', $coach->id_coach) }}">{{ $coach->athletes_coach_count }}</a>
                             </td>
                             <td>
+                                {{-- View button --}}
+                                <a href="{{ route('coach.show',$coach->id_coach) }}"
+                                class="btn btn-outline-info">
+                                <i class="fa-solid fa-eye me-1"></i> View
+                                </a>
+
                                 <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#coachModal"
                                     data-mode="edit" data-id="{{ $coach->id_coach }}">
                                     <i class="fa-solid fa-pen-to-square me-1"></i> Edit
@@ -36,6 +42,10 @@
                                 {{-- <button class="btn btn-outline-danger btn-delete" data-id="{{ $coach->id_coach }}">
                                     <i class="fa-solid fa-trash me-1"></i> Delete
                                 </button> --}}
+                                
+                
+
+
                             </td>
                         </tr>
                     @endforeach

@@ -182,6 +182,19 @@ Route::middleware('auth')->group(function(){
     // Modul: Coach (jika terpisah)
     // Permissions: view coach, add coach, edit coach, delete coach
     // ------------------------------
+    Route::middleware('auth')->group(function(){
+    // resource routes for coach
+    Route::resource('coach', CoachController::class)
+         ->except(['show']);
+
+    Route::get('/coach/create',               [CoachController::class,'create'])->name('coach.create');
+    Route::post('/coach',                     [CoachController::class,'store'  ])->name('coach.store');
+    // helper endpoint for AJAX-loading districts by state
+    Route::get('/coach/districts/{stateId}',  [CoachController::class,'districtsByState'])->name('coach.districts');
+    Route::get('/coach/{coach}', [CoachController::class, 'show'])->name('coach.show');
+    
+    });
+    
     Route::middleware('permission:view coach')->group(function() {
         Route::get('/coach',            [CoachController::class, 'index'])->name('coach.index');
         // Route::get('/coach/{coach}',    [CoachController::class, 'show'])->name('coach.show');
@@ -196,11 +209,11 @@ Route::middleware('auth')->group(function(){
     //     Route::put('/coach/{coach}',     [CoachController::class, 'update'])->name('coach.update');
     // });
     Route::middleware('permission:add coach')->group(function() {
-        Route::get('/coach/add', [CoachController::class, 'form'])->name('coach.create');
+        //Route::get('/coach/add', [CoachController::class, 'form'])->name('coach.create');
         Route::post('/coach',           [CoachController::class, 'store'])->name('coach.store');
     });
     Route::middleware('permission:edit coach')->group(function() {
-        Route::get('/coach/{id}/edit', [CoachController::class, 'form'])->name('coach.edit');
+        //Route::get('/coach/{id}/edit', [CoachController::class, 'form'])->name('coach.edit');
         Route::put('/coach/{coach}',     [CoachController::class, 'update'])->name('coach.update');
     });
     Route::middleware('permission:delete coach')->group(function() {
