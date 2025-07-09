@@ -413,13 +413,32 @@
           {{-- QUALIFICATION --}}
           <div class="tab-pane fade" id="qualification" role="tabpanel">
             <div class="table-responsive mb-3">
+              <template id="qualification-row-template">
+                <tr>
+                  <td>
+                    <select name="qualification[INDEX][course_id]" …>
+                      <option value=""></option>
+                      @foreach($courses as $cid => $cname)
+                        <option value="{{ $cid }}">{{ $cname }}</option>
+                      @endforeach
+                    </select>
+                  </td>
+                  <!-- …and so on for level, pass_date, accreditation, cert_number, cert_file… -->
+                  <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-outline-danger btnRemoveQualification">×</button>
+                  </td>
+                </tr>
+              </template>
+              
               <table class="table" id="qualificationTable">
+               
                 <thead>
                   <tr>
                     <th>Course</th><th>Level</th><th>Date Passed</th><th>Accreditation</th><th>Cert No.</th><th>Upload</th><th></th>
                   </tr>
                 </thead>
                 <tbody>
+                   
                   @if(count($quals))
                     @foreach($quals as $i => $q)
                       <tr>
@@ -497,12 +516,15 @@
                       <td><input type="text" name="qualification[0][cert_number]"   class="form-control"></td>
                       <td><input type="file" name="qualification[0][cert_file]"     class="form-control"></td>
                       <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-outline-danger btnRemoveQualification">×</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger btnRemoveQualification">X</button>
                       </td>
                     </tr>
                   @endif
+                  
                 </tbody>
-              </table>
+                 
+               </table>
+             
               <button type="button" id="btnAddQualification" class="btn btn-sm btn-outline-primary mb-3">
                 <i class="fa-solid fa-plus"></i> Add Certification
               </button>
@@ -586,28 +608,45 @@
     if($('#state_id').val()) $('#state_id').trigger('change');
 
     // repeater helper
-    function repeater(btn, tbl, removeCls){
-      $(btn).on('click',_=>{
-        let $first = $(`${tbl} tbody tr:first`),
-            idx = $(`${tbl} tbody tr`).length,
-            $row = $first.clone();
-        $row.find('input,select').each(function(){
-          let nm = $(this).attr('name').replace(/\[\d+\]/,`[${idx}]`);
-          $(this).attr('name',nm).val('');
-        });
-        $row.find('select.select2').each(function(){
-          $(this).next().remove();
-          $(this).select2({ placeholder:$(this).data('placeholder'),allowClear:true,width:'100%' });
-        });
-        $(`${tbl} tbody`).append($row);
-      });
-      $(document).on('click',removeCls,function(){
-        if($(`${tbl} tbody tr`).length>1) $(this).closest('tr').remove();
-      });
+function repeater(btn, table, removeClass, templateId) {
+  const tpl = $(templateId).html();
+
+  // adding new row
+  $(btn).on('click', function(e){
+    e.preventDefault();
+    let idx = $(`${table} tbody tr`).length;        // e.g. 0, 1, 2…
+    let rowHtml = tpl.replace(/INDEX/g, idx);       // bump all names to [0], [1], [2], etc.
+    let $row = $(rowHtml);
+
+    // init select2 on new row
+    $row.find('select.select2').select2({
+      placeholder: function(){ return $(this).data('placeholder') },
+      allowClear: true,
+      width: '100%'
+    });
+
+    // append it
+    $(`${table} tbody`).append($row);
+  });
+
+  // removing a row
+  $(document).on('click', removeClass, function(e){
+    e.preventDefault();
+    e.stopPropagation();
+
+    let $rows = $(`${table} tbody tr`);
+    if ($rows.length > 1) {
+      $(this).closest('tr').remove();
+    } else {
+      // if you only want to clear the last row rather than remove it:
+      $(this).closest('tr').find('input,select').val('');
     }
+  });
+}
     repeater('#btnAddAcademic','#academicTable','.btnRemoveAcademic');
     repeater('#btnAddExperience','#experienceTable','.btnRemoveExperience');
-    repeater('#btnAddQualification','#qualificationTable','.btnRemoveQualification');
+    repeater('#btnAddQualification','#qualificationTable','.btnRemoveQualification', '#qualification-row-template');
+    
 
     // Next/Prev
     $(document).on('click','button[data-next]',function(){

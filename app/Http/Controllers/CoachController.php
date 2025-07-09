@@ -67,10 +67,15 @@ class CoachController extends Controller
     {
         // eager‐load everything the edit.blade needs
         $coach->load([
-        'userDetail',
-        'educations.institution',
-        'coachExperience',
-        'coachCourse.course',
+        'user',                            // email & contact_no
+        'userDetail',                      // ic_no, address, etc.
+        'userDetail.state',                // state_name
+        'userDetail.district',             // district_name
+        'userDetail.nationalityRelation',  // nationality_name
+        'educations.institution',          // for Academic tab
+        'coachExperience',                 // for Experience tab
+        'coachCourse.course',              // for Qualification tab
+        'club',                            // for Club Info tab
         ]);
         
         $states         = State::pluck('state_name','id_state');
@@ -79,7 +84,7 @@ class CoachController extends Controller
         $clubs          = Club::pluck('club_name','id_club');
         $nationalities  = Nationality::pluck('nationality_name','id_nationality');
         $institution    = Institution::pluck('ipt_name','id');
-        $courses = Course::pluck('course_name','id_course');
+        $courses        = Course::pluck('course_name','id_course');
 
         return view('coach.edit', compact(
           'states','districts','clubs','coach','nationalities','institution', 'courses'
