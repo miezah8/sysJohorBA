@@ -21,6 +21,18 @@
     </div>
     <div class="card-body">
 
+      {{-- 1) GLOBAL ERROR SUMMARY --}}
+      @if($errors->any())
+        <div class="alert alert-danger">
+          <strong>There were some problems with your input:</strong>
+          <ul class="mb-0">
+            @foreach($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+      @endif
+
       <form
         id="coachForm"
         action="{{ $editing
@@ -32,12 +44,9 @@
       >
         @csrf
         @if($editing) @method('PUT') @endif
-
-        {{-- keep track of the coach ID so edit knows when to PUT vs POST --}}
         <input
           type="hidden"
           name="id_coach"
-          id="id_coach"
           value="{{ $coach->id_coach ?? '' }}"
         >
 
@@ -54,11 +63,9 @@
             <li class="nav-item" role="presentation">
               <button
                 class="nav-link {{ $loop->first ? 'active' : '' }}"
-                id="tab-{{ $id }}"
                 data-bs-toggle="tab"
                 data-bs-target="#{{ $id }}"
                 type="button"
-                role="tab"
               >{{ $label }}</button>
             </li>
           @endforeach
@@ -67,12 +74,7 @@
         <div class="tab-content">
 
           {{-- 1) Personal Info --}}
-          <div
-            class="tab-pane fade show active"
-            id="personal"
-            role="tabpanel"
-            aria-labelledby="tab-personal"
-          >
+          <div class="tab-pane fade show active" id="personal" role="tabpanel">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="gambar" class="form-label">Profile Image</label>
@@ -87,7 +89,6 @@
                   <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
               </div>
-
               <div class="col-md-6 mb-3">
                 <label for="nama_penuh" class="form-label">Full Name *</label>
                 <input
@@ -119,7 +120,6 @@
                   <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
               </div>
-
               <div class="col-md-6 mb-3">
                 <label for="no_tel" class="form-label">Phone No. *</label>
                 <input
@@ -151,7 +151,6 @@
                   <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
               </div>
-
               <div class="col-md-6 mb-3">
                 <label for="ic_picture" class="form-label">Upload IC/Passport *</label>
                 <input
@@ -178,18 +177,17 @@
                   required
                 >
                   <option value="">Please select</option>
-                  {{-- If you want Malaysia first --}}
                   @if($nationalities->contains('Malaysia'))
                     <option
                       value="{{ $nationalities->search('Malaysia') }}"
-                      {{ old('nationality') == $nationalities->search('Malaysia') ? 'selected' : '' }}
+                      {{ old('nationality') == $nationalities->search('Malaysia') ? 'selected':'' }}
                     >Malaysia</option>
                   @endif
                   @foreach($nationalities as $nid => $nname)
-                    @if($nname !== 'Malaysia')
+                    @if($nname!=='Malaysia')
                       <option
                         value="{{ $nid }}"
-                        {{ old('nationality', optional($coach->userDetail)->nationality) == $nid ? 'selected' : '' }}
+                        {{ old('nationality', optional($coach->userDetail)->nationality) == $nid ? 'selected':'' }}
                       >{{ $nname }}</option>
                     @endif
                   @endforeach
@@ -198,7 +196,6 @@
                   <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
               </div>
-
               <div class="col-md-6 mb-3">
                 <label for="alamat" class="form-label">Address *</label>
                 <textarea
@@ -227,7 +224,7 @@
                   @foreach($states as $sid=>$sname)
                     <option
                       value="{{ $sid }}"
-                      {{ old('negeri', optional($coach->userDetail)->state_id) == $sid ? 'selected':'' }}
+                      {{ old('negeri', optional($coach->userDetail)->state_id)==$sid?'selected':'' }}
                     >{{ $sname }}</option>
                   @endforeach
                 </select>
@@ -235,7 +232,6 @@
                   <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
               </div>
-
               <div class="col-md-4 mb-3">
                 <label for="district_id" class="form-label">District *</label>
                 <select
@@ -245,13 +241,11 @@
                   required
                 >
                   <option value="">Please select state first</option>
-                  {{-- AJAX will replace --}}
                 </select>
                 @error('daerah')
                   <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
               </div>
-
               <div class="col-md-4 mb-3">
                 <label for="poskod" class="form-label">Postcode *</label>
                 <input
@@ -279,7 +273,7 @@
                       name="jantina"
                       id="jantina_{{ $val }}"
                       value="{{ $val }}"
-                      {{ old('jantina', optional($coach->userDetail)->gender) == $val ? 'checked':'' }}
+                      {{ old('jantina', optional($coach->userDetail)->gender)==$val?'checked':'' }}
                       required
                     >
                     <label class="form-check-label" for="jantina_{{ $val }}">{{ $lbl }}</label>
@@ -289,7 +283,6 @@
                   <div class="text-danger">{{ $message }}</div>
                 @enderror
               </div>
-
               <div class="col-md-4">
                 <label for="ethnicity" class="form-label">Race *</label>
                 <select
@@ -302,7 +295,7 @@
                   @foreach(['Malay','Chinese','Indian','Other'] as $race)
                     <option
                       value="{{ $race }}"
-                      {{ old('ethnicity', optional($coach->userDetail)->race) == $race ? 'selected':'' }}
+                      {{ old('ethnicity', optional($coach->userDetail)->race)==$race?'selected':'' }}
                     >{{ $race }}</option>
                   @endforeach
                 </select>
@@ -313,17 +306,12 @@
             </div>
 
             <div class="text-end mb-4">
-              <button
-                type="button"
-                class="btn btn-primary"
-                data-next="academic"
-              >Next</button>
+              <button type="button" class="btn btn-primary" data-next="academic">Next</button>
             </div>
           </div>{{-- /personal --}}
 
-
           {{-- 2) Academic --}}
-          <div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="tab-academic">
+          <div class="tab-pane fade" id="academic" role="tabpanel">
             <div class="table-responsive mb-3">
               <table class="table" id="academicTable">
                 <thead>
@@ -340,15 +328,18 @@
                       <input
                         type="text"
                         name="academic[0][education_level]"
-                        class="form-control"
+                        class="form-control @error('academic.0.education_level') is-invalid @enderror"
                         placeholder="e.g. Diploma in Sports Science"
                         required
                       >
+                      @error('academic.0.education_level')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                      @enderror
                     </td>
                     <td>
                       <select
                         name="academic[0][institution_id]"
-                        class="form-select select2"
+                        class="form-select select2 @error('academic.0.institution_id') is-invalid @enderror"
                         data-placeholder="Search institution…"
                         required
                       >
@@ -357,16 +348,22 @@
                           <option value="{{ $iid }}">{{ $iname }}</option>
                         @endforeach
                       </select>
+                      @error('academic.0.institution_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                      @enderror
                     </td>
                     <td>
                       <input
                         type="text"
                         name="academic[0][year]"
-                        class="form-control"
+                        class="form-control @error('academic.0.year') is-invalid @enderror"
                         placeholder="YYYY"
                         pattern="\d{4}"
                         required
                       >
+                      @error('academic.0.year')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                      @enderror
                     </td>
                     <td class="text-center">
                       <button type="button" class="btn btn-sm btn-outline-danger btnRemoveAcademic">×</button>
@@ -378,16 +375,14 @@
                 + Add Qualification
               </button>
             </div>
-
             <div class="d-flex justify-content-between">
               <button type="button" class="btn btn-secondary" data-next="personal">Prev</button>
               <button type="button" class="btn btn-primary" data-next="experience">Next</button>
             </div>
           </div>{{-- /academic --}}
 
-
           {{-- 3) Experience --}}
-          <div class="tab-pane fade" id="experience" role="tabpanel" aria-labelledby="tab-experience">
+          <div class="tab-pane fade" id="experience" role="tabpanel">
             <div class="table-responsive mb-3">
               <table class="table" id="experienceTable">
                 <thead>
@@ -403,7 +398,17 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td><input type="text" name="experience[0][activity]"   class="form-control" required></td>
+                    <td>
+                      <input
+                        type="text"
+                        name="experience[0][activity]"
+                        class="form-control @error('experience.0.activity') is-invalid @enderror"
+                        required
+                      >
+                      @error('experience.0.activity')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                      @enderror
+                    </td>
                     <td><input type="text" name="experience[0][position]"   class="form-control"></td>
                     <td><input type="text" name="experience[0][level]"      class="form-control"></td>
                     <td><input type="text" name="experience[0][organized_by]"class="form-control"></td>
@@ -419,16 +424,14 @@
                 + Add Experience
               </button>
             </div>
-
             <div class="d-flex justify-content-between">
               <button type="button" class="btn btn-secondary" data-next="academic">Prev</button>
               <button type="button" class="btn btn-primary" data-next="qualification">Next</button>
             </div>
           </div>{{-- /experience --}}
 
-
           {{-- 4) Qualification --}}
-          <div class="tab-pane fade" id="qualification" role="tabpanel" aria-labelledby="tab-qualification">
+          <div class="tab-pane fade" id="qualification" role="tabpanel">
             <div class="table-responsive mb-3">
               <table class="table" id="qualificationTable">
                 <thead>
@@ -437,7 +440,7 @@
                     <th>Level</th>
                     <th>Date Passed</th>
                     <th>Accreditation</th>
-                    <th>Certificate No.</th>
+                    <th>Cert No.</th>
                     <th>Upload Cert.</th>
                     <th></th>
                   </tr>
@@ -447,7 +450,7 @@
                     <td>
                       <select
                         name="qualification[0][course_id]"
-                        class="form-select select2"
+                        class="form-select select2 @error('qualification.0.course_id') is-invalid @enderror"
                         data-placeholder="Search course…"
                         required
                       >
@@ -456,6 +459,9 @@
                           <option value="{{ $cid }}">{{ $cname }}</option>
                         @endforeach
                       </select>
+                      @error('qualification.0.course_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                      @enderror
                     </td>
                     <td>
                       <select name="qualification[0][level]" class="form-select" required>
@@ -479,16 +485,14 @@
                 + Add Certification
               </button>
             </div>
-
             <div class="d-flex justify-content-between">
               <button type="button" class="btn btn-secondary" data-next="experience">Prev</button>
               <button type="button" class="btn btn-primary" data-next="club">Next</button>
             </div>
           </div>{{-- /qualification --}}
 
-
           {{-- 5) Club Info --}}
-          <div class="tab-pane fade" id="club" role="tabpanel" aria-labelledby="tab-club">
+          <div class="tab-pane fade" id="club" role="tabpanel">
             <div class="mb-3">
               <label for="club_id" class="form-label">Select Club *</label>
               <select
@@ -501,32 +505,28 @@
                 @foreach($clubs as $cid=>$cn)
                   <option
                     value="{{ $cid }}"
-                    {{ old('club_id', $coach->club_id) == $cid ? 'selected':'' }}
-                  >
-                    {{ $cn }}
-                  </option>
+                    {{ old('club_id', $coach->club_id)==$cid?'selected':'' }}
+                  >{{ $cn }}</option>
                 @endforeach
               </select>
               @error('club_id')
                 <div class="invalid-feedback">{{ $message }}</div>
               @enderror
             </div>
-
             <div class="d-flex justify-content-between">
               <button type="button" class="btn btn-secondary" data-next="qualification">Prev</button>
               <button type="button" class="btn btn-primary" data-next="declaration">Next</button>
             </div>
           </div>{{-- /club --}}
 
-
           {{-- 6) Declaration --}}
-          <div class="tab-pane fade" id="declaration" role="tabpanel" aria-labelledby="tab-declaration">
+          <div class="tab-pane fade" id="declaration" role="tabpanel">
             <div class="mb-3 form-check">
               <input
-                class="form-check-input @error('declaration') is-invalid @enderror"
                 type="checkbox"
                 name="declaration"
                 id="declaration"
+                class="form-check-input @error('declaration') is-invalid @enderror"
                 {{ old('declaration') ? 'checked':'' }}
                 required
               >
@@ -537,12 +537,11 @@
                 <div class="text-danger">{{ $message }}</div>
               @enderror
             </div>
-
-            <button type="submit" class="btn btn-success">Submit Coach</button>
+            <button type="submit" class="btn btn-success">
+              {{ $editing ? 'Update Coach' : 'Submit Coach' }}
+            </button>
           </div>{{-- /declaration --}}
-
         </div><!-- /.tab-content -->
-
       </form>
     </div><!-- /.card-body -->
   </div><!-- /.card -->
@@ -555,9 +554,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-  $(document).ready(function(){
+  $(function(){
     // Initialize Select2
-    $('.select2').select2({ placeholder: (_, element) => $(element).data('placeholder'), allowClear:true, width:'100%' });
+    $('.select2').select2({ placeholder: (_, el) => $(el).data('placeholder'), allowClear:true, width:'100%' });
 
     // AJAX load districts
     $('#state_id').on('change', function(){
@@ -567,17 +566,17 @@
       $.getJSON(`{{ url('coach/districts') }}/${sid}`)
         .done(list=>{
           let html = '<option value="">Please select</option>';
-          $.each(list,(i,name)=> html += `<option value="${i}">${name}</option>`);
+          $.each(list,(i,name)=> html+=`<option value="${i}">${name}</option>`);
           $dd.html(html).prop('disabled',false);
         })
         .fail(_=> $dd.html('<option>Error loading</option>'));
     });
-    // if old or editing
+    // if editing or old input present
     if($('#state_id').val()) $('#state_id').trigger('change');
 
-    // row repeater
+    // Row repeater helper (same pattern for academic, experience, qualification)
     function repeater(btn, table, removeBtn){
-      $(btn).on('click',function(){
+      $(btn).click(function(){
         let $first = $(`${table} tbody tr:first`),
             idx    = $(`${table} tbody tr`).length,
             $row   = $first.clone();
@@ -586,8 +585,7 @@
           $(this).attr('name',nm).val('');
           if($(this).is('select')) $(this).next('.select2-container').remove();
         });
-        // re-init selects
-        $row.find('select.select2').select2({ placeholder: (_,el)=>$(el).data('placeholder'), allowClear:true, width:'100%' });
+        $row.find('select.select2').select2({ placeholder: (_, el)=>$(el).data('placeholder'), allowClear:true, width:'100%' });
         $(`${table} tbody`).append($row);
       });
       $(document).on('click', removeBtn, function(){
@@ -598,12 +596,19 @@
     repeater('#btnAddExperience','#experienceTable','.btnRemoveExperience');
     repeater('#btnAddQualification','#qualificationTable','.btnRemoveQualification');
 
-    // Next/Prev
+    // Next/Prev buttons
     $('[data-next]').click(function(){
-      let next = $(this).data('next'),
-          tab  = document.querySelector(`.nav-link[data-bs-target="#${next}"]`);
-      bootstrap.Tab.getOrCreateInstance(tab).show();
+      let tgt = $(this).data('next'),
+          tab = document.querySelector(`.nav-link[data-bs-target="#${tgt}"]`);
+      if(tab) bootstrap.Tab.getOrCreateInstance(tab).show();
     });
+
+    // On page load, if there are invalid fields, switch to its tab
+    var $firstInvalid = $('.is-invalid').first();
+    if($firstInvalid.length) {
+      var pane = $firstInvalid.closest('.tab-pane').attr('id');
+      $('.nav-link[data-bs-target="#'+pane+'"]').tab('show');
+    }
   });
   </script>
 @endpush
