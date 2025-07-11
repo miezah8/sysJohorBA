@@ -2,6 +2,33 @@
 @section('title', 'Coach Module')
 
 @section('content')
+
+{{-- Success Modal --}}
+@if(session('success'))
+  <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content text-center p-3">
+        <div class="modal-body">
+          {{ session('success') }}
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{-- Trigger it on load --}}
+  @push('scripts')
+    <script>
+      document.addEventListener('DOMContentLoaded', function(){
+        let modalEl = document.getElementById('successModal');
+        new bootstrap.Modal(modalEl).show();
+      });
+    </script>
+  @endpush
+@endif
+
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">
             <h5 class="mb-0">List of Coaches</h5>
