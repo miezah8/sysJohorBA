@@ -205,33 +205,56 @@ class CoachController extends Controller
             ]);
         }}
 
-        // 9) experiences
-        if (! empty($data['experience'])) {
-        foreach($data['experience'] as $exp) {
-            $coach->coachExperience()->create($exp);
-        }}
+// 8) Wipe & re-create all courses/certifications
+$coach->coachCourse()->delete();
 
-        // 10) qualifications / courses
-        if (! empty($data['qualification'])) {
-        foreach($data['qualification'] as $qual) {
-            $item = [
-                'course_id'     => $qual['course_id'], 
-                'course_level'  => $qual['level']         ?? null,
-                'pass_date'     => $qual['pass_date']     ?? null,
-                'recognition'   => $qual['accreditation'] ?? null,
-                'cert_siri'     => $qual['cert_number']   ?? null,
-            ];
-            if (isset($qual['cert_file'])) {
-                $item['cert_attach'] = $qual['cert_file']->store('certs','public');
-            }
-            $coach->coachCourse()->create($item);
-        }}
+// First, filter out any “completely blank” entries
+$qualifications = array_filter($data['qualification'], function($q) {
+    // only keep ones where at least one of these fields is non-empty
+    return 
+        ! empty($q['course_id'])      ||
+        ! empty($q['pass_date'])      ||
+        ! empty($q['accreditation'])  ||
+        ! empty($q['cert_number'])    ||
+        ! empty($q['existing_cert_attach']);
+});
+
+foreach ($qualifications as $i => $qual) {
+    // Determine attachment:  
+    // 1) new upload? 2) else existing hidden? 3) else blank
+    if (isset($qual['cert_file']) && $qual['cert_file'] instanceof \Illuminate\Http\UploadedFile) {
+        $attach = $qual['cert_file']->store('certs','public');
+    } elseif (! empty($qual['existing_cert_attach'])) {
+        $attach = $qual['existing_cert_attach'];
+    } else {
+        $attach = '';  // or null if your column allows it
+    }
+
+    $coach->coachCourse()->create([
+        'course_id'    => $qual['course_id'],
+        'course_level' => $qual['level']         ?? null,
+        'pass_date'    => $qual['pass_date']     ?? null,
+        'recognition'  => $qual['accreditation'] ?? null,
+        'cert_siri'    => $qual['cert_number']   ?? null,
+        'cert_attach'  => $attach,
+    ]);
+}
+
+
 
         });
 
-        return redirect()
-                ->route('coach.index')
-                ->with('success','Coach successfully created.');
+    // If this was an AJAX request, return JSON
+    if ($request->ajax()) {
+        return response()->json([
+            'message' => 'Coach successfully created.',
+        ]);
+    }
+
+    // Otherwise fall back to normal redirect
+    return redirect()
+            ->route('coach.index')
+            ->with('success','Coach successfully created.');
         
 
         } catch (\Throwable $e) {
@@ -354,31 +377,41 @@ public function update(Request $request, $id)
         }
 
         // 8) courses/certifications
-        foreach ($data['qualification'] as $i => $qual) {
-        // 1) store new file if uploaded
-        if ($request->hasFile("qualification.{$i}.cert_file")) {
-            $path = $request
-                    ->file("qualification.{$i}.cert_file")
-                    ->store('certs','public');
-        }
-        // 2) else reuse the hidden field
-        elseif (! empty($qual['existing_cert_attach'])) {
-            $path = $qual['existing_cert_attach'];
-        }
-        // 3) finally fallback to empty string (never null)
-        else {
-            $path = '';
-        }
+// 8) Wipe & re-create all courses/certifications
+$coach->coachCourse()->delete();
 
-        $coach->coachCourse()->create([
-          'course_id'    => $qual['course_id'],
-          'course_level' => $qual['level']         ?? null,
-          'pass_date'    => $qual['pass_date']     ?? null,
-          'recognition'  => $qual['accreditation'] ?? null,
-          'cert_siri'    => $qual['cert_number']   ?? null,
-          'cert_attach'  => $path,
-        ]);
-      }
+// First, filter out any “completely blank” entries
+$qualifications = array_filter($data['qualification'], function($q) {
+    // only keep ones where at least one of these fields is non-empty
+    return 
+        ! empty($q['course_id'])      ||
+        ! empty($q['pass_date'])      ||
+        ! empty($q['accreditation'])  ||
+        ! empty($q['cert_number'])    ||
+        ! empty($q['existing_cert_attach']);
+});
+
+foreach ($qualifications as $i => $qual) {
+    // Determine attachment:  
+    // 1) new upload? 2) else existing hidden? 3) else blank
+    if (isset($qual['cert_file']) && $qual['cert_file'] instanceof \Illuminate\Http\UploadedFile) {
+        $attach = $qual['cert_file']->store('certs','public');
+    } elseif (! empty($qual['existing_cert_attach'])) {
+        $attach = $qual['existing_cert_attach'];
+    } else {
+        $attach = '';  // or null if your column allows it
+    }
+
+    $coach->coachCourse()->create([
+        'course_id'    => $qual['course_id'],
+        'course_level' => $qual['level']         ?? null,
+        'pass_date'    => $qual['pass_date']     ?? null,
+        'recognition'  => $qual['accreditation'] ?? null,
+        'cert_siri'    => $qual['cert_number']   ?? null,
+        'cert_attach'  => $attach,
+    ]);
+}
+
     });
 
     return redirect()

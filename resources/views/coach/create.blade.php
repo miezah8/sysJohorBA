@@ -546,6 +546,21 @@
     </div><!-- /.card-body -->
   </div><!-- /.card -->
 
+    <!-- Success Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content text-center p-3">
+        <div class="modal-body">
+          Coach successfully created!
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 @endsection
 
 @push('scripts')
@@ -609,6 +624,38 @@
       var pane = $firstInvalid.closest('.tab-pane').attr('id');
       $('.nav-link[data-bs-target="#'+pane+'"]').tab('show');
     }
+
+  // $('#coachForm').on('submit', function(e){
+  //   e.preventDefault();
+
+  //   let form = this,
+  //       url  = form.action,
+  //       method = form.method.toUpperCase(),
+  //       data   = new FormData(form);
+
+  //   $.ajax({
+  //     url: url,
+  //     type: method,
+  //     data: data,
+  //     processData: false,
+  //     contentType: false,
+  //     success: function(res){
+  //       // show the success modal
+  //       let modalEl = document.getElementById('successModal'),
+  //           bsModal = new bootstrap.Modal(modalEl);
+  //       bsModal.show();
+
+  //       // when modal hides, go back to index
+  //       modalEl.addEventListener('hidden.bs.modal', function(){
+  //         window.location = '{{ route("coach.index") }}';
+  //       }, { once: true });
+  //     },
+  //     error: function(xhr){
+  //       // if validation failed, reload page so Laravel shows errors
+  //       window.location.reload();
+  //     }
+  //   });
+  // });    
   });
   </script>
 @endpush
