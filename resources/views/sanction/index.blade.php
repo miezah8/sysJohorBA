@@ -20,11 +20,13 @@
                 {{--@endcan--}}
 
                 {{-- Show “Admin Review” only if user can review all sanctions --}}
-                @can('review sanction')
+                @role('admin|Jba_commitee')
+                {{-- @can('review sanction') --}}
                     <a href="{{ route('sanctions.admin.index') }}" class="btn btn-danger">
                         <i class="fa-solid fa-shield-check me-1"></i> Admin Review
                     </a>
-                @endcan
+                {{-- @endcan --}}
+                @endrole
             </div>
         </div>
 

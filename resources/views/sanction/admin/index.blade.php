@@ -9,7 +9,7 @@
 @section('content')
     <div class="card p-2">
         <div class="card-header d-flex justify-content-between">
-            <h5 class="mb-0">All Sanction Applications</h5>
+            <h5 class="mb-0">Review Sanction Applications</h5>
             <a href="{{ route('sanction.index') }}" class="btn btn-sm btn-secondary">← Back to List of My Sanction Applications</a>
         </div>
         

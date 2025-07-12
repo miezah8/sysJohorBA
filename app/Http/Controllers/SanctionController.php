@@ -10,12 +10,47 @@ use Illuminate\Support\Facades\Storage;
 
 class SanctionController extends Controller
 {
-    // 1. List the current user’s own applications
+    // 1. LIST (everyone auth’d can hit it)
     public function index()
     {
-        $mine = SanctionRequest::where('user_id', Auth::id())
-                 ->latest()->paginate(10);
+        $user = Auth::user();
+
+        // Admin & JBA Committee: see ALL
+        if ($user->hasAnyRole(['admin','Jba_commitee'])) {
+            $mine = SanctionRequest::with('user')
+                       ->latest()
+                       ->paginate(10);
+        }
+        // Otherwise: only your own
+        else {
+            $mine = SanctionRequest::where('user_id', $user->id)
+                       ->latest()
+                       ->paginate(10);
+        }
+
         return view('sanction.index', compact('mine'));
+    }
+
+     // 2. SHOW detail (everyone auth’d can hit it)
+    public function show(SanctionRequest $sanction)
+    {
+        $user = Auth::user();
+
+        // Admin & JBA Committee pass through
+        if ($user->hasAnyRole(['admin','Jba_commitee'])) {
+            //
+        }
+        // Or the record owner passes through
+        elseif ($sanction->user_id === $user->id) {
+            //
+        }
+        // Otherwise 403
+        else {
+            abort(403, 'You are not authorized to view this application.');
+        }
+
+        $sanction->load('documents');
+        return view('sanction.show', compact('sanction'));
     }
 
     // 2. Show “Apply” form
@@ -68,14 +103,6 @@ class SanctionController extends Controller
 
         return redirect()->route('sanction.index')
                          ->with('success','Application has Successfully submitted.');
-    }
-
-    // 4. Show details of your own application
-    public function show(SanctionRequest $sanction)
-    {
-        $this->authorize('view', $sanction);
-        $sanction->load('documents');
-        return view('sanction.show', compact('sanction'));
     }
 
     // 5. Admin: list ALL applications

@@ -265,34 +265,33 @@ Route::middleware(['auth','role:admin'])->group(function() {
     // Modul: Sanction (resource + custom routes)
     // Permissions: view sanction, add sanction, edit sanction, delete sanction, sanction.review, sanction.apply
     // ------------------------------
-    // Resource routes (index, create, store, show, edit, update, destroy)
-    /*Route::resource('sanction', SanctionController::class)
-        ->names([
-            'index'   => 'sanction.index',
-            'create'  => 'sanction.create',
-            'store'   => 'sanction.store',
-            'show'    => 'sanction.show',
-            'edit'    => 'sanction.edit',
-            'update'  => 'sanction.update',
-            'destroy' => 'sanction.destroy',
-        ]);*/
-    // Middleware berbasis permission:
-    //  - Organiser: apply & view own → sanction.apply, sanction.view_own
-    //  - Reviewer: review (lihat semua & approve/reject) → sanction.review
-    //Route::middleware('permission:apply sanction')->group(function() {
-        Route::get('sanctions/create', [SanctionController::class, 'create'])->name('sanction.create');
-        Route::post('sanctions',       [SanctionController::class, 'store'])->name('sanction.store');
-    //});
-    
-    Route::middleware('permission:view_own sanction')->group(function() {
-        Route::get('sanctions', [SanctionController::class, 'index'])->name('sanction.index');
-    });
+// everyone must be logged in
+// All of these routes require *just* authentication
+Route::middleware('auth')->group(function(){
 
+    //
+    //  1) APPLY FORM + SUBMIT
+    //     (everyone can apply, or you can gate with permission:apply sanction)
+    //
+    Route::get ('sanctions/create', [SanctionController::class,'create'])
+         ->name('sanction.create');
+    Route::post('sanctions',        [SanctionController::class,'store'])
+         ->name('sanction.store');
 
+    //
+    //  2) LIST & SHOW
+    //     *No* role/permission middleware here—any logged-in user reaches them,
+    //     and your controller will decide “all” vs “own.”
+    //
+    Route::get('sanctions',          [SanctionController::class,'index'])
+         ->name('sanction.index');
+    Route::get('sanctions/{sanction}',[SanctionController::class,'show'])
+         ->name('sanction.show');
 
-    Route::middleware('permission:view_own sanction')->group(function() {
-        Route::get('sanctions/{sanction}', [SanctionController::class, 'show'])->name('sanction.show');
-        Route::get('sanctions/{sanction}/documents/{doc}', function($sanctionId, $docId) {
+    //
+    //  3) VIEW UPLOADED DOCS
+    //
+    Route::get('sanctions/{sanction}/documents/{doc}', function($sanctionId, $docId) {
         // 1) Load the record (optionally: verify it belongs to the current user)
         $doc = SanctionDocument::where('sanction_request_id',$sanctionId)
                             ->findOrFail($docId);
@@ -308,15 +307,22 @@ Route::middleware(['auth','role:admin'])->group(function() {
         $disk->path($path),
         [ 'Content-Disposition' => 'inline; filename="'.$doc->filename.'"' ]
         );
-    })->name('sanction.documents.view')
-    ->middleware(['auth','permission:view_own sanction']);                            
-    });
 
-    Route::middleware('permission:review sanction')->group(function() {
-        Route::get('admin/sanctions',                    [SanctionController::class, 'adminIndex'])->name('sanctions.admin.index');
-        Route::get('admin/sanctions/{sanction}/edit',    [SanctionController::class, 'edit'])->name('sanctions.admin.edit');
-        Route::put('admin/sanctions/{sanction}',         [SanctionController::class, 'update'])->name('sanctions.admin.update');
+    })->name('sanction.documents.view');
+
+    //
+    //  4) REVIEW / ADMIN UI
+    //    Only jba_committee + admin
+    //
+    Route::middleware('role:Jba_commitee|admin')->prefix('admin')->group(function(){
+        Route::get ('sanctions',             [SanctionController::class,'adminIndex'])
+             ->name('sanctions.admin.index');
+        Route::get ('sanctions/{sanction}/edit',[SanctionController::class,'edit'])
+             ->name('sanctions.admin.edit');
+        Route::put ('sanctions/{sanction}',    [SanctionController::class,'update'])
+             ->name('sanctions.admin.update');
     });
+});
 
     // ------------------------------
     // Modul: Achievement
