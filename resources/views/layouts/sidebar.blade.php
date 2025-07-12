@@ -50,7 +50,7 @@
         </a>
     </li>
     @endhasanyrole
-
+    
     <li class="nav-item">
         <a href="{{ route('sanction.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
@@ -59,7 +59,7 @@
             <span class="nav-link-text ms-1">Sanction</span>
         </a>
     </li>
-   
+   @hasanyrole('admin|Jba_commitee')
     <li class="nav-item">
         <a href="{{ route('reports.index') }}" class="nav-link" role="button">
             <div class="icon icon-sm shadow-sm border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
@@ -68,7 +68,7 @@
             <span class="nav-link-text ms-1">Report</span>
         </a>
     </li>
-    
+    @endhasanyrole
             @role('admin')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#manage" class="nav-link " aria-controls="manage"
