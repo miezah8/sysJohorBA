@@ -54,7 +54,7 @@
         <dd class="col-sm-9">{{ ucfirst($detail->race) }}</dd>
 
         <dt class="col-sm-3">Nationality</dt>
-        <dd class="col-sm-9">{{ $detail->nationalityRelation->nationality_name ?? '–' }}</dd>
+        <dd class="col-sm-9">{{ $detail->nationalityRelation->nationality_name ?? '-' }}</dd>
 
         <dt class="col-sm-3">Address</dt>
         <dd class="col-sm-9">{{ $detail->address }}</dd>
@@ -62,8 +62,8 @@
         <dt class="col-sm-3">Postcode / State / District</dt>
         <dd class="col-sm-9">
           {{ $detail->postcode }} 
-          {{ $detail->state->state_name ?? '–' }} 
-          {{ $detail->district->district_name ?? '–' }}
+          {{ $detail->state->state_name ?? '-' }} 
+          {{ $detail->district->district_name ?? '-' }}
         </dd>
 
         <dt class="col-sm-3">T-Shirt Size</dt>
@@ -169,12 +169,12 @@
       <dl class="row">
         <dt class="col-sm-3">Coach</dt>
         <dd class="col-sm-9">
-          {{ optional($athlete->coach)->coach_fname ?? '–' }}
+          {{ optional($athlete->coach)->coach_fname ?? '-' }}
         </dd>
 
         <dt class="col-sm-3">Club</dt>
         <dd class="col-sm-9">
-          {{ optional($athlete->club)->club_name ?? '–' }}
+          {{ optional($athlete->club)->club_name ?? '-' }}
         </dd>
       </dl>
 
@@ -182,7 +182,9 @@
 
     <div class="card-footer text-end">
       <a href="{{ route('athlete.index') }}" class="btn btn-secondary btn-sm">Back to list</a>
+      @hasanyrole('admin|coach|athlete|Jba_commitee')
       <a href="{{ route('athlete.edit', $athlete) }}" class="btn btn-primary btn-sm">Edit</a>
+      @endrole
     </div>
   </div>
 @endsection

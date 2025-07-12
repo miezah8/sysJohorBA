@@ -118,10 +118,24 @@ Route::middleware('auth')->group(function(){
     // Modul: Athlete
     // Permissions: view athlete, add athlete, edit athlete, delete athlete
     // ------------------------------
-/*    Route::resource('athlete', AthleteController::class)
-     ->only(['index','create','store','show'])
-     ->middleware('auth');
-*/
+
+    Route::middleware('auth')->group(function() {
+
+    // 1) LIST & VIEW — admin + coach
+    Route::middleware('role:admin|coach|Jba_commitee|athlete')->group(function(){
+        Route::get('/athlete',          [AthleteController::class,'index']) ->name('athlete.index');
+        Route::get('/athlete/create', [AthleteController::class,'create'])->name('athlete.create');
+        Route::get('/athlete/{athlete}',[AthleteController::class,'show'])  ->name('athlete.show');
+        
+        Route::post('/athlete',       [AthleteController::class,'store']) ->name('athlete.store');
+        Route::get('/athlete/{athlete}/edit', [AthleteController::class,'edit'])  ->name('athlete.edit');
+        Route::put('/athlete/{athlete}',      [AthleteController::class,'update'])->name('athlete.update');
+        Route::get('/districts', [AthleteController::class,'districtList'])->name('districts.list');
+        Route::get('/ajax/states',    [AthleteController::class, 'stateList'])->name('states.list');
+        Route::get('/ajax/school', [AthleteController::class, 'getSchool'])->name('school.list');
+    });
+    });
+/*
     // View / list athletes
     Route::get('/athlete', [AthleteController::class, 'index'])
         ->name('athlete.index')
@@ -160,64 +174,31 @@ Route::middleware('auth')->group(function(){
     Route::delete('/athlete/{athlete}', [AthleteController::class, 'destroy'])
         ->name('athlete.destroy')
         ->middleware(['auth','permission:delete athlete']);
-
-/*    Route::middleware('permission:view athlete')->group(function() {
-        Route::get('/athlete', [AthleteController::class, 'index'])->name('athlete.index');
-        Route::get('/athlete/sch/{id}', [AthleteController::class, 'show'])->name('athlete.show');
-    });
-    Route::middleware('permission:add athlete')->group(function() {
-        Route::get('/athlete/form', [AthleteController::class, 'create'])->name('athlete.form');
-        Route::post('/athlete', [AthleteController::class, 'store'])->name('athlete.store');
-    });
-    Route::middleware('permission:edit athlete')->group(function() {
-        Route::get('/athlete/{athlete}/edit', [AthleteController::class, 'edit'])->name('athlete.edit');
-        Route::put('/athlete/{athlete}', [AthleteController::class, 'update'])->name('athlete.update');
-    });
-
-    Route::middleware('permission:delete athlete')->group(function() {
-        Route::delete('/athlete/{athlete}', [AthleteController::class, 'destroy'])->name('athlete.destroy');
-    });
 */
+
     // ------------------------------
     // Modul: Coach (jika terpisah)
     // Permissions: view coach, add coach, edit coach, delete coach
     // ------------------------------
-    Route::middleware('auth')->group(function(){
-    // resource routes for coach
-    Route::resource('coach', CoachController::class)
-         ->except(['show']);
+    // 1) LIST & VIEW & PLAYERS — admin + coach
+    Route::middleware(['auth','role:admin|coach'])->group(function() {
+        // All coaches for admin, only self for coach (we’ll enforce in controller)
+        Route::resource('coach', CoachController::class)->except(['show']);
+        Route::get('/coach',                 [CoachController::class,'index'])   ->name('coach.index');
+        Route::get('/coach/{coach}',         [CoachController::class,'show'])    ->name('coach.show');
+        Route::get('/coach/{coach}/players', [CoachController::class,'players']) ->name('coach.players');
+        Route::get('/coach/create', [CoachController::class,'create'])->name('coach.create');
+        Route::post('/coach',       [CoachController::class,'store']) ->name('coach.store');
+        Route::post('/coach',                     [CoachController::class,'store'  ])->name('coach.store');
+        Route::get('/coach/{coach}/edit',[CoachController::class,'edit'])->name('coach.edit');
+        Route::put('/coach/{coach}',     [CoachController::class,'update'])->name('coach.update');
+        Route::get('/coach/districts/{stateId}',  [CoachController::class,'districtsByState'])->name('coach.districts');
 
-    Route::get('/coach/create',               [CoachController::class,'create'])->name('coach.create');
-    Route::post('/coach',                     [CoachController::class,'store'  ])->name('coach.store');
-    // helper endpoint for AJAX-loading districts by state
-    Route::get('/coach/districts/{stateId}',  [CoachController::class,'districtsByState'])->name('coach.districts');
-    Route::get('/coach/{coach}', [CoachController::class, 'show'])->name('coach.show');
-    
     });
-    
-    Route::middleware('permission:view coach')->group(function() {
-        Route::get('/coach',            [CoachController::class, 'index'])->name('coach.index');
-        // Route::get('/coach/{coach}',    [CoachController::class, 'show'])->name('coach.show');
-        Route::get('/coach/{coach}/players', [CoachController::class, 'players'])->name('coach.players');
-    });
-    // Route::middleware('permission:add coach')->group(function() {
-    //     Route::get('/coach/create',     [CoachController::class, 'create'])->name('coach.create');
-    //     Route::post('/coach',           [CoachController::class, 'store'])->name('coach.store');
-    // });
-    // Route::middleware('permission:edit coach')->group(function() {
-    //     Route::get('/coach/{coach}/edit',[CoachController::class, 'edit'])->name('coach.edit');
-    //     Route::put('/coach/{coach}',     [CoachController::class, 'update'])->name('coach.update');
-    // });
-    Route::middleware('permission:add coach')->group(function() {
-        //Route::get('/coach/add', [CoachController::class, 'form'])->name('coach.create');
-        Route::post('/coach',           [CoachController::class, 'store'])->name('coach.store');
-    });
-    Route::middleware('permission:edit coach')->group(function() {
-        //Route::get('/coach/{id}/edit', [CoachController::class, 'form'])->name('coach.edit');
-        Route::put('/coach/{coach}',     [CoachController::class, 'update'])->name('coach.update');
-    });
-    Route::middleware('permission:delete coach')->group(function() {
-        Route::delete('/coach/{coach}',  [CoachController::class, 'destroy'])->name('coach.destroy');
+
+    // 2) DELETE
+    Route::middleware(['auth','permission:delete coach'])->group(function() {
+        Route::delete('/coach/{coach}',  [CoachController::class,'destroy'])->name('coach.destroy');
     });
 
     // ------------------------------

@@ -62,5 +62,11 @@ class User extends Authenticatable
         'last_login' => 'datetime',
     ];
 
+    //for role purpose-can find the current user’s coach record
+    public function coach()
+    {
+        return $this->hasOne(\App\Models\Coach::class, 'user_id');
+    }    
+
 
 }

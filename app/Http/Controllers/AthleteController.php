@@ -14,6 +14,7 @@ use App\Models\Experience;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class AthleteController extends Controller
 {
@@ -22,21 +23,40 @@ class AthleteController extends Controller
      */
     public function index()
     {
-        // Eager-load everything the index table needs:
-/*        $athletes = Athlete::with(['club', 'school', 'coach'])
-                           ->orderBy('created_at', 'desc')
-                           ->paginate(20);
-*/
-    $athleteData = DB::table('athlete as a')
-      ->leftJoin('club as c','a.club_id','=','c.id_club')
-      ->leftJoin('school as b','a.school_id','=','b.id_school')
-      ->leftJoin('users as d','a.user_id','=','d.id')
-      //->selectRaw("a.id_athlete, CONCAT(a.athlete_fname,' ',a.athlete_lname) as full_name, c.club_name, b.school_name")
-      ->selectRaw("a.id_athlete, d.name AS full_name, c.club_name, b.school_name")
-      ->get();
+          $qb = DB::table('athlete as a')
+            ->leftJoin('club    as c','a.club_id','=','c.id_club')
+            ->leftJoin('school  as b','a.school_id','=','b.id_school')
+            ->leftJoin('users   as d','a.user_id','=','d.id')
+            ->selectRaw("
+                a.id_athlete,
+                CONCAT(a.athlete_fname,' ',a.athlete_lname) AS full_name,
+                c.club_name,
+                b.school_name
+            ")
+            ->orderBy('a.created_at','desc');
 
-    return view('athlete.index', compact('athleteData'));
-    }
+            $user = Auth::user();
+
+            // 1) Coaches see only their own players
+            if ($user->hasRole('coach') && ! $user->hasRole('admin')) {
+                $coach = Coach::where('user_id', $user->id)->first();
+                if ($coach) {
+                    $qb->where('a.coach_id', $coach->id_coach);
+                } else {
+                    $qb->whereRaw('0 = 1');
+                }
+            }
+            // 2) Athletes see only their own record
+            elseif ($user->hasRole('athlete') && ! $user->hasRole('admin')) {
+                $qb->where('a.user_id', $user->id);
+            }
+            // 3) Admins (and any other roles) see everything
+
+             // Finally paginate
+            $athleteData = $qb->paginate(25);
+
+        return view('athlete.index', compact('athleteData'));
+        }
 
     /**
      * Show the form for creating a new athlete.
@@ -211,6 +231,22 @@ class AthleteController extends Controller
      */
     public function show(Athlete $athlete)
     {
+        $user = Auth::user();
+
+        // 1) Admin always OK
+        // 2) Coach can only view if they're assigned
+        if ($user->hasRole('coach') && ! $user->hasRole('admin')) {
+            if ($athlete->coach_id !== $user->coach->id_coach) {
+                abort(403);
+            }
+        }
+        // 3) Athlete can only view _their own_ record
+        elseif ($user->hasRole('athlete') && ! $user->hasRole('admin')) {
+            if ($athlete->user_id !== $user->id) {
+                abort(403);
+            }
+        }
+
         // eager-load everything for your “show” view
         $athlete->load([
             'guardian',

@@ -19,16 +19,16 @@ use Illuminate\Support\Facades\Log;
 
 class CoachController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $coaches = Coach::all();
-        $coachData = Coach::withCount('athletesCoach')->get();
+        $query = Coach::withCount('athletesCoach');
 
-        // $coach = coach::find('1');
-        // $athletes = $coach->athletes; // returns a collection of athletes associated with the coach
-        // $athlete = Athlete::find(1);
-        // $coach = $athlete->coach; // returns the coach associated with the athlete
+        // if not an admin, only show the logged‐in user's own coach record(s)
+        if (! Auth::user()->hasRole('admin')) {
+            $query->where('user_id', Auth::id());
+        }
 
+        $coachData = $query->get();
         return view('coach.index', ['coachData' => $coachData]);
     }
 
@@ -93,6 +93,11 @@ class CoachController extends Controller
 
     public function players(Coach $coach)
     {
+        if (! Auth::user()->hasRole('admin') 
+            && $coach->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         $players = $coach->athletesCoach()->paginate(25);
         return view('coach.players', compact('coach', 'players'));
     }
@@ -463,17 +468,23 @@ foreach ($data['qualification'] as $i => $qual) {
 
     public function show(Coach $coach)
 {
-    $coach->load([
-      'user',
-      'userDetail.state',
-      'userDetail.district',
-      'userDetail.nationalityRelation',
-      'educations.institution',
-      'coachExperience',
-      'coachCourse.course',
-      'club',
-    ]);
-    return view('coach.show', compact('coach'));
+        // forbid if they’re not admin AND this isn’t their coach record
+        if (! Auth::user()->hasRole('admin') 
+            && $coach->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $coach->load([
+        'user',
+        'userDetail.state',
+        'userDetail.district',
+        'userDetail.nationalityRelation',
+        'educations.institution',
+        'coachExperience',
+        'coachCourse.course',
+        'club',
+        ]);
+        return view('coach.show', compact('coach'));
 }
 
 
