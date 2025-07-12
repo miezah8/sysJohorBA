@@ -25,7 +25,7 @@ class RolePermissionSeeder extends Seeder
         }
 
         // 3. Senarai semua roles yang ingin diwujudkan
-        $roles = ['admin', 'athlete', 'coach', 'club', 'state_ba', 'technical', 'organiser'];
+        $roles = ['admin', 'athlete', 'coach', 'club', 'state_ba', 'Jba_commitee', 'organiser'];
 
         foreach ($roles as $roleName) {
             Role::firstOrCreate([

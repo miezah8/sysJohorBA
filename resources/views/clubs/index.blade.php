@@ -46,6 +46,7 @@
                 </a>
               </td>
               <td>
+                @role('admin|club')
                <button
                   class="btn btn-outline-secondary me-1"
                   data-bs-toggle="modal"
@@ -62,10 +63,14 @@
                         data-id="{{ $club->id_club }}">
                   <i class="fa-solid fa-pen-to-square me-1"></i>Edit
                 </button>
+                @endrole
+                {{-- DELETE only for admin --}}
+                @role('admin')
                 <button class="btn btn-outline-danger btn-delete"
                         data-id="{{ $club->id_club }}">
                   <i class="fa-solid fa-trash me-1"></i>Delete
                 </button>
+                 @endrole
               </td>
             </tr>
           @endforeach

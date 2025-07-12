@@ -23,7 +23,16 @@ class ClubController extends Controller
      */
     public function index()
     {
-        $clubs          = Club::withCount(['athletes','facilities'])->get();
+        // Build the base query, counting both athletes and facilities
+        $query = Club::withCount(['athletes','facilities']);
+
+        // If the current user is NOT an admin, scope to only their clubs
+        if (! Auth::user()->hasRole('admin')) {
+            $query->where('user_id', Auth::id());
+        }
+
+        // Execute it
+        $clubs = $query->get();
         $states         = State::orderBy('state_name')->get();
         // pluck the facility *names* into $facilityNames
         $facilityNames  = Facility::where('status',1)->orderBy('name')->get();

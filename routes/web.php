@@ -224,30 +224,28 @@ Route::middleware('auth')->group(function(){
     // Modul: Club
     // Permissions: view club, add club, edit club, delete club
     // ------------------------------
-    Route::middleware('permission:view club')->group(function() {
-        Route::get('/clubs',             [ClubController::class, 'index'])->name('clubs.index');
-        Route::get('/clubs/{club}',      [ClubController::class, 'show'])->name('clubs.show');
-        Route::get('/clubs/{club}/players', [ClubController::class, 'players'])->name('clubs.players');
-        // Route::resource('clubs', ClubController::class);
-
-    });
-    Route::middleware('permission:add club')->group(function() {
-        Route::get('/clubs/create',      [ClubController::class, 'create'])->name('clubs.create');
-        Route::post('/clubs',            [ClubController::class, 'store'])->name('clubs.store');
-    });
-    Route::middleware('permission:edit club')->group(function() {
-        Route::get('/clubs/{club}/edit', [ClubController::class, 'edit'])->name('clubs.edit');
-        Route::put('/clubs/{club}',      [ClubController::class, 'update'])->name('clubs.update');
-    });
-    Route::middleware('permission:delete club')->group(function() {
-        Route::delete('/clubs/{club}',   [ClubController::class, 'destroy'])->name('clubs.destroy');
-    });
-
+    
+// view & edit (admin + club)
+Route::middleware(['auth','role:admin|club'])->group(function() {
+    Route::get('/clubs',            [ClubController::class,'index'])->name('clubs.index');
+    Route::get('/clubs/{club}',     [ClubController::class,'show'])->name('clubs.show');
+    Route::get('/clubs/{club}/edit',[ClubController::class,'edit'])->name('clubs.edit');
+    Route::put('/clubs/{club}',     [ClubController::class,'update'])->name('clubs.update');
+    Route::get('/clubs/{club}/players', [ClubController::class, 'players'])->name('clubs.players');
+    Route::post('/clubs',            [ClubController::class, 'store'])->name('clubs.store');
     Route::get('/api/districts/{state_id}', function($state_id) {
         return District::where('state_id', $state_id)
                     ->select('id_district','district_name')
                     ->get();
     });
+});
+
+// delete (admin only)
+Route::middleware(['auth','role:admin'])->group(function() {
+    Route::delete('/clubs/{club}',  [ClubController::class,'destroy'])->name('clubs.destroy');
+});
+
+
 
 
     // ------------------------------
