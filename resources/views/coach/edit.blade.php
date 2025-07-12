@@ -59,6 +59,7 @@
           <div class="tab-pane fade show active" id="personal" role="tabpanel">
             <div class="row mb-3">
               <div class="col-md-6">
+                {{-- Profile Image --}}
                 <label for="gambar">Profile Image</label>
                 <input
                   id="gambar"
@@ -67,6 +68,9 @@
                   accept="image/*"
                 >
                   @if(optional($coach->userDetail)->profile_picture)
+                   <input type="hidden"
+                      name="existing_profile_picture"
+                      value="{{ $coach->userDetail->profile_picture }}">
                   <div class="mt-2">
                     <a
                       href="{{ asset('storage/'.$coach->userDetail->profile_picture) }}"
@@ -123,6 +127,7 @@
                 >
               </div>
               <div class="col-md-6">
+                {{-- IC/Passport --}}
                 <label for="ic_picture">Upload IC/Passport</label>
                 <input
                   id="ic_picture"
@@ -131,6 +136,9 @@
                   accept="image/*"
                 >
                 @if(optional($coach->userDetail)->ic_picture)
+                <input type="hidden"
+                      name="existing_ic_picture"
+                      value="{{ $coach->userDetail->ic_picture }}">
                   <div class="mt-2">
                     <a
                       href="{{ asset('storage/'.$coach->userDetail->ic_picture) }}"
@@ -411,129 +419,126 @@
           </div>
 
           {{-- QUALIFICATION --}}
-          <div class="tab-pane fade" id="qualification" role="tabpanel">
-            <div class="table-responsive mb-3">
-              <template id="qualification-row-template">
-                <tr>
-                  <td>
-                    <select name="qualification[INDEX][course_id]" …>
-                      <option value=""></option>
-                      @foreach($courses as $cid => $cname)
-                        <option value="{{ $cid }}">{{ $cname }}</option>
-                      @endforeach
-                    </select>
-                  </td>
-                  <!-- …and so on for level, pass_date, accreditation, cert_number, cert_file… -->
-                  <td class="text-center">
-                    <button type="button" class="btn btn-sm btn-outline-danger btnRemoveQualification">×</button>
-                  </td>
-                </tr>
-              </template>
-              
-              <table class="table" id="qualificationTable">
-               
-                <thead>
-                  <tr>
-                    <th>Course</th><th>Level</th><th>Date Passed</th><th>Accreditation</th><th>Cert No.</th><th>Upload</th><th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                   
-                  @if(count($quals))
-                    @foreach($quals as $i => $q)
-                      <tr>
-                        {{-- course --}}
-                        <td>
-                          <select
-                            name="qualification[{{ $i }}][course_id]"
-                            class="form-select select2"
-                            data-placeholder="Search course…"
-                            required
-                          >
-                            <option value=""></option>
-                            @foreach($courses as $cid=>$cname)
-                              <option value="{{ $cid }}" {{ $q['course_id']==$cid?'selected':'' }}>
-                                {{ $cname }}
-                              </option>
-                            @endforeach
-                          </select>
-                        </td>
-                        {{-- level --}}
-                        <td>
-                          <select name="qualification[{{ $i }}][level]" class="form-select" required>
-                            <option value="NA"    {{ $q['course_level']=='NA'?'selected':'' }}>NA</option>
-                            <option value="Level 1"{{ $q['course_level']=='Level 1'?'selected':'' }}>Level 1</option>
-                            <option value="Level 2"{{ $q['course_level']=='Level 2'?'selected':'' }}>Level 2</option>
-                            <option value="Level 3"{{ $q['course_level']=='Level 3'?'selected':'' }}>Level 3</option>
-                          </select>
-                        </td>
-                        {{-- pass_date --}}
-                        <td><input type="date" name="qualification[{{ $i }}][pass_date]"    class="form-control" value="{{ $q['pass_date'] }}"></td>
-                        {{-- accreditation --}}
-                        <td><input type="text" name="qualification[{{ $i }}][accreditation]"class="form-control" value="{{ $q['recognition'] }}"></td>
-                        {{-- cert_number --}}
-                        <td><input type="text" name="qualification[{{ $i }}][cert_number]"  class="form-control" value="{{ $q['cert_siri'] }}"></td>
-                        {{-- cert_file --}}
-                        <td><input type="file" name="qualification[{{ $i }}][cert_file]" class="form-control">
-                        @if(! empty($q['cert_attach']))
-                          <input 
-                            type="hidden"
-                            name="qualification[{{ $i }}][existing_cert_attach]"
-                            value="{{ $q['cert_attach'] }}"
-                          >      
-                        <a
-                         href="{{ asset('storage/'.$q['cert_attach']) }}"
-                         target="_blank"
-                         class="d-block mt-1"
-                       >View Upload</a>
-                        @endif
-                        </td>
-                        <td class="text-center">
-                          <button type="button" class="btn btn-sm btn-outline-danger btnRemoveQualification">×</button>
-                        </td>
-                      </tr>
-                    @endforeach
-                  @else
-                    <tr>
-                      <td>
-                        <select name="qualification[0][course_id]" class="form-select select2" data-placeholder="Search course…" required>
-                          <option value=""></option>
-                          @foreach($courses as $cid=>$cname)
-                            <option value="{{ $cid }}">{{ $cname }}</option>
-                          @endforeach
-                        </select>
-                      </td>
-                      <td>
-                        <select name="qualification[0][level]" class="form-select" required>
-                          <option value="NA">NA</option>
-                          <option value="Level 1">Level 1</option>
-                          <option value="Level 2">Level 2</option>
-                          <option value="Level 3">Level 3</option>
-                        </select>
-                      </td>
-                      <td><input type="date" name="qualification[0][pass_date]" class="form-control"></td>
-                      <td><input type="text" name="qualification[0][accreditation]" class="form-control"></td>
-                      <td><input type="text" name="qualification[0][cert_number]"   class="form-control"></td>
-                      <td><input type="file" name="qualification[0][cert_file]"     class="form-control"></td>
-                      <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-outline-danger btnRemoveQualification">X</button>
-                      </td>
-                    </tr>
-                  @endif
-                  
-                </tbody>
-                 
-               </table>
-             
-              <button type="button" id="btnAddQualification" class="btn btn-sm btn-outline-primary mb-3">
-                <i class="fa-solid fa-plus"></i> Add Certification
-              </button>
-            </div>
-            <div class="d-flex justify-content-between">
-              <button type="button" class="btn btn-secondary" data-next="experience" data-bs-toggle="tab" data-bs-target="#experience">Prev</button>
-              <button type="button" class="btn btn-primary"  data-next="club"       data-bs-toggle="tab" data-bs-target="#club">Next</button>
-            </div>
-          </div>
+{{-- 1) A pure‐blank template, outside any @foreach loop --}}
+<template id="qualification-row-template">
+  <tr>
+    <td>
+      <select name="qualification[INDEX][course_id]" class="form-select select2" data-placeholder="Search course…" required>
+        <option value=""></option>
+        @foreach($courses as $cid => $cname)
+          <option value="{{ $cid }}">{{ $cname }}</option>
+        @endforeach
+      </select>
+    </td>
+    <td>
+      <select name="qualification[INDEX][level]" class="form-select" required>
+        <option value="NA">NA</option>
+        <option value="Level 1">Level 1</option>
+        <option value="Level 2">Level 2</option>
+        <option value="Level 3">Level 3</option>
+      </select>
+    </td>
+    <td><input type="date"      name="qualification[INDEX][pass_date]"    class="form-control"></td>
+    <td><input type="text"      name="qualification[INDEX][accreditation]"class="form-control"></td>
+    <td><input type="text"      name="qualification[INDEX][cert_number]"  class="form-control"></td>
+    <td>
+      <input type="file"         name="qualification[INDEX][cert_file]"    class="form-control">
+    </td>
+    <td class="text-center">
+      <button type="button" class="btn btn-sm btn-outline-danger btnRemoveQualification">×</button>
+    </td>
+  </tr>
+</template>
+
+{{-- 2) The real table --}}
+<div class="tab-pane fade" id="qualification" role="tabpanel">
+  <div class="table-responsive mb-3">
+    <table class="table" id="qualificationTable">
+      <thead>
+        <tr>
+          <th>Course</th><th>Level</th><th>Date Passed</th><th>Accreditation</th><th>Cert No.</th><th>Upload</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse($quals as $i => $q)
+          <tr>
+            <td>
+              <select name="qualification[{{ $i }}][course_id]" class="form-select select2" data-placeholder="Search course…" required>
+                <option value=""></option>
+                @foreach($courses as $cid=>$cname)
+                  <option value="{{ $cid }}" {{ $q['course_id']==$cid?'selected':'' }}>
+                    {{ $cname }}
+                  </option>
+                @endforeach
+              </select>
+            </td>
+            <td>
+              <select name="qualification[{{ $i }}][level]" class="form-select" required>
+                <option value="NA"      {{ $q['course_level']=='NA'     ?'selected':'' }}>NA</option>
+                <option value="Level 1" {{ $q['course_level']=='Level 1'?'selected':'' }}>Level 1</option>
+                <option value="Level 2" {{ $q['course_level']=='Level 2'?'selected':'' }}>Level 2</option>
+                <option value="Level 3" {{ $q['course_level']=='Level 3'?'selected':'' }}>Level 3</option>
+              </select>
+            </td>
+            <td><input type="date"      name="qualification[{{ $i }}][pass_date]"    class="form-control" value="{{ $q['pass_date'] }}"></td>
+            <td><input type="text"      name="qualification[{{ $i }}][accreditation]"class="form-control" value="{{ $q['recognition'] }}"></td>
+            <td><input type="text"      name="qualification[{{ $i }}][cert_number]"  class="form-control" value="{{ $q['cert_siri'] }}"></td>
+            <td>
+                <input type="file"        name="qualification[{{ $i }}][cert_file]"    class="form-control">
+              @if(! empty($q['cert_attach']))
+                <input type="hidden"    name="qualification[{{ $i }}][existing_cert_attach]" value="{{ $q['cert_attach'] }}">
+                <a href="{{ asset('storage/'.$q['cert_attach']) }}" target="_blank" class="d-block mt-1">
+                  View existing
+                </a>
+              @endif
+              @if(! empty($q['id_coach_course']))
+                  <input type="hidden"  name="qualification[{{ $i }}][id]" value="{{ $q['id_cco'] }}">
+              @endif    
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn btn-sm btn-outline-danger btnRemoveQualification">×</button>
+            </td>
+          </tr>
+        @empty
+          {{-- one blank real row if no quals --}}
+          <tr>
+            <td>
+              <select name="qualification[0][course_id]" class="form-select select2" data-placeholder="Search course…" required>
+                <option value=""></option>
+                @foreach($courses as $cid => $cname)
+                  <option value="{{ $cid }}">{{ $cname }}</option>
+                @endforeach
+              </select>
+            </td>
+            <td>
+              <select name="qualification[0][level]" class="form-select" required>
+                <option value="NA">NA</option>
+                <option value="Level 1">Level 1</option>
+                <option value="Level 2">Level 2</option>
+                <option value="Level 3">Level 3</option>
+              </select>
+            </td>
+            <td><input type="date" name="qualification[0][pass_date]" class="form-control"></td>
+            <td><input type="text" name="qualification[0][accreditation]" class="form-control"></td>
+            <td><input type="text" name="qualification[0][cert_number]"   class="form-control"></td>
+            <td><input type="file" name="qualification[0][cert_file]"     class="form-control"></td>
+            <td class="text-center">
+              <button type="button" class="btn btn-sm btn-outline-danger btnRemoveQualification">×</button>
+            </td>
+          </tr>
+        @endforelse
+      </tbody>
+    </table>
+    <button type="button" id="btnAddQualification" class="btn btn-sm btn-outline-primary mb-3">
+      <i class="fa-solid fa-plus"></i> Add Certification
+    </button>
+  </div>
+  <div class="d-flex justify-content-between">
+    <button type="button" class="btn btn-secondary" data-next="experience" data-bs-toggle="tab" data-bs-target="#experience">Prev</button>
+    <button type="button" class="btn btn-primary"  data-next="club"       data-bs-toggle="tab" data-bs-target="#club">Next</button>
+  </div>
+</div>
+
 
           {{-- CLUB --}}
           <div class="tab-pane fade" id="club" role="tabpanel">
@@ -630,22 +635,16 @@ function repeater(btn, table, removeClass, templateId) {
   });
 
   // removing a row
-  $(document).on('click', removeClass, function(e){
-    e.preventDefault();
-    e.stopPropagation();
+$(document).on('click','.btnRemoveQualification',function(e){
+  e.preventDefault();
+  $(this).closest('tr').remove();
+});
 
-    let $rows = $(`${table} tbody tr`);
-    if ($rows.length > 1) {
-      $(this).closest('tr').remove();
-    } else {
-      // if you only want to clear the last row rather than remove it:
-      $(this).closest('tr').find('input,select').val('');
-    }
-  });
 }
+repeater('#btnAddQualification','#qualificationTable','.btnRemoveQualification', '#qualification-row-template');
     repeater('#btnAddAcademic','#academicTable','.btnRemoveAcademic');
     repeater('#btnAddExperience','#experienceTable','.btnRemoveExperience');
-    repeater('#btnAddQualification','#qualificationTable','.btnRemoveQualification', '#qualification-row-template');
+    
     
 
     // Next/Prev

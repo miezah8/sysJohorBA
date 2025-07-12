@@ -205,37 +205,58 @@ class CoachController extends Controller
         }
 
     // 8) Wipe & re-create all courses/certifications
-    $coach->coachCourse()->delete();
 
-    foreach ($data['qualification'] as $i => $qual) {
-        // skip if completely blank (no course chosen)
-        if (empty($qual['course_id'])) {
-            continue;
-        }
+// 0) collect existing qualification PKs
+$existing = $coach->coachCourse
+                  ->pluck('id_cco')
+                  ->toArray();
 
-        // determine attachment
-        if ($request->hasFile("qualification.$i.cert_file")) {
-            // new upload
-            $attach = $request
-                ->file("qualification.$i.cert_file")
-                ->store('certs','public');
-        } elseif (! empty($qual['existing_cert_attach'])) {
-            // keep old one (if editing)
-            $attach = $qual['existing_cert_attach'];
-        } else {
-            // no file ever
-            $attach = null;
-        }
+// 1) pull submitted IDs out of the payload
+$submitted = array_filter(array_column($data['qualification'], 'id'));
 
-        $coach->coachCourse()->create([
-            'course_id'   => $qual['course_id'],
-            'course_level'=> $qual['level']         ?? null,
-            'pass_date'   => $qual['pass_date']     ?? null,
-            'recognition' => $qual['accreditation'] ?? null,
-            'cert_siri'   => $qual['cert_number']   ?? null,
-            'cert_attach' => $attach,
-        ]);
+// 2) figure out which got removed
+$toDelete = array_diff($existing, $submitted);
+
+// 3) delete them in one go
+if (! empty($toDelete)) {
+    $coach->coachCourse()
+          ->whereIn('id_cco', $toDelete)
+          ->delete();
+}
+
+// 4) now proceed to update-or-create as before
+foreach ($data['qualification'] as $i => $qual) {
+    $attrs = [
+      'course_id'    => $qual['course_id'],
+      'course_level' => $qual['level']         ?? null,
+      'pass_date'    => $qual['pass_date']     ?? null,
+      'recognition'  => $qual['accreditation'] ?? null,
+      'cert_siri'    => $qual['cert_number']   ?? null,
+    ];
+
+    // decide on attachment
+    if (
+      isset($qual['cert_file'])
+      && $qual['cert_file'] instanceof \Illuminate\Http\UploadedFile
+    ) {
+      $attrs['cert_attach'] = 
+        $qual['cert_file']->store('certs','public');
+    } elseif (! empty($qual['existing_cert_attach'])) {
+      $attrs['cert_attach'] = $qual['existing_cert_attach'];
+    } else {
+      $attrs['cert_attach'] = '';
     }
+
+    if (! empty($qual['id'])) {
+      // update existing
+      $coach->coachCourse()
+            ->where('id_cco', $qual['id'])
+            ->update($attrs);
+    } else {
+      // insert new
+      $coach->coachCourse()->create($attrs);
+    }
+}
         });
 
     // If this was an AJAX request, return JSON
@@ -329,12 +350,18 @@ public function update(Request $request, $id)
             'contact_no' => $data['no_tel'],
         ]);
 
-        // 4) Store uploaded files
+        // 4) Store uploaded files if present
         if ($request->hasFile('gambar')) {
             $pic = $request->file('gambar')->store('profiles','public');
+        } else {
+            // fallback to hidden input
+            $pic = $request->input('existing_profile_picture');
         }
+
         if ($request->hasFile('ic_picture')) {
-            $ic  = $request->file('ic_picture')->store('profiles','public');
+            $ic = $request->file('ic_picture')->store('profiles','public');
+        } else {
+            $ic = $request->input('existing_ic_picture');
         }
 
         // 5) Update or create user detail
@@ -349,8 +376,8 @@ public function update(Request $request, $id)
                 'district_id'     => $data['daerah'],
                 'gender'          => $data['jantina'],
                 'race'            => $data['ethnicity'],
-                'profile_picture' => $pic ?? null,
-                'ic_picture'      => $ic  ?? null,
+                'profile_picture' => $pic,
+                'ic_picture'      => $ic,
             ]
         );
 
@@ -371,40 +398,59 @@ public function update(Request $request, $id)
         }
 
         // 8) courses/certifications
-// 8) Wipe & re-create all courses/certifications
-$coach->coachCourse()->delete();
+// 0) collect existing qualification PKs
+$existing = $coach->coachCourse
+                  ->pluck('id_cco')
+                  ->toArray();
 
-// First, filter out any “completely blank” entries
-$qualifications = array_filter($data['qualification'], function($q) {
-    // only keep ones where at least one of these fields is non-empty
-    return 
-        ! empty($q['course_id'])      ||
-        ! empty($q['pass_date'])      ||
-        ! empty($q['accreditation'])  ||
-        ! empty($q['cert_number'])    ||
-        ! empty($q['existing_cert_attach']);
-});
+// 1) pull submitted IDs out of the payload
+$submitted = array_filter(array_column($data['qualification'], 'id'));
 
-foreach ($qualifications as $i => $qual) {
-    // Determine attachment:  
-    // 1) new upload? 2) else existing hidden? 3) else blank
-    if (isset($qual['cert_file']) && $qual['cert_file'] instanceof \Illuminate\Http\UploadedFile) {
-        $attach = $qual['cert_file']->store('certs','public');
+// 2) figure out which got removed
+$toDelete = array_diff($existing, $submitted);
+
+// 3) delete them in one go
+if (! empty($toDelete)) {
+    $coach->coachCourse()
+          ->whereIn('id_cco', $toDelete)
+          ->delete();
+}
+
+// 4) now proceed to update-or-create as before
+foreach ($data['qualification'] as $i => $qual) {
+    $attrs = [
+      'course_id'    => $qual['course_id'],
+      'course_level' => $qual['level']         ?? null,
+      'pass_date'    => $qual['pass_date']     ?? null,
+      'recognition'  => $qual['accreditation'] ?? null,
+      'cert_siri'    => $qual['cert_number']   ?? null,
+    ];
+
+    // decide on attachment
+    if (
+      isset($qual['cert_file'])
+      && $qual['cert_file'] instanceof \Illuminate\Http\UploadedFile
+    ) {
+      $attrs['cert_attach'] = 
+        $qual['cert_file']->store('certs','public');
     } elseif (! empty($qual['existing_cert_attach'])) {
-        $attach = $qual['existing_cert_attach'];
+      $attrs['cert_attach'] = $qual['existing_cert_attach'];
     } else {
-        $attach = '';  // or null if your column allows it
+      $attrs['cert_attach'] = '';
     }
 
-    $coach->coachCourse()->create([
-        'course_id'    => $qual['course_id'],
-        'course_level' => $qual['level']         ?? null,
-        'pass_date'    => $qual['pass_date']     ?? null,
-        'recognition'  => $qual['accreditation'] ?? null,
-        'cert_siri'    => $qual['cert_number']   ?? null,
-        'cert_attach'  => $attach,
-    ]);
+    if (! empty($qual['id'])) {
+      // update existing
+      $coach->coachCourse()
+            ->where('id_cco', $qual['id'])
+            ->update($attrs);
+    } else {
+      // insert new
+      $coach->coachCourse()->create($attrs);
+    }
 }
+
+
 
     });
 

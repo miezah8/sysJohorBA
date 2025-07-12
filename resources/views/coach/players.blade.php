@@ -16,7 +16,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>First Name</th>
-                                <th>Last Name</th>
+                                {{-- <th>Last Name</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -25,7 +25,7 @@
                                 <tr>
                                     <td>{{ $i + $players->firstItem() }}</td>
                                     <td>{{ $p->athlete_fname }}</td>
-                                    <td>{{ $p->athlete_lname }}</td>
+                                    {{-- <td>{{ $p->athlete_lname }}</td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
